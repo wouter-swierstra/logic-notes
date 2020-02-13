@@ -1,185 +1,182 @@
 ---
 author: Wouter Swierstra
 title: "*Logic for Computer Science*"
+
 book: true
 titlepage: true
 titlepage-rule-color: "6687C3"
 toc-own-page: true
 titlepage-text-color: 000000
-classoption: [oneside]
+logo: "data/uulogo.png"
+logo-width: 200
+
+toc: true
+number-sections: true
+secnumdepth: 2
+top-level-division: chapter
+
+classoption: oneside
+
 sansfont: Open Sans
 monofont: Ubuntu Mono
-logo: uulogo.png
-logo-width: 200
-toc: true
+
+filters:
+  - pandoc-citeproc
+bibliography: "notes.bib"
+link-citations: true
+
+
+pdf-engine: xelatex
+to: pdf
+data-dir: "data"
+template: ["data/eisvogel-template.tex"]
+include-in-header: ["data/header.tex"]
+
 ---
+
+\frontmatter
 
 # About these notes
 
-These notes offer some supplementary material.
+These course notes are intended for the undergraduate course *Logic
+for Computer Science* that I teach at the University of Utrecht. In
+the first part of the course, I cover the first part of *Modelling
+Computing Systems* [@modelling]; in these lecture notes I assume
+students have some familiarity with basic logic, (structural)
+induction, and a bit of programming experience.
 
-Follows after *Modelling Computing Systems* – but any one with a
-background in logic should be able to understand them.
+The contents of these notes are cobbled together from several sources,
+including *Semantics with Applications* [@semantics], Frank Pfenning's
+[-@pfenning] lecture notes on natural deduction, and Gabriele Keller
+and Liam O'Connor-Davis's [-@keller] lecture notes on inference rules and rule
+induction.
 
-Thanks for Eisvogel template, pandoc, students for their helpful
-feedback.
+<!-- Thanks for Eisvogel template, pandoc, students for their helpful -->
+<!-- feedback. -->
+
+\vspace{3ex}
 
 Wouter Swierstra
 
 February 2020
 
+\mainmatter
 
 
 # Inference rules
 
-BNF notation for inductively defined sets.
+Throughout the lectures so far, we have seen various *inductive
+definitions*. For example, we can define the set
+all binary words $W$ using the following BNF equation:
 
-Defin functions by induction on the structure of the data.
+ $w$  ::=   ε   |   0$w$   |   1$w$
 
-But how can we define relations inductively?
+That is, every binary word is either empty (ε), or it starts with
+either a 1 or a 0, followed by some shorter word.
 
-How now?
+We can then define *inductive functions* over such sets, by
+introducing cases for each alternative. For example, the function
+`length` computes the length of a given binary word:
 
-## Recap
+```
+length : W → N
+length(ε)  = 0
+length(0w) = 1 + length(w)
+length(1w) = 1 + length(w)
+```
 
-So far, we have encountered propositional logic in several lectures:
+In this style, we have seen numerous examples of inductively defined
+sets, including the natural numbers, powersets of a given finite set, binary
+trees, and propositional logic formulas. We can define each of these
+sets using BNF; subsequently we can define functions over such sets
+using induction.
 
-* The first lecture defined the syntax of propositional logic informally
+Yet we have not yet encountered many inductively defined *relations*.
+In this section, we will try to define a relation $w ≤ w'$ that states
+that $w$ is a prefix of $w'$. Before trying to define this relation,
+consider the following examples:
 
-* Later, we saw how to define this syntax formally as an inductively defined set
+* 0 is a prefix of 001, or written differently 0 ≤ 001;
+* 00 ≤ 001 and 001 ≤ 001 also hold;
+* but 01 is *not* a prefix of 001;
+* finally, ε is trivially a prefix of 001.
 
-* We have studied the semantics of propositional logic using truth tables.
+How can we give an *inductive* definition of this prefix relation? One way to
+characterise the relation is with the following three clauses:
 
-* We have seen the semantics of propositional logic informally using proof strategies
+* for all $w ∈ W$, ε ≤ $w$;
+* if $w ≤ w'$, then $0w ≤ 0w'$;
+* if $w ≤ w'$, then $1w ≤ 1w'$;
 
-Can we not give a more precise definition of proof?
+This is a bit clunky: a good analogy is the early definitions of
+inductive sets, before we have encountered BNF. Isn't there a better
+notation for inductively defined relations? In this section, we will
+introduce the *inference rule* notation for inductively defined
+relations. This notation plays a central role in our definitions of
+proofs and programming logic in the remaining chapters.
 
-And relate it to the 'truth table semantics' we saw in the first lecture?
-
-
-
-## What is a proof?
-
-Given a formula in propositional logic $p$, we can check when $p$
-holds for all possible values of its atomic propositional variables --
-this is what we do when we write a truth table.
-
-We can also give a 'proof sketch' using proof strategies -- but we
-haven't made precise what these strategies are, relying on an informal
-diagrammatic description.
-
-Can we define a set of all proofs of some propositional logic
-formula?
-
-After all, we managed to define the syntax of propositionial logic as
-inductively defined set -- can we do the same for its semantics?
-
-
-
-## Syntax and semantics
-
-We can define the *syntax* of propositional logic using BNF as follows:
-
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
-
-Can we define a *semantics*, describing the set of valid proofs for an
-arbitrary propositional formula?
-
-
-
-## Inductively defined relations
-
-So far, we have seen the BNF notation for inductively defined sets.
-
-But what notation should we use for inductively defined *relations*?
-
-For example, we defined the $≤$ *relation* between Peano natural
-numbers using the following rules:
-
-* for all $n ∈ ℕ, \, 0 ≤ n$;
-* if $n ≤ m$, then $s(n) ≤ s(m)$
-
-Isn't there a better notation?
-
-
-
-## Notation for inductively defined relations
-
-Inductively defined relations are often given by means of *inference rules*:
+Inductively defined relations are often given by means of *inference
+rules*:
 
 \begin{prooftree}
 \AxiomC{ }
 \RightLabel{Base}
-\UnaryInfC{$0 ≤ n$}
+\UnaryInfC{$ε ≤ w$}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{$n ≤ m$}
-\RightLabel{Step}
-\UnaryInfC{$s(n) ≤ s(m)$}
+\AxiomC{$w ≤ w'$}
+\RightLabel{Step0}
+\UnaryInfC{$0w ≤ 0w'$}
 \end{prooftree}
 
-Here we have two inference rules, named Base and Step; these rules
-together define a relation $(\leq) \; \subseteq \; \mathbb{N} \times \mathbb{N}$.
+\begin{prooftree}
+\AxiomC{$w ≤ w'$}
+\RightLabel{Step1}
+\UnaryInfC{$1w ≤ 1w'$}
+\end{prooftree}
+
+Here we have three inference *rules*, named Base, Step0 and Step1;
+these rules together define a binary relation on binary words $(\leq)
+\; \subseteq \; \mathbf{W} \times \mathbf{W}$.
 
 The statements above the horizontal line are the *premises* - the
 assumptions that you must establish in order to use this rule; the
 statement under the horizontal line is the *conclusion* that you can
-draw from these assumptions.
+draw from these assumptions. A rule without premises is sometimes
+called an *axiom*.
 
+These inference rules state that there are three ways to prove that $w
+≤ w'$ for a given pair of  words $w$ and $w'$:
 
+* if $w=ε$ the Base rule tells us that $ε ≤ w$ -- for *any* binary word $w$;
 
-## Notation for inductively defined relations
+* if both $w$ and $w'$ start with a zero,
 
-These rules state that there are two ways to prove that $n ≤ m$:
+* if both $w$ and $w'$ start with a one,
 
-\begin{prooftree}
-\AxiomC{ }
-\RightLabel{≤-Base}
-\UnaryInfC{$0 ≤ n$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$n ≤ m$}
-\RightLabel{≤-Step}
-\UnaryInfC{$s(n) ≤ s(m)$}
-\end{prooftree}
-
-
-* if $n=0$ the ≤-Base rule tells us that $0 \leq n$ -- for *any* n;
-
-* if we can show $n \leq m$, we can use the ≤-Step rule to prove $s(n) \leq s(m)$.
-
-A rule without premises is called an *axiom*.
-
-
-
-## Writing proofs
-
-By repeatedly applying these rules, we can write larger proofs.
-
-For example, to give a formal proof that $2 \leq 5$ we write:
+By repeatedly applying these rules, we can write larger proofs. For
+example, to give a formal proof that $01 \leq 010$ we can use all
+three rules in the following fashion:
 
 \begin{prooftree}
 \AxiomC{ }
-\RightLabel{≤-Base}
-\UnaryInfC{$0 ≤ s(s(s(0)))$}
-\RightLabel{≤-Step}
-\UnaryInfC{$s(0) ≤ s(s(s(s(0))))$}
-\RightLabel{≤-Step}
-\UnaryInfC{$s(s(0)) ≤ s(s(s(s(s(0)))))$}
+\RightLabel{Base}
+\UnaryInfC{$ε ≤ 0$}
+\RightLabel{Step1}
+\UnaryInfC{$1 ≤ 10$}
+\RightLabel{Step0}
+\UnaryInfC{$01 ≤ 010$}
 \end{prooftree}
-
-We can read these rules top-to-bottom or bottom-to-top.
 
 Such a proof is sometimes referred to a as *derivation*.
 
+We can read these rules top-to-bottom or bottom-to-top.
 Each of the inference rules gives a different 'lego piece' that we can
 use to write bigger proofs.
 
 
-
-## Example: even numbers
+#### Example: even numbers
 
 We can use this inference rule notation to write all kinds of relations.
 
@@ -199,14 +196,9 @@ proves that a given number is even.
 \UnaryInfC{isEven(s(s(n))}
 \end{prooftree}
 
-#### {Question} \vspace{2mm}
-
-Give a derivation that s(s(s(s(0)))) is even.
 
 
-
-
-## Example: isSorted
+#### Example: isSorted
 
 Similarly, we can define inference rules that make precise when a list of numbers is sorted:
 
@@ -231,25 +223,32 @@ Similarly, we can define inference rules that make precise when a list of number
 
 Note that we can require more than one hypothesis -- as in the isSorted-Step rule.
 
-#### {Question}\vspace{2mm}
 
-Prove that the list $1 : 3 : 5 : [ \, ]$ is indeed sorted.
+#### What is a proof?
 
+Given the following set of propositional logical formulas over a set of atomic variables $P$:
 
+ $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
 
+Can we give inference rules that capture precisely the tautologies?
 
-## Exercise
+These inference rules, sometimes called *natural deduction*, formalize
+the proof strategies that we have seen previously.
+
+## Exercises
+
+1. Give a derivation that s(s(s(s(0)))) is even.
+
+1. Prove that the list $1 : 3 : 5 : [ \, ]$ is indeed sorted.
+
+1. Example: palindrome
 
 A word over an alphabet Σ is called a **palindrome** if it reads the same backward as forward.
 
 Examples include: 'racecar', 'radar', or 'madam'.
 
-#### {Question}\vspace{2mm}
-
 Give a inference rules that characterise a unary relation on words,
 capturing the fact that they are a palindrome.
-
-. . . 
 
 \begin{prooftree}
 \AxiomC{ }
@@ -272,24 +271,38 @@ capturing the fact that they are a palindrome.
 
 
 
-## Challenge
+# Natural deduction
 
-Given the following set of propositional logical formulas over a set of atomic variables $P$:
+So far, we have encountered propositional logic in several lectures:
 
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
+* The first lecture defined the syntax of propositional logic informally
 
-Can we give inference rules that capture precisely the tautologies?
+* Later, we saw how to define this syntax formally as an inductively defined set
 
-. . . 
+* We have studied the semantics of propositional logic using truth tables.
 
-Yes!
+* We have seen the semantics of propositional logic informally using proof strategies
 
-These inference rules, sometimes called *natural deduction*, formalize
-the proof strategies that we have seen previously.
+Can we not give a more precise definition of proof?
 
+And relate it to the 'truth table semantics' we saw in the first lecture?
 
+What is a proof?
 
-## Natural deduction
+Given a formula in propositional logic $p$, we can check when $p$
+holds for all possible values of its atomic propositional variables --
+this is what we do when we write a truth table.
+
+We can also give a 'proof sketch' using proof strategies -- but we
+haven't made precise what these strategies are, relying on an informal
+diagrammatic description.
+
+Can we define a set of all proofs of some propositional logic
+formula?
+
+After all, we managed to define the syntax of propositionial logic as
+inductively defined set -- can we do the same for its semantics?
+
 
 Most logical textbooks do not introduce an explicit name for the
 relation capturing 'truthfulness' of a given propositional logical
@@ -355,8 +368,6 @@ Proof of $P ∧ Q$\\
 Therefore, $P$ holds.
 \end{tcolorbox}
 \end{center}
-
-#### {Question}\vspace{2mm}
 
 What is the corresponding elimination rule for conjunction?
 
@@ -498,8 +509,6 @@ inference rule.
 
 ## Example: $(P \wedge Q) \Rightarrow (Q \wedge P)$
 
-#### {Question}\vspace{2mm}
-
 Give a closed natural deduction proof of $(P \wedge Q) \Rightarrow (Q \wedge P)$.
 
 . . .
@@ -559,8 +568,6 @@ Proof of $P$.
 Therefore, we can conclude $Q \quad \square$.
 \end{tcolorbox}
 \end{center}
-
-#### {Question}\vspace{2mm}
 
 What is the rule for implication elimination?
 
@@ -690,8 +697,6 @@ Similarly, $P \Leftrightarrow Q$ behaves the same as $P \Rightarrow Q
 
 ## Exercise
 
-#### {Question}\vspace{2mm}
-
 Prove that $P \Rightarrow (Q \Rightarrow (Q \wedge P))$
 
 . . . 
@@ -730,8 +735,6 @@ the assumption $P$ in the current proof subtree.
 -
 
 ## Exercise
-
-#### {Question}\vspace{2mm}
 
 Prove that $P \wedge \top \Leftrightarrow P$.
 
@@ -836,8 +839,6 @@ If we know $P \vee Q$ holds...
 
 ## Exercise
 
-#### {Question}\vspace{2mm}
-
 Give a proof that $(P \vee \bot) \Rightarrow P$.
 
 . . .
@@ -904,8 +905,9 @@ When we fill out a truth table for some propositional formula $p$, we
 show how each choice of atomic propositional variables of $p$ results
 in a true/false value.
 
+
 | `p`     | `q`    | `¬` | `(p` | `∨` | `q)` | `⇒`    | `(¬p` | `∧` | `¬q)` |
-|:-:|::|::|:-:|::|:-:|::|:--:|::|:--:|
+|:-------:|:------:|:---:|:----:|:---:|:----:|:------:|:-----:|:---:|:-----:|
 |  F      |  F     |  T  |   F  |  F  |  F   |  **T** |   T   |  T  |   T   |
 |  F      |  T     |  F  |   F  |  T  |  T   |  **T** |   T   |  F  |   F   |
 |  T      |  F     |  F  |   T  |  T  |  F   |  **T** |   F   |  F  |   T   |
@@ -1135,19 +1137,8 @@ These results show just how clean and simple propositional logic is...
 But they break down as soon as you study richer predicate logics...
 
 
-
-
-# Natural deducton
-
-Now that we know how to define inductive relations, we can study *proofs* formally.
-
-Given a propositional formula, can we define the *proofs* of this formula?
-
-This turns out to formalize the proof strategies we have seen previously.
-
-## Soundness and completeness
-
 ## Exercises
+
 
 # Reasoning about programs
 
@@ -1155,8 +1146,6 @@ We have already seen the syntax of a (toy) programming language, While
 -- but what is its semantics?
 
 ## Operational semantics
-
-
 
  $e$  ::=  $n$ | $x$ | $e + e$ | $e × e$ | …
 
@@ -1800,7 +1789,7 @@ a result, the precondition changes in both branches of the if-statement.
 
 . . . 
 
-## Question
+#### Question
 
 Use the two rules we have seen so far to show that:
 
@@ -2018,6 +2007,17 @@ There is a rich field of research on **program calculation** that tries to solve
 Approaches include the refinement calculus, pioneered by people such
 as Edsger Dijkstra, Tony Hoare, and many others.
 
+# References
 
 
+<!-- TODO: fix local variables to also run pandoc-citeproc -->
+<!-- TODO: move filters etc from YAML header to separate default file -- cf Makefile -->
+
+
+<!-- Local Variables:  -->
+<!-- pandoc/template: "data/eisvogel-template.tex" -->
+<!-- pandoc/include-in-header: "data/header.tex" -->
+<!-- pandoc/number-sections: t -->
+<!-- pandoc/top-level-division: "chapter" -->
+<!-- End:  -->
 
