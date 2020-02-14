@@ -12,7 +12,7 @@ logo-width: 200
 
 toc: true
 number-sections: true
-secnumdepth: 2
+secnumdepth: 0
 top-level-division: chapter
 
 classoption: oneside
@@ -63,7 +63,7 @@ February 2020
 \mainmatter
 
 
-# Inference rules
+# Inductively defined relations
 
 Throughout the lectures so far, we have seen various *inductive
 definitions*. For example, we can define the set
@@ -73,7 +73,6 @@ all binary words $W$ using the following BNF equation:
 
 That is, every binary word is either empty (ε), or it starts with
 either a 1 or a 0, followed by some shorter word.
-
 We can then define *inductive functions* over such sets, by
 introducing cases for each alternative. For example, the function
 `length` computes the length of a given binary word:
@@ -108,15 +107,23 @@ characterise the relation is with the following three clauses:
 * if $w ≤ w'$, then $0w ≤ 0w'$;
 * if $w ≤ w'$, then $1w ≤ 1w'$;
 
-This is a bit clunky: a good analogy is the early definitions of
-inductive sets, before we have encountered BNF. Isn't there a better
-notation for inductively defined relations? In this section, we will
-introduce the *inference rule* notation for inductively defined
-relations. This notation plays a central role in our definitions of
-proofs and programming logic in the remaining chapters.
+This is a bit clunky – how can we check whether or not a given 'proof'
+that $w ≤ w'$ is constructed using these rules or not? If we need to
+define more complex inductive relation, we might need many such
+rules. There is a clear need for more precise notation: a good analogy
+is the early definitions of inductive sets that we saw, before
+introducing BNF. Is there not a better notation for inductively
+defined relations?
 
-Inductively defined relations are often given by means of *inference
-rules*:
+## Inference rules
+
+In this section, we will introduce the *inference rule* notation for
+inductively defined relations. This notation plays a central role in
+our definitions of proofs and programming logic in the remaining
+chapters.
+
+Rather than the bullet points we saw on the previous page, we can also
+define inductive relations by means of *inference rules*:
 
 \begin{prooftree}
 \AxiomC{ }
@@ -136,24 +143,31 @@ rules*:
 \UnaryInfC{$1w ≤ 1w'$}
 \end{prooftree}
 
-Here we have three inference *rules*, named Base, Step0 and Step1;
-these rules together define a binary relation on binary words $(\leq)
-\; \subseteq \; \mathbf{W} \times \mathbf{W}$.
+Here we have three *inference rules*. Each rule consists of three
+parts: the name, premises and conclusion. These three rules are named
+Base, Step0 and Step1; each rule corresponds to one of the bullet
+points we saw previously. Together these rules define a binary
+relation on binary words $(\leq) \; \subseteq \; \mathbf{W} \times
+\mathbf{W}$.
 
-The statements above the horizontal line are the *premises* - the
-assumptions that you must establish in order to use this rule; the
-statement under the horizontal line is the *conclusion* that you can
-draw from these assumptions. A rule without premises is sometimes
-called an *axiom*.
+The part above the horizontal line in each rule are the *premises* -
+these are the statements that you must establish in order to use this
+rule. The statement under the horizontal line is the *conclusion* that
+you can draw once you have established the premises hold. A rule
+without premises is sometimes called an *axiom*.
 
 These inference rules state that there are three ways to prove that $w
 ≤ w'$ for a given pair of  words $w$ and $w'$:
 
-* if $w=ε$ the Base rule tells us that $ε ≤ w$ -- for *any* binary word $w$;
+* for any binary word $w$, we can use the Base rule to establish $ε ≤
+  w$;
 
-* if both $w$ and $w'$ start with a zero,
+* for any binary words $w$ and $w'$, if we have already established $w
+  ≤ w'$ then we can use the Step0 rule to show $0w ≤ 0w'$;
 
-* if both $w$ and $w'$ start with a one,
+* similarly, for any binary words $w$ and $w'$, if we have already
+  established $w ≤ w'$ then we can use the Step1 rule to show $1w ≤
+  1w'$;
 
 By repeatedly applying these rules, we can write larger proofs. For
 example, to give a formal proof that $01 \leq 010$ we can use all
@@ -169,109 +183,263 @@ three rules in the following fashion:
 \UnaryInfC{$01 ≤ 010$}
 \end{prooftree}
 
-Such a proof is sometimes referred to a as *derivation*.
+Such a proof is sometimes referred to a as *derivation*.  You may want
+to think of each inference rules describing a different 'lego piece'
+that can use to assemble more complex derivations. 
 
-We can read these rules top-to-bottom or bottom-to-top.
-Each of the inference rules gives a different 'lego piece' that we can
-use to write bigger proofs.
+Although the derivation above happens to use all three rules, other
+derivations may use some rules more than once or not at all.
 
-
-#### Example: even numbers
-
-We can use this inference rule notation to write all kinds of relations.
-
-For example, we may want to define the unary relation isEven -- that
-proves that a given number is even.
-
-
-\begin{prooftree}
-\AxiomC{ }
-\RightLabel{isEven-Base}
-\UnaryInfC{isEven(0)}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{isEven(n)}
-\RightLabel{isEven-Step}
-\UnaryInfC{isEven(s(s(n))}
-\end{prooftree}
+\begin{Exercise} 
+Give a derivation of $00 ≤ 001$. How often does your derivation use each inference rule?
+\end{Exercise}
+\begin{Answer}
+Wat denk je zelf?
+\end{Answer}
 
 
+We can read each rule and derivation from both top-down and
+bottom-up. Read bottom-up, a derivation establishes that a given
+relation holds, repeatedly breaking the statement into smaller
+pieces. Read top-down, a derivation starts with the axioms of a
+relation; by applying other inference rules, we then establish other
+statements also hold, until we reach the end of the derivation.
 
-#### Example: isSorted
+#### Example: Palindromes
 
-Similarly, we can define inference rules that make precise when a list of numbers is sorted:
+A word over an alphabet Σ is called a **palindrome** if it reads the
+same backward as forward. For example, 'racecar', 'radar', and 'madam'
+are all palindromes.
 
-\begin{prooftree}
-\AxiomC{ }
-\RightLabel{isSorted-empty}
-\UnaryInfC{isSorted($[ \, ]$)}
-\end{prooftree}
+We can define the set of all palindromes $P ⊆ Σ^{⋆}$ as unary relation
+using three inference rules. Whenever we can establish
+isPalindrome($w$) using these rules, we claim that $w$ must be a
+palindrome:
 
 \begin{prooftree}
 \AxiomC{ }
-\RightLabel{isSorted-Single}
-\UnaryInfC{isSorted($n : [ \, ]$)}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$n ≤ m$}
-\AxiomC{isSorted($m : w$)}
-\RightLabel{isSorted-Step}
-\BinaryInfC{isSorted($n : m : w$)}
-\end{prooftree}
-
-Note that we can require more than one hypothesis -- as in the isSorted-Step rule.
-
-
-#### What is a proof?
-
-Given the following set of propositional logical formulas over a set of atomic variables $P$:
-
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
-
-Can we give inference rules that capture precisely the tautologies?
-
-These inference rules, sometimes called *natural deduction*, formalize
-the proof strategies that we have seen previously.
-
-## Exercises
-
-1. Give a derivation that s(s(s(s(0)))) is even.
-
-1. Prove that the list $1 : 3 : 5 : [ \, ]$ is indeed sorted.
-
-1. Example: palindrome
-
-A word over an alphabet Σ is called a **palindrome** if it reads the same backward as forward.
-
-Examples include: 'racecar', 'radar', or 'madam'.
-
-Give a inference rules that characterise a unary relation on words,
-capturing the fact that they are a palindrome.
-
-\begin{prooftree}
-\AxiomC{ }
-\RightLabel{isPalindrome-empty}
+\RightLabel{Empty}
 \UnaryInfC{isPalindrome($ ε $)}
 \end{prooftree}
 
 \begin{prooftree}
 \AxiomC{$a ∈ Σ$ }
-\RightLabel{isPalindrome-Single}
+\RightLabel{Single}
 \UnaryInfC{isPalindrome($a$)}
 \end{prooftree}
 
 \begin{prooftree}
 \AxiomC{$a ∈ Σ$}
 \AxiomC{isPalindrome($w$)}
-\RightLabel{isPalindrome-Step}
+\RightLabel{Step}
 \BinaryInfC{isPalindrome($a \, w \, a$)}
 \end{prooftree}
+
+Let's go over these rules one by one. The Empty and Single rules say
+that ε is a palindrome and that for each letter in $a$ in our alphabet
+Σ, the word $a$ is a palidrome. The more interesting rule, Step,
+states that if we can establish $w$ is a palindrome, then so is the
+larger word $a  w  a$, that adds the letter $a ∈ Σ$ to the front and
+back of $w$.
+
+The Step rule is a bit more interesting than the other rules we have
+seen so far: it has *more than one premise*. That is, to use the Step
+rule, we need to establish that **both** $a ∈ Σ$ and isPalindrom($w$).
+
+
+\begin{Exercise} 
+Give a derivation showing isPalindrome(00) and
+isPalindrome(101).
+\end{Exercise}
+\begin{Answer}
+Wat denk je zelf?
+\end{Answer}
+
+\begin{Exercise} 
+There are two axioms that can be used to prove isPalindrome($w$).
+Given a derivation of isPalindrome($w$), can you predict with which axiom
+was used to start the derivation?
+\end{Exercise}
+\begin{Answer}
+Wat denk je zelf? Dan?
+\end{Answer}
+
+
+## Dyck words
+
+In the examples we have seen so far, there is typically only ever one
+inference rule that is applicable. This is not always the case
+however. To give a convincing example of a more complicated set of
+inference rules, however, requires a bit of work.
+
+Consider the alphabet $Σ = \{  [ , ] \}$, that is the set of all
+words built from the open bracket character '[' and closing
+bracket character ']'. Now consider the words over this alphabet, such as:
+
+* $[ ] ∈ Σ^{⋆}$
+* $[ ][ ] ∈ Σ^{⋆}$
+* $[[ ][ ]] ∈ Σ^{⋆}$
+* $]] ∈ Σ^{⋆}$
+
+Some of these words correspond to a *balanced* set of brackets, where
+each closing bracket is preceded by a matching open bracket and each
+open bracket is closed before the end of the word. This subset of all
+words over Σ is sometimes referred to as the *Dyck language*.  When
+studying programming languages, we typically want to work with
+sequences of parentheses or curly braces that are well balanced---how
+can we characterise the set of all balanced words?  
+
+Before trying to define the set of all balanced words, we can consider
+a few examples. For instance, $[[][]]$ is balanced; whereas $[][$ and
+$][]$ are both not balanced. We would like to define a unary relation
+on $Σ^{⋆}$ that exactly characterises the balanced words. One way to
+do so is by defining the following three inference rules:
+
+\begin{prooftree}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced($ ε $)}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{isBalanced($w$)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[ w ]$)}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{isBalanced($w$)}
+\AxiomC{isBalanced($w'$)}
+\RightLabel{Append}
+\BinaryInfC{isBalanced($w w'$)}
+\end{prooftree}
+
+Once again, let's go over the rules one by one. There is a single
+axiom, Empty, that states that the empty word ε is balanced. The two
+other rules are a bit more complex.
+
+The Bracket rule states that any balanced word can be enclosed in
+brackets and remain balanced. The final rule, Append, states that if
+two words $w$ and $w'$ are balanced, then so is $w w'$, that is, the
+word formed by concatenating $w$ and $w'$. Using these rules, we can
+prove that $[[][]]$ is balanced:
+
+\begin{prooftree}
+\AxiomC{isBalanced(ε)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[]$)}
+\AxiomC{isBalanced(ε)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[]$)}
+\RightLabel{Append}
+\BinaryInfC{isBalanced($[][]$)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[[][]]$)}
+\end{prooftree}
+
+TODO: unclear which rule needs to be applied a priori. Sometimes it's
+easier to work bottom-up.
+
+\begin{Exercise}
+Which of the example words below are balanced?
+\begin{enumerate}
+  \item $[ ] ∈ Σ^{⋆}$
+  \item $[ ][ ] ∈ Σ^{⋆}$
+  \item $[[ ][ ]] ∈ Σ^{⋆}$
+  \item $]] ∈ Σ^{⋆}$ 
+\end{enumerate}  
+  If they are balanced, give a derivation. If they are not, explain
+why no derivation can exist.
+\end{Exercise}
+
+\begin{Exercise} 
+How many \emph{different} derivations of isBalanced($w$) are there? 
+
+\emph{Hint:} recall that $ε w = w = w ε$ for all words $w$.
+
+What about the isPalindrome relation? Can there be more than one
+different derivation that a binary word is a palindrome? Why or why
+not?
+\end{Exercise}
+
+## Rule induction
+
+Why go through all this effort to define an inductive relation using
+inference rules? One advantage is that we can now *prove* properties
+of balanced words by induction over their derivation.
+
+\begin{theorem} 
+For every word $w ∈ Σ^{⋆}$, if $w$ is balanced then $w$ has an equal
+number of opening and closing brackets.
+\end{theorem}
+
+**Proof** If $w$ is an arbitrary balanced word, there must be some
+*derivation* establishing isBalanced($w$). This derivation, however,
+is a finite structure built from the inference rules we have given
+above. As a result, we can perform *induction on the derivation* and
+distinguish the following three cases:
+
+* if the derivation consists of the Empty axiom, we can conclude that
+  $w$ must be equal to the empty word ε. As ε has an equal number of
+  opening and closing brackets (namely zero), we are done.
+* if the derivation ends with the Bracket rule, we learn that $w$ is
+  actually of the form $[ w' ]$ for some other balanced word $w'$. Our
+  induction hypothesis tells us that $w'$ has an equal number of opening
+  and closing brackets; as the Bracket rule adds one opening bracket
+  and one closing bracket, our proof holds for our original word $w$.
+* finally, if the derivation ends in the Append rule, we know that
+  $w$ can be written as $w₁ w₂$ for some pair of balanced words $w₁$
+  and $w₂$. By induction, we know that both $w₁$ and $w₂$ have an
+  equal number of opening and closing brackets, hence $w$ must also
+  have an equal number of opening and closing brackets.
+
+It is important to emphasise that this proof does **not** do induction
+on the word $w$ itself, but rather on the *derivation* showing that
+$w$ is balanced.
+
+By making the inductive structure of the isBalanced relation explicit
+by means of inference rules, we can suddenly reason about all possible
+proofs of 'balancedness'. By contrast, we could also define an
+inductive function that checks if a given word is balanced or not —–
+but any proofs about balanced words would need to follow the inductive
+structure of the words themselves. 
+
+The proof technique illustrated above, using induction over a
+derivation, is sometimes referred to as **rule induction**. We won't
+perform many such proofs, but they form a crucial proof technique when
+studying logic and programming languages. In the MSc course on
+*Concepts of programming languages* you will encounter many more
+examples of systems of inference rules and proofs about them using
+rule induction.
+
+For now, however, we will limit ourselves to studying systems of
+inference rules and the derivations we can write using them.
+
+
+\newpage
+
+## Exercises
+
+Define isEven
+
+Define less than or equal prove that 2 < 4
+
+Define parity check
+
+
+\newpage
+
+## Solutions to exercises
+
+\shipoutAnswer
+\setcounter{Exercise}{0}
+
 
 
 
 # Natural deduction
+
+
 
 So far, we have encountered propositional logic in several lectures:
 
@@ -303,6 +471,17 @@ formula?
 After all, we managed to define the syntax of propositionial logic as
 inductively defined set -- can we do the same for its semantics?
 
+## What is a proof?
+
+Given the following set of propositional logical formulas over a set of atomic variables $P$:
+
+ $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
+
+Can we give inference rules that capture precisely the tautologies?
+
+These inference rules, sometimes called *natural deduction*, formalize
+the proof strategies that we have seen previously.
+
 
 Most logical textbooks do not introduce an explicit name for the
 relation capturing 'truthfulness' of a given propositional logical
@@ -325,8 +504,7 @@ Rather than the more explicit:
 \end{prooftree}
 
 
-
-## Proof strategies vs natural deduction
+#### Proof strategies vs natural deduction
 
 Compare the proof strategy for conjunction introduction:
 
@@ -355,7 +533,7 @@ And the inference rule for conjunction introduction:
 
 
 
-## Conjuction elimination
+#### Conjuction elimination
 
 \begin{center}
 \begin{tcolorbox}[width=6cm]
@@ -382,7 +560,7 @@ What is the corresponding elimination rule for conjunction?
 
 
 
-## Assumptions
+#### Assumptions
 
 Most textbooks in logic define natural deduction as a *unary* relation
 on propositional formulas.
@@ -400,7 +578,7 @@ assumptions from the 'leaves' of our proof tree.
 
 
 
-## Example derivation
+#### Example derivation
 
 Combining the rules we have seen so far, we can prove that if $P \wedge Q$ holds, so does $Q \wedge P$.
 
@@ -424,7 +602,7 @@ To prove this, we need the *implication introduction* rule.
 
 
 
-## Implication introduction -- proof strategy
+#### Implication introduction -- proof strategy
 
 
 \begin{center}
@@ -447,7 +625,7 @@ How can keep track of the assumptions in natural deduction proofs?
 
 
 
-## Assumptions
+#### Assumptions
 
 \begin{prooftree}
 \AxiomC{$P \wedge Q$}
@@ -465,7 +643,7 @@ propositions that we assume must hold.
 
 
 
-## Implication introduction -- inference rule
+#### Implication introduction -- inference rule
 
 \begin{prooftree}
 \AxiomC{ }
@@ -488,7 +666,7 @@ discharged them.
 
 
 
-## Example: $P \Rightarrow P$
+#### Example: $P \Rightarrow P$
 
 
 \begin{prooftree}
@@ -507,7 +685,7 @@ inference rule.
 
 
 
-## Example: $(P \wedge Q) \Rightarrow (Q \wedge P)$
+#### Example: $(P \wedge Q) \Rightarrow (Q \wedge P)$
 
 Give a closed natural deduction proof of $(P \wedge Q) \Rightarrow (Q \wedge P)$.
 
@@ -531,7 +709,7 @@ Give a closed natural deduction proof of $(P \wedge Q) \Rightarrow (Q \wedge P)$
 
 
 
-## Wrong proofs
+#### Wrong proofs
 
 The statement $(P ⇒ P) ⇒ P$ is not true in general.
 
@@ -554,7 +732,7 @@ discharging the assumption $P$, whereas we should be discharging $P
 
 
 
-## Implication elimination
+#### Implication elimination
 
 \begin{center}
 \begin{tcolorbox}[width=8cm]
@@ -582,7 +760,7 @@ What is the rule for implication elimination?
 
 
 
-## Natural deduction
+#### Natural deduction
 
 We'll go through the rules for natural deduction for propositional
 logic.
@@ -597,7 +775,7 @@ to relate them to the *truth table semantics* from our first lecture.
 
 
 
-## Truth and falsity
+#### Truth and falsity
 
 Most logic textbooks use $\top$ for **T** (truth) and $\bot$ for **F**
 (falsity).
@@ -614,7 +792,7 @@ There is no introduction rule for falsity.
 
 
 
-## Falsity elimination
+#### Falsity elimination
 
 \begin{center}
 \begin{tcolorbox}[width=8cm]
@@ -636,7 +814,7 @@ Or written as an inference rule:
 
 
 
-## Negation rules
+#### Negation rules
 
 Recall that $\neg P$ behaves just like $P \Rightarrow \bot$.
 
@@ -667,7 +845,7 @@ and negation introduction rules.
 
 -
 
-## Equivalence rules
+#### Equivalence rules
 
 Similarly, $P \Leftrightarrow Q$ behaves the same as $P \Rightarrow Q
 \wedge P \Rightarrow P$.
@@ -695,7 +873,7 @@ Similarly, $P \Leftrightarrow Q$ behaves the same as $P \Rightarrow Q
 
 
 
-## Exercise
+#### Exercise
 
 Prove that $P \Rightarrow (Q \Rightarrow (Q \wedge P))$
 
@@ -715,7 +893,7 @@ Prove that $P \Rightarrow (Q \Rightarrow (Q \wedge P))$
 
 
 
-## Discharging more than once
+#### Discharging more than once
 
 Consider the following proof that $P \Rightarrow (P \wedge P)$
 
@@ -734,7 +912,7 @@ the assumption $P$ in the current proof subtree.
 
 -
 
-## Exercise
+#### Exercise
 
 Prove that $P \wedge \top \Leftrightarrow P$.
 
@@ -762,7 +940,7 @@ Prove that $P \wedge \top \Leftrightarrow P$.
 
 
 
-## What's missing?
+#### What's missing?
 
 The only thing remaining are the rules for disjunction.
 
@@ -785,7 +963,7 @@ The *introduction* rules are easy:
 
 
 
-## Disjuction elimination: proof strategy
+#### Disjuction elimination: proof strategy
 
 \begin{center}
 \begin{tcolorbox}[width=9cm]
@@ -809,7 +987,7 @@ Therefore, $R$ is true, regardless of which of $P$ or $Q$ is true.
 
 
 
-## Disjuction elimination
+#### Disjuction elimination
 
 \begin{prooftree}
 \AxiomC{$P \vee Q$}
@@ -837,7 +1015,7 @@ If we know $P \vee Q$ holds...
 
 
 
-## Exercise
+#### Exercise
 
 Give a proof that $(P \vee \bot) \Rightarrow P$.
 
@@ -862,7 +1040,7 @@ Give a proof that $(P \vee \bot) \Rightarrow P$.
 
 
 
-## Final rules
+#### Final rules
 
 We need one final rule:
 
@@ -885,7 +1063,7 @@ introduction-elimination rule for a logical operator?)
 
 
 
-## Beyond propositional logic...
+#### Beyond propositional logic...
 
 I've presented the rules for propositional logic -- but we can extend
 these rules to handle *predicate* logic.
@@ -920,8 +1098,6 @@ Can we make this more precise?
 
 
 
-## Semantics of propositional logic
-
 We call a function $v : P$ → **Bool** a *truth assignment*.
 
 Such a function chooses the values of associated with each atomic propositional variables.
@@ -929,9 +1105,6 @@ Such a function chooses the values of associated with each atomic propositional 
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
 
-
-
-## Semantics of propositional logic
 
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
@@ -950,10 +1123,6 @@ logic formulas are given by the following BNF:
   return **T**.
 
 
-
-
-
-## Semantics of propositional logic
 
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
@@ -978,8 +1147,6 @@ logic formulas are given by the following BNF:
 
 
 
-## Semantics of propositional logic
-
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
 
@@ -994,8 +1161,6 @@ Our truth assignment tells us exactly how to treat atomic propositions.
 
 
 
-## Semantics of propositional logic
-
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
 
@@ -1009,13 +1174,8 @@ formula $p$ into a function that, given a truth assignment for all
 atomic propositional variables, computes the truth value of the entire
 propositional logic formula $p$.
 
-. . . 
-
 But what does this have to do with truth tables?
 
-
-
-## Finite functions
 
 If you think back to the lectures on functions and induction, we saw
 how to *define* a function on a *finite* domain by listing all it
@@ -1036,10 +1196,6 @@ each student their mark:
 
  ...
  
-
-
-## Finite functions and truth tables
-
 When filling out a truth table for some propositional logic formula
 $p$, you are essentially computing the truth value of $p$ *for all
 possible choice of value for the atomic variables in p*.
@@ -1056,8 +1212,7 @@ as a truth table with $2^{\mid fv(p)\mid}$ rows.
 **Truth tables are simply the tabulation of this semantics.**
 
 
-
-## Natural deduction vs semantics
+## Relating natural deduction and semantics
 
 Given any propositional logic formula $p$, we can assign it semantics:
 
@@ -1072,17 +1227,11 @@ inference rules always holds?
 
 And can we be sure that we haven't left out any inference rules?
 
-
-
-## Notation
-
 Given a set of propositional logic formulas, $\Gamma$, we will write
 $\Gamma \vdash p$ whenever we can find a natural deduction proof of
 the formula $p$ using the assumptions from $\Gamma$.
 
 When we do not need any assumptions to show $p$, we write $\vdash p$.
-
-. . . 
 
 Given an truth assignment $v$ we write $v \models p$ if $\llbracket p
 \rrbracket v = \mathbf{T}$.
@@ -1090,9 +1239,6 @@ Given an truth assignment $v$ we write $v \models p$ if $\llbracket p
 If for all truth assignments $v$, we have $v \models p$ we say that $\models
 p$ (and $p$ is a tautotology).
 
-
-
-## Soundness and completeness
 
 It turns out that natural deduction inference rules above satisfy two
 important properties:
@@ -1106,16 +1252,12 @@ $p$ consists of only **T**, there is *some* derivation of $p$ using
 the inference rules of natural deduction.
 
 
-
-## Proofs?
-
 The proofs of soundness and completeness are a subject of a more
 advanced course on formal logic...
 
 ...but in principle you have the reasoning techniques to understand
 them.
 
-. . . 
 
 * Soundness is relatively easy to show: given a derivation of some
   formula $p$, we can do induction on this derivation. If we can show
@@ -1130,14 +1272,20 @@ them.
 
 
 
-## Soundness and completeness
-
 These results show just how clean and simple propositional logic is...
 
 But they break down as soon as you study richer predicate logics...
 
+\newpage
 
 ## Exercises
+
+\newpage
+
+## Solutions to exercises
+
+\shipoutAnswer
+\setcounter{Exercise}{0}
 
 
 # Reasoning about programs
@@ -1145,7 +1293,7 @@ But they break down as soon as you study richer predicate logics...
 We have already seen the syntax of a (toy) programming language, While
 -- but what is its semantics?
 
-## Operational semantics
+## Semantics of expressions
 
  $e$  ::=  $n$ | $x$ | $e + e$ | $e × e$ | …
 
@@ -1161,7 +1309,7 @@ But – this doesn't quite work: what is the value of `x + 3`?
 This depends on the last value we assigned to the variable `x` -- we
 need to keep track of the computer's memory.
 
-## Memory
+#### Memory
 
 We can mode the contents of the computer's memory as a function $V \to
 \Int$  this function tells us for each variable in $V$ what its
@@ -1178,7 +1326,7 @@ function to associate meaning with variables.
 
 
 
-## Example
+#### Example
 
 Previously we didn't know the meaning of `x + 3` – but what if we are
 given the current memory $σ : V → \Int$ and we know that $σ(x) = 7$:
@@ -1191,7 +1339,7 @@ value associated with boolean expressions provided we know the current
 
 
 
-## Semantics for statements
+## Semantics for programs
 
  $p$  ::=  $x := e$ 
 
@@ -1216,7 +1364,7 @@ Any semantics for our language should carefully describe how the state changes..
 
 
 
-## Example execution
+#### Example execution
 
 \begin{tabular}{p{10mm}l}
  & \texttt{x := 3;}  \\
@@ -1239,11 +1387,6 @@ That is initially we're in a state $\sigma$ which satisfies:
 
 Now let's run this program step by step...
 
-
-## Hoare logic
-
-## Making this more precise...
-
 This gives some idea of how a program is executed.
 
 But this example raises some interesting questions:
@@ -1262,9 +1405,7 @@ programming languages precise.
 
 Let's try to give a mathematical account of program execution.
 
-
-
-## Modelling state
+#### Modelling state
 
 We model the current state of our computer's memory (storing the value
 of all our variables) as function:
@@ -1341,7 +1482,7 @@ for propositional logic).
 
 
 
-## Assignment
+#### Assignment
 
 \begin{prooftree}
 \RightLabel{Assignment}
@@ -1366,7 +1507,7 @@ command $x := y + 2$ by:
 
 
 
-## Conditionals
+#### Conditionals
 
 
 \begin{prooftree}
@@ -1390,7 +1531,7 @@ There are two rules for evaluating if-then-else statements:
 
 
 
-## Example
+#### Example
 
 
 Suppose we start from a state σ satisfying σ(x) = 3 and σ(y) = 10
@@ -1420,7 +1561,7 @@ Using the previous derivation rules:
 
 
 
-## Notation
+#### Notation
 
 It's often clear enough which rule is being applied.
 
@@ -1433,7 +1574,7 @@ In other words, our original progam halts in the state where r has become 3.
 
 
 
-## Sequential composition
+#### Sequential composition
 
 \begin{prooftree}
 \RightLabel{seq-a}
@@ -1457,7 +1598,7 @@ There are two rules for sequential composition:
 
 
 
-## Sequential composition
+#### Sequential composition
 
 \begin{prooftree}
 \RightLabel{seq-a}
@@ -1480,7 +1621,7 @@ There are two rules for sequential composition:
 
 
 
-## Loops
+#### Loops
 
 \begin{prooftree}
 \RightLabel{While-false}
@@ -1503,8 +1644,6 @@ Just as we saw for conditionals, we need two rules to handle loops:
 
 
 
-## Operational semantics
-
 These seven rules determine precisely how a program is executed.
 
 Given any initial state σ and program $p$, we can repeatedly apply
@@ -1518,7 +1657,7 @@ Let's extend our operational semantics to handle many execution steps
 
 
 
-## More than one step
+#### More than one step
 
 We say a given program $p$ and starting state σ **terminates** in τ
 precisely if:
@@ -1544,20 +1683,20 @@ by repeatedly applying the rules from our operational semantics.
 
 
 
-## Labelled transition systems
+<!-- ## Labelled transition systems -->
 
-This semantics forms a **labelled transition system**:
+<!-- This semantics forms a **labelled transition system**: -->
 
-* the set of states are the current program $p$ and memory σ;
-* our operational semantics determine the transition relation between
-  our states;
-* if we extend our language with other effects, such as opening a
-  window or writing to stdout -- we can add further *actions* to our
-  system to observe these effects.
+<!-- * the set of states are the current program $p$ and memory σ; -->
+<!-- * our operational semantics determine the transition relation between -->
+<!--   our states; -->
+<!-- * if we extend our language with other effects, such as opening a -->
+<!--   window or writing to stdout -- we can add further *actions* to our -->
+<!--   system to observe these effects. -->
 
 
 
-## From operational semantics to logic
+## From operational semantics to program logic
 
 These operational semantics determine how a program is executed from a given initial state σ.
 
@@ -1579,7 +1718,7 @@ This motivates the shift from *operational semantics* to *program logic*.
 
 
 
-## Specifications
+#### Specifications
 
 A **formal specification** is a mathematical description of what a program should do.
 
@@ -1592,9 +1731,6 @@ Instead, we use a formal specification to answer one question:
 **Is this program doing what it should?**
 
 
-
-## Specificiations
-
 We will give specifications in the form of a pre- and post-condition
 that are predicates on our states.
 
@@ -1606,7 +1742,7 @@ after the program has finished executing.
 
 
 
-## Notation
+#### Notation
 
 To define our logic for reasoning about programs, we introduce the following notation:
 
@@ -1625,9 +1761,7 @@ if executing $⟨ p , σ ⟩$ terminates in some final state τ, then τ must sa
 We'll define this -- once again -- using inference rules. But's let
 look at some examples first.
 
-
-
-## Examples
+#### Examples
 
 * \{ x = 3\}  `x := x + 1`  \{ x = 4\}
 
@@ -1647,7 +1781,7 @@ postcondition!
 
 
 
-## Examples
+#### Examples
 
 \{ true \} 
 ```c
@@ -1665,7 +1799,7 @@ How can we write a derivation proving this? What are the *inference rules* that 
 
 
 
-## Hoare logic
+### Hoare logic
 
 We'll give a handful of inference rules for proving statements of the
 form $\{ P \} \; p \; \{ Q \}$.
@@ -1676,7 +1810,7 @@ together with Edsger Dijkstra, Robert Floyd, and others.
 
 
 
-## Hoare logic -- assignment
+#### Hoare logic -- assignment
 
 What rule should we use for assignment? We've seen one example:
 
@@ -1697,10 +1831,6 @@ Or what if the pre- and postcoditions are not a simple equality?
 What's the most general rule?
 
 
-
-## Hoare logic -- assignment
-
-
 \begin{prooftree}
 \AxiomC{}
 \RightLabel{Assign}
@@ -1716,9 +1846,6 @@ What's the most general rule?
   
 Let's look at some examples...
 
-
-
-## Hoare logic -- assignment
 
 
 \begin{prooftree}
@@ -1755,7 +1882,7 @@ Here are three different examples of this rule in action:
 
 
 
-## Hoare logic -- conditional
+#### Hoare logic -- conditional
 
 
 \begin{prooftree}
@@ -1770,10 +1897,6 @@ What happens when we execute an if statement?
 We will continue executing either the 'then-branch' or the
 'else-branch'; if both branches manage to end in a state satisfying
 $Q$, the entire if-statement will.
-
-
-
-## Hoare logic -- conditional
 
 
 \begin{prooftree}
@@ -1797,7 +1920,7 @@ Use the two rules we have seen so far to show that:
 
 
 
-## Hoare logic -- composition
+#### Hoare logic -- composition
 
 \begin{prooftree}
 \AxiomC{\{ $P$ \} \; $p_1$ \; \{$R$\}}
@@ -1815,8 +1938,7 @@ reach a state satisfying $R$;
 But now we can run $p_2$ on this state, to produce a state satisfying $Q$.
 
 
-
-## Hoare logic -- bookkeeping
+#### Hoare logic -- rule of consequence
 
 \begin{prooftree}
 \AxiomC{\{ $P$ \} \; $p_1$ \; \{$R$\}}
@@ -1834,9 +1956,6 @@ This rarely happens in larger derivations.
 To still be able to use such rules, we need an additional
 'bookkeeping' rule.
 
-
-
-## Hoare logic -- consequence
 
 \begin{prooftree}
 \AxiomC{$P' \Rightarrow P$}
@@ -1863,7 +1982,7 @@ if executing $⟨ p , σ ⟩$ terminates in some final state τ, then τ must sa
 
 
 
-## Hoare logic -- while
+#### Hoare logic -- while
 
 \begin{prooftree}
 \AxiomC{\{ $??? \wedge b$ \} \; $p$ \; \{$???$\}}
@@ -1881,8 +2000,6 @@ But how should we fill in the question marks?
 
 
 
-## Hoare logic -- while
-
 \begin{prooftree}
 \AxiomC{\{ ${P} \wedge b$ \} \; $p$ \; \{$???$\}}
 \RightLabel{While}
@@ -1891,9 +2008,6 @@ But how should we fill in the question marks?
 
 When we first enter the loop body, we know that $P$ still holds.
 
-
-
-## Hoare logic -- while
 
 \begin{prooftree}
 \AxiomC{\{ $P \wedge b$ \} \; $p$ \; \{${P}$\}}
@@ -1905,12 +2019,6 @@ After completing the loop body, we may need to execute the loop body
 again (and again and again and again).
 
 The precondition of $p$ should *continue to hold during execution*.
-
-
-
-
-
-## Hoare logic -- while
 
 \begin{prooftree}
 \AxiomC{\{ $P \wedge b$ \} \; $p$ \; \{$P$\}}
@@ -1928,9 +2036,7 @@ the execution of the while loop.
 
 
 
-## Example
-
-#### {Question}\vspace{2mm}
+#### Example
 
 Give a derivation of the following statement:
 
@@ -1949,9 +2055,7 @@ Give a derivation of the following statement:
 
 
 
-
-
-## Hoare logic -- soundness and completeness
+## Soundness and completeness
 
 How can we be sure that we chose the right set of inference rules?
 
@@ -1970,13 +2074,11 @@ derivation showing $\{ P \} \; p \; \{ Q \}$.
 **We can reason about all possible program behaviours
 using the rules of Hoare logic.**
 
-. . . 
-
 Put differently, we never need to *execute* code to prove its correctness.
 
 
 
-## From While to C\#
+#### From While to C\#
 
 We still need to consider a bucketload of missing features to turn our
 simple imperative language into a more realistic programming language:
@@ -1993,9 +2095,7 @@ simple imperative language into a more realistic programming language:
 * ...
 
 
-
-
-## Program calculation
+#### Program calculation
 
 #### Problem\vspace{2mm}
 

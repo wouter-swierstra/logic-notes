@@ -50,7 +50,7 @@
 \newunicodechar{〚}{\ensuremath{\llbracket}}
 \newunicodechar{〛}{\ensuremath{\rrbracket}}
 \newunicodechar{⋮}{\ensuremath{\vdots}}
-\newunicodechar{ }{\ensuremath{\,}}
+\newunicodechar{ }{\ensuremath{\,}}
 \newunicodechar{ }{\ensuremath{\;}}
 \newunicodechar{ }{\ensuremath{\quad}}
 % Boxes around proof sketches
@@ -76,3 +76,15 @@
 \definecolor{uuPurple}{RGB}{82,41,128}
 
 \usepackage{url}
+
+\usepackage[answerdelayed,lastexercise]{exercise}
+\renewcommand{\ExerciseHeader}{\textbf{\large
+\ExerciseName~\arabic{chapter}.\ExerciseHeaderNB\ExerciseHeaderTitle
+\ExerciseHeaderOrigin\medskip}\\}
+
+\renewcommand{\AnswerHeader}{\medskip\textbf{
+Exercise~\arabic{chapter}.\ExerciseHeaderNB}\smallskip\\}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
