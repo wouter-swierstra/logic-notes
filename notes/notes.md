@@ -194,7 +194,19 @@ derivations may use some rules more than once or not at all.
 Give a derivation of $00 ≤ 001$. How often does your derivation use each inference rule?
 \end{Exercise}
 \begin{Answer}
-Wat denk je zelf?
+\begin{prooftree}
+\AxiomC{ }
+\RightLabel{Base}
+\UnaryInfC{$ε ≤ 1$}
+\RightLabel{Step0}
+\UnaryInfC{$0 ≤ 01$}
+\RightLabel{Step0}
+\UnaryInfC{$00 ≤ 001$}
+\end{prooftree}
+
+This proof uses the Step0 rule twice and the Base rule once. It
+doesn't the Step1 rule at all.
+
 \end{Answer}
 
 
@@ -252,7 +264,22 @@ Give a derivation showing isPalindrome(00) and
 isPalindrome(101).
 \end{Exercise}
 \begin{Answer}
-Wat denk je zelf?
+\begin{prooftree}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isPalindrome($ε$)}
+\RightLabel{Step}
+\UnaryInfC{isPalindrome($00$)}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{ }
+\RightLabel{Single}
+\UnaryInfC{isPalindrome($0$)}
+\RightLabel{Step}
+\UnaryInfC{isPalindrome($101$)}
+\end{prooftree}
+
 \end{Answer}
 
 \begin{Exercise} 
@@ -260,8 +287,12 @@ There are two axioms that can be used to prove isPalindrome($w$).
 Given a derivation of isPalindrome($w$), can you predict with which axiom
 was used to start the derivation?
 \end{Exercise}
-\begin{Answer}
-Wat denk je zelf? Dan?
+
+\begin{Answer} 
+If the length of the word $w$ is even, we can repeatedly remove two
+chararters until we have none left over. In the final step, we then
+apply the Empty rule. If the length of $w$ is odd, however, the
+derivation must end using the Single rule.
 \end{Answer}
 
 
@@ -337,20 +368,50 @@ prove that $[[][]]$ is balanced:
 \UnaryInfC{isBalanced($[[][]]$)}
 \end{prooftree}
 
-TODO: unclear which rule needs to be applied a priori. Sometimes it's
-easier to work bottom-up.
-
 \begin{Exercise}
 Which of the example words below are balanced?
 \begin{enumerate}
   \item $[ ] ∈ Σ^{⋆}$
+  \item $][ ∈ Σ^{⋆}$   
   \item $[ ][ ] ∈ Σ^{⋆}$
-  \item $[[ ][ ]] ∈ Σ^{⋆}$
   \item $]] ∈ Σ^{⋆}$ 
-\end{enumerate}  
+\end{enumerate}
   If they are balanced, give a derivation. If they are not, explain
 why no derivation can exist.
 \end{Exercise}
+\begin{Answer}
+\begin{enumerate}
+\item The word $[]$ is balanced, as shown by the following derivation:
+
+\begin{prooftree}
+\AxiomC{isBalanced(ε)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[]$)}
+\end{prooftree}
+
+\item There is no derivation showing that isBalanced($][$). The only
+rule that introduces brackets is the Bracket rule; this rule must
+introduces a opening bracket that is closed later. As this word starts
+with a closing bracket, no derivation can exist.
+
+\item The word $[][]$ is balanced, as shown by the following derivation:
+\begin{prooftree}
+\AxiomC{isBalanced(ε)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[]$)}
+\AxiomC{isBalanced(ε)}
+\RightLabel{Bracket}
+\UnaryInfC{isBalanced($[]$)}
+\BinaryInfC{isBalanced($[][]$)}
+\end{prooftree}
+
+\item The word $]]$ is not balanced. Just as we argued above, all
+balanced words start with an opening bracket - hence this word cannot
+be balanced.
+\end{enumerate}
+
+\end{Answer}
+
 
 \begin{Exercise} 
 How many \emph{different} derivations of isBalanced($w$) are there? 
@@ -361,6 +422,53 @@ What about the isPalindrome relation? Can there be more than one
 different derivation that a binary word is a palindrome? Why or why
 not?
 \end{Exercise}
+
+\begin{Answer}
+Given any derivation isBalanced($w$) for some word $w$, we can always
+construct a new derivation as follows:
+
+\begin{prooftree}
+\AxiomC{isBalanced(ε)}
+\AxiomC{isBalanced($w$)}
+\RightLabel{Append}
+\BinaryInfC{isBalanced($w$)}
+\end{prooftree}
+
+Hence there are *infinitely* many possible derivations showing
+establishing isBalanced($w$) for balanced words $w$.
+
+The isPalindrome relation, however, is very different: there is
+precisely one possible rule applicable for each word $w$; each
+derivation is unique.
+\end{Answer}
+
+#### Amibuguity
+
+Although we -- as humans -- can easily enough construct a derivation
+for a given Dyck word using the rules above, this is not as obvious as
+you may think. Consider the above derivation of isBalanced($[[][]]$);
+we can see easily enough that a derivation should start by using the
+Bracket rule -- but this isn't the only possible way to start. We
+could just as well have started by applying the Append rule as
+follows:
+
+\begin{prooftree}
+\AxiomC{isBalanced($[$)}
+\AxiomC{isBalanced($[][]]$)}
+\RightLabel{Append}
+\BinaryInfC{isBalanced($[[][]]$)}
+\end{prooftree}
+
+This derivation is unfinished--and indeed there is no way to complete
+it since we still need to establish isBalanced($[$), for which no derivation
+exists. 
+
+This example illustrates that *more than one* rule may be applicable
+to establish a certain property. Indeed, there may be more than one
+derivation for the same property. This is a crucial difference between
+inductively defined functions and inductively defined relations: where
+a function should produce a single result on a given input, there may
+be many different derivations of the same fact.
 
 ## Rule induction
 
@@ -405,7 +513,7 @@ but any proofs about balanced words would need to follow the inductive
 structure of the words themselves. 
 
 The proof technique illustrated above, using induction over a
-derivation, is sometimes referred to as **rule induction**. We won't
+derivation, is sometimes referred to as *rule induction*. We won't
 perform many such proofs, but they form a crucial proof technique when
 studying logic and programming languages. In the MSc course on
 *Concepts of programming languages* you will encounter many more
@@ -420,12 +528,14 @@ inference rules and the derivations we can write using them.
 
 ## Exercises
 
+TODO: add further exercises and solutions
+
 Define isEven
 
 Define less than or equal prove that 2 < 4
 
 Define parity check
-
+ 
 
 \newpage
 
@@ -440,73 +550,39 @@ Define parity check
 # Natural deduction
 
 
-
-So far, we have encountered propositional logic in several lectures:
-
-* The first lecture defined the syntax of propositional logic informally
-
-* Later, we saw how to define this syntax formally as an inductively defined set
-
-* We have studied the semantics of propositional logic using truth tables.
-
-* We have seen the semantics of propositional logic informally using proof strategies
-
-Can we not give a more precise definition of proof?
-
-And relate it to the 'truth table semantics' we saw in the first lecture?
-
-What is a proof?
-
-Given a formula in propositional logic $p$, we can check when $p$
-holds for all possible values of its atomic propositional variables --
-this is what we do when we write a truth table.
-
-We can also give a 'proof sketch' using proof strategies -- but we
-haven't made precise what these strategies are, relying on an informal
-diagrammatic description.
-
-Can we define a set of all proofs of some propositional logic
-formula?
-
-After all, we managed to define the syntax of propositionial logic as
-inductively defined set -- can we do the same for its semantics?
+So far, we have encountered propositional logic several times. In the
+first lecture, we defined the syntax of propositional logic
+informally; later, we saw how to define this syntax more formally as
+an inductively defined set using a BNF equation. We have defined the
+*semantics* of propositional logic in terms of truth tables; later, we
+saw how we could give an alternative semantics using proof
+strategies. In contrast to the *syntax* of propositional logic,
+however, both these approaches to semantics fail to nail down the
+semantics of propositional logic precisely. This chapter aims to
+achieve just that.
 
 ## What is a proof?
 
-Given the following set of propositional logical formulas over a set of atomic variables $P$:
+We can define the set of propositional logical formulas over a set of
+atomic variables $P$ using the following BNF equation:
 
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
+ $p,q$  ::=  true  |  false  |  $P$  |  $¬p$  |  $p ∧ q$  |  $p ∨ q$  |  $p ⇒ q$  |  $p ⇔ q$ 
 
-Can we give inference rules that capture precisely the tautologies?
+This equation enables us to distinguish between those strings of
+symbols that correspond to well-formed formulas, such as $p ∨ ¬q$, and
+those that do no, such as $¬∨∨p$. But this does not yet tell us why a
+formula such as $p ⇒ p$ is always true, but $p ∨ p$ is not. How can we
+distinguish the propositional logic formulas that are true from those
+that are false? Or put differently, given some formula $p$, *what is a
+proof of $p$*? If we define the *syntax* of propositional logic as an
+inductively defined set, why should be not be able to give an
+inductive definition of a formula's semantics?
 
-These inference rules, sometimes called *natural deduction*, formalize
-the proof strategies that we have seen previously.
-
-
-Most logical textbooks do not introduce an explicit name for the
-relation capturing 'truthfulness' of a given propositional logical
-formula, writing:
-
-\begin{prooftree}
-\AxiomC{$P$}
-\AxiomC{$Q$}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{$P \wedge Q$}
-\end{prooftree}
-
-Rather than the more explicit:
-
-\begin{prooftree}
-\AxiomC{isTrue($P$)}
-\AxiomC{isTrue($Q$)}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{isTrue($P \wedge Q$)}
-\end{prooftree}
-
-
-#### Proof strategies vs natural deduction
-
-Compare the proof strategy for conjunction introduction:
+So far, we have seen two different approaches to define a semantics
+for propositional logic: truth tables and proof strategies. Let's
+start to giving a formal account of proof strategies, before turning
+our attention to truth tables. Proof strategy are typically given by
+using the following notation:
 
 \begin{center}
 \begin{tcolorbox}[width=6cm]
@@ -522,7 +598,23 @@ Therefore we conclude $P ∧ Q$.
 \end{tcolorbox} 
 \end{center}
 
-And the inference rule for conjunction introduction:
+This strategy for conjunction shows how to prove $P ∧ Q$, given a
+proof of $P$ and a proof of $Q$. We can translate this strategy to our
+inference rule notation directly:
+
+\begin{prooftree}
+\AxiomC{isTrue($P$)}
+\AxiomC{isTrue($Q$)}
+\RightLabel{$\wedge$-I}
+\BinaryInfC{isTrue($P \wedge Q$)}
+\end{prooftree}
+
+In this style, we can try to define a unary relation isTrue on the
+formulas of propositional logic; the inference rules then define the
+set of all possible valid proofs. Most logical textbooks do not
+introduce an explicit name for the relation capturing 'truthfulness' –
+like our isTrue relation - but rather identify a formula with its
+semantics, writing:
 
 \begin{prooftree}
 \AxiomC{$P$}
@@ -531,14 +623,18 @@ And the inference rule for conjunction introduction:
 \BinaryInfC{$P \wedge Q$}
 \end{prooftree}
 
+The aim of this chapter is to find a suitable collection of inference
+rules describing all possible proofs of a propositional logic
+formula. Clearly, we will need more rules than the conjunction
+introduction rule above. What about conjunction elimination?
 
-
-#### Conjuction elimination
+There were two strategies for conjunction elimination; here is the
+first:
 
 \begin{center}
 \begin{tcolorbox}[width=6cm]
 \begin{tcolorbox}[width=4cm]
-⋮
+⋮\\
 Proof of $P ∧ Q$\\
 ⋮
 \end{tcolorbox}
@@ -547,165 +643,259 @@ Therefore, $P$ holds.
 \end{tcolorbox}
 \end{center}
 
-What is the corresponding elimination rule for conjunction?
-
-
-. . .
+What should the corresponding inference rule for conjunction
+elimination be? There is very little creativity necessary to come up
+with the following rule:
 
 \begin{prooftree}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E$_l$}
+\AxiomC{$P ∧ Q$}
+\RightLabel{$∧$-E$_1$}
 \UnaryInfC{$P$}
 \end{prooftree}
 
-
-
-#### Assumptions
-
-Most textbooks in logic define natural deduction as a *unary* relation
-on propositional formulas.
+Of course, there is also a second elimination rule for conjunction:
 
 \begin{prooftree}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E$_l$}
-\UnaryInfC{$P$}
-\end{prooftree}
-
-This rule states that from the assumption $P \wedge Q$, you can deduce $P$.
-
-Once you have completed a derivation, we can read off all the
-assumptions from the 'leaves' of our proof tree.
-
-
-
-#### Example derivation
-
-Combining the rules we have seen so far, we can prove that if $P \wedge Q$ holds, so does $Q \wedge P$.
-
-\begin{prooftree}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E$_r$}
+\AxiomC{$P ∧ Q$}
+\RightLabel{$∧$-E$_2$}
 \UnaryInfC{$Q$}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E$_l$}
-\UnaryInfC{$P$}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{$Q \wedge P$}
 \end{prooftree}
 
+Using these rules, we can start to write the following (incomplete)
+proof:
 
-But how can we manage these assumptions?
+\begin{prooftree}
+\AxiomC{…}
+\UnaryInfC{$P ∧ Q$}
+\RightLabel{$∧$-E$_2$}
+\UnaryInfC{$Q$}
 
-Wouldn't it be nicer to show that $(P \wedge Q) \Rightarrow (Q \wedge P)$ (without making any further assumptions)?
+\AxiomC{…}
+\UnaryInfC{$P ∧ Q$}
+\RightLabel{$∧$-E$_1$}
+\UnaryInfC{$P$}
 
-To prove this, we need the *implication introduction* rule.
+\RightLabel{$∧$-I}
+\BinaryInfC{$Q ∧ P$}
+\end{prooftree}
 
+This derivation fragment shows how to establish $Q ∧ P$ if we already
+have a proof of $P ∧ Q$. The derivation is, however, incomplete---we
+have not yet shown that $P ∧ Q$ holds. Nonetheless, this example shows
+how different inference rules can be used to combine larger proofs.
 
-
-#### Implication introduction -- proof strategy
-
+Can every proof strategy be adapted to an inference rule in this
+style? Unfortunately, it is not always quite this
+straightforward. Consider the following strategy for the introduction
+of an implication:
 
 \begin{center}
 \begin{tcolorbox}[width=8cm]
 Assume $P$.\\
 \begin{tcolorbox}[width=5cm]
-⋮
+⋮\\
 Proof of $Q$.\\
 ⋮
 \end{tcolorbox}
-Therefore, we can conclude $P \Rightarrow Q \quad \square$
+Therefore, we can conclude $P ⇒ Q \quad \square$
 \end{tcolorbox}
 \end{center}
 
 In the implication introduction rule, we are allowed to *assume* that
-$P$ holds to give a proof of $Q$, and then conclude $P \Rightarrow Q$
-holds.
+$P$ holds to give a proof of $Q$, and then conclude $P ⇒ Q$
+holds. There is one important catch: we can *only* use our assumption
+that $P$ holds to prove that $Q$ holds. In particular, we cannot
+decide to use our proof of $P$ elsewhere (unless we can provide a
+separate proof that $P$ holds). This example makes it clear that we
+need to account for the assumptions that we make when writing our
+proofs.
 
-How can keep track of the assumptions in natural deduction proofs?
+## Assumptions and contexts
+
+Keep track of list of assumptions that we are allowed to use:
 
 
+ $Γ$  ::=  ε  |  Γ , $p$ 
 
-#### Assumptions
+
+We can then define a relation on Γ × P, often written as $Γ ⊢ p$ to
+denote that we can find a proof of the formula $p$ from the list of
+assumptions $Γ$.
+
+We can rephrase our previous rules for conjunction as follows:
 
 \begin{prooftree}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E2}
-\UnaryInfC{$Q$}
-\AxiomC{$P \wedge Q$}
-\RightLabel{$\wedge$-E1}
-\UnaryInfC{$P$}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{$Q \wedge P$}
+\AxiomC{$Γ ⊢ P$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{∧I}
+\BinaryInfC{$Γ ⊢ P ∧ Q$}
 \end{prooftree}
 
-In the proof tree above, we have $P \wedge Q$ as \emph{axioms} --
-propositions that we assume must hold.
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₁}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₂}
+\UnaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+
+How to use the assumptions in our context?
+
+\begin{prooftree}
+\AxiomC{$P ∈ Γ$}
+\RightLabel{Assumption}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+Now we give a proof of $P ∧ Q ⊢ Q ∧ P$.
+
+\begin{prooftree}
+\AxiomC{$P ∧ Q ∈ P ∧ Q$}
+\RightLabel{Assumption}
+\UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
+\RightLabel{$∧$-E$_2$}
+\UnaryInfC{$P ∧ Q ⊢ Q$}
+
+\AxiomC{$P ∧ Q ∈ P ∧ Q$}
+\RightLabel{Assumption}
+\UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
+\RightLabel{$∧$-E$_1$}
+\UnaryInfC{$P ∧ Q ⊢ P$}
+
+\RightLabel{$∧$-I}
+\BinaryInfC{$P ∧ Q ⊢ Q ∧ P$}
+\end{prooftree}
+
+Often, we will leave out the explicit application of the assumption rule, writing:
+
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
+\RightLabel{$∧$-E$_2$}
+\UnaryInfC{$P ∧ Q ⊢ Q$}
+\end{prooftree}
+
+when it is obvious that $P ∧ Q ∈ P ∧ Q$.
+
+
+What about the implication rule that was previously problematic?
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ Q$}
+\RightLabel{I⇒}
+\UnaryInfC{$Γ ⊢ P ⇒ Q$}
+\end{prooftree}
+
+
+#### Implication elimination
+
+\begin{center}
+\begin{tcolorbox}[width=8cm]
+\begin{tcolorbox}[width=5cm]
+Proof of $P ⇒ Q$.
+\end{tcolorbox}
+\vspace{5mm}
+\begin{tcolorbox}[width=5cm]
+Proof of $P$.
+\end{tcolorbox}
+Therefore, we can conclude $Q \quad \square$.
+\end{tcolorbox}
+\end{center}
+
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ⇒ Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{E⇒}
+\BinaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
 
 
 
-#### Implication introduction -- inference rule
+Natural deduction is modular
+Historical perspective
+
+show contraposition as an admissable rule
+
+
+
+
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ P ∨ Q$} -->
+<!-- \AxiomC{$Γ, P ⊢ C$} -->
+<!-- \AxiomC{$Γ, Q ⊢ C$} -->
+<!-- \RightLabel{∨E} -->
+<!-- \TrinaryInfC{$Γ ⊢ C$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ P$} -->
+<!-- \RightLabel{∨I₁} -->
+<!-- \UnaryInfC{$Γ ⊢ P ∨ Q$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ Q$} -->
+<!-- \RightLabel{∨I₂} -->
+<!-- \UnaryInfC{$Γ ⊢ P ∨ Q$} -->
+<!-- \end{prooftree} -->
+
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ ¬P$} -->
+<!-- \AxiomC{$Γ ⊢ P$} -->
+<!-- \RightLabel{¬E} -->
+<!-- \BinaryInfC{$Γ ⊢ ⊥$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ, P ⊢ ⊥$} -->
+<!-- \RightLabel{¬I} -->
+<!-- \UnaryInfC{$Γ ⊢ ¬P$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ ⊥$} -->
+<!-- \RightLabel{⊥E} -->
+<!-- \UnaryInfC{$Γ ⊢ C$} -->
+<!-- \end{prooftree} -->
+
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ, ¬P ⊢ ⊥$} -->
+<!-- \RightLabel{???} -->
+<!-- \UnaryInfC{$Γ ⊢ P$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{$Γ ⊢ ¬¬P$} -->
+<!-- \RightLabel{???} -->
+<!-- \UnaryInfC{$Γ ⊢ P$} -->
+<!-- \end{prooftree} -->
+
+<!-- \begin{prooftree} -->
+<!-- \AxiomC{} -->
+<!-- \RightLabel{???} -->
+<!-- \UnaryInfC{$Γ ⊢ P ∨ ¬P$} -->
+<!-- \end{prooftree} -->
+
+
+
 
 \begin{prooftree}
 \AxiomC{ }
-\UnaryInfC{$P^1$}
-\UnaryInfC{$\vdots$}
-\UnaryInfC{$Q$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \Rightarrow Q$}
-\end{prooftree}
-
-The *implication introduction* rule takes a proof of $Q$ that is built
-using $P$ as assumptions.
-
-To conclude $P \Rightarrow Q$, we *discharge* all the occurrences of
-$P$ as axioms *in the current subtree*.
-
-We number each usage of the implication introduction rule; the
-assumptions discharged are also numbered -- indicating which rule
-discharged them.
-
-
-
-#### Example: $P \Rightarrow P$
-
-
-\begin{prooftree}
-\AxiomC{ }
-\UnaryInfC{$P^1$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \Rightarrow P$}
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$ ⊢ P ⇒ P$}
 \end{prooftree}
 
 This proof is *closed* -- meaning there are no open assumptions that
 it is making.
-
-**Note:** when using the implication elimination rule more than once,
-you'll need to assign a unique number to each application of this
-inference rule.
-
-
-
-#### Example: $(P \wedge Q) \Rightarrow (Q \wedge P)$
-
-Give a closed natural deduction proof of $(P \wedge Q) \Rightarrow (Q \wedge P)$.
-
-. . .
-
-\begin{prooftree}
-\AxiomC{ }
-\UnaryInfC{$(P \wedge Q)^1$}
-\RightLabel{$\wedge$-E2}
-\UnaryInfC{$Q$}
-\AxiomC{ }
-\UnaryInfC{$(P \wedge Q)^1$}
-\RightLabel{$\wedge$-E1}
-\UnaryInfC{$P$}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{$Q \wedge P$}
-\RightLabel{$\Rightarrow-I$ 1}
-\UnaryInfC{$(P \wedge Q) \Rightarrow (Q \wedge P)$}
-\end{prooftree}
-
 
 
 
@@ -717,50 +907,38 @@ We previously saw how we 'abused' proof strategies to come up with an incorrect 
 
 What kind of mistakes can we make when we writing a proof using natural deduction?
 
-. . . 
-
 \begin{prooftree}
 \AxiomC{ }
-\UnaryInfC{$P^1$}
-\RightLabel{$\Rightarrow-I$ 1}
-\UnaryInfC{$(P \Rightarrow P) \Rightarrow P$}
+\UnaryInfC{$P ⇒ P ⊢ P$}
+\RightLabel{$⇒-I$}
+\UnaryInfC{$ ⊢ (P ⇒ P) ⇒ P$}
 \end{prooftree}
 
-Here we can make the previous mistake more explicit: we are
-discharging the assumption $P$, whereas we should be discharging $P
-\Rightarrow P$.
+Here we can make the previous mistake more explicit: the assumption
+that we are allowed to use is $P ⇒ P$ rather than $P$ itself.
 
 
-
-#### Implication elimination
-
-\begin{center}
-\begin{tcolorbox}[width=8cm]
-\begin{tcolorbox}[width=5cm]
-Proof of $P \Rightarrow Q$.
-\end{tcolorbox}
-\vspace{5mm}
-\begin{tcolorbox}[width=5cm]
-Proof of $P$.
-\end{tcolorbox}
-Therefore, we can conclude $Q \quad \square$.
-\end{tcolorbox}
-\end{center}
-
-What is the rule for implication elimination?
-
-. . .
-
+\begin{Exercise}
+Give a natural deduction proof of $⊢ P ⇒ (Q ⇒ (Q ∧ P))$
+\end{Exercise}
+\begin{Answer}
 \begin{prooftree}
-\AxiomC{$P$ }
-\AxiomC{$P \Rightarrow Q$}
-\RightLabel{$\Rightarrow-E$}
-\BinaryInfC{$Q$}
+\AxiomC{}
+\UnaryInfC{$P, Q ⊢ Q$}
+\AxiomC{}
+\UnaryInfC{$P, Q ⊢ P$}
+\BinaryInfC{$P, Q ⊢ Q ∧ P$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$P ⊢ Q ⇒ (Q ∧ P)$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$⊢ P ⇒ (Q ⇒ (Q ∧ P))$}
 \end{prooftree}
+\end{Answer}
 
 
 
-#### Natural deduction
+
+## Natural deduction
 
 We'll go through the rules for natural deduction for propositional
 logic.
@@ -777,15 +955,15 @@ to relate them to the *truth table semantics* from our first lecture.
 
 #### Truth and falsity
 
-Most logic textbooks use $\top$ for **T** (truth) and $\bot$ for **F**
+Most logic textbooks use $⊤$ for **T** (truth) and $⊥$ for **F**
 (falsity).
 
 The introduction rule for truth is trivial:
 
 \begin{prooftree}
 \AxiomC{$$}
-\RightLabel{$\top$-I}
-\UnaryInfC{$\top$}
+\RightLabel{$⊤$-I}
+\UnaryInfC{$Γ ⊢ ⊤$}
 \end{prooftree}
 
 There is no introduction rule for falsity.
@@ -807,163 +985,122 @@ Therefore we conclude $P$.
 Or written as an inference rule:
 
 \begin{prooftree}
-\AxiomC{$\bot$}
-\RightLabel{$\bot$-E}
-\UnaryInfC{$P$}
+\AxiomC{$Γ ⊢ ⊥$}
+\RightLabel{$⊥$-E}
+\UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
+
+Example: P ∧ ¬P ⇒ Q
 
 
 #### Negation rules
 
-Recall that $\neg P$ behaves just like $P \Rightarrow \bot$.
+Recall that $¬ P$ behaves just like $P ⇒ ⊥$.
 
 
 \begin{prooftree}
-\AxiomC{$\neg P$}
-\AxiomC{$P$}
-\RightLabel{$\neg$-E}
-\BinaryInfC{$\bot$}
+\AxiomC{$Γ ⊢ ¬ P$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{$¬$-E}
+\BinaryInfC{$Γ ⊢ ⊥$}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{ }
-\UnaryInfC{$P^1$}
-\UnaryInfC{$\vdots$}
-\UnaryInfC{$\bot$}
-\RightLabel{$\neg$-I 1}
-\UnaryInfC{$\neg P$}
+\AxiomC{$Γ, P ⊢ ⊥$}
+\RightLabel{$¬$-I}
+\UnaryInfC{$Γ ⊢ ¬ P$}
 \end{prooftree}
 
-**Note:** the negation introduction rule also discharges assumptions!
-Remember: keep the numbering of such rules unique throughout the
-entire proof tree to avoid confusion.
-
-That is -- don't use rule number 1 for both introduction introduction
-and negation introduction rules.
-
-
--
 
 #### Equivalence rules
 
-Similarly, $P \Leftrightarrow Q$ behaves the same as $P \Rightarrow Q
-\wedge P \Rightarrow P$.
+Similarly, $P ⇔ Q$ behaves the same as $P ⇒ Q
+∧ P ⇒ P$.
 
 
 \begin{prooftree}
-\AxiomC{$P \Rightarrow Q$}
-\AxiomC{$P \Rightarrow Q$}
-\RightLabel{$\Leftrightarrow$-I}
-\BinaryInfC{$P \Leftrightarrow Q$}
+\AxiomC{$Γ, P ⊢ Q$}
+\AxiomC{$Γ, Q ⊢ P $}
+\RightLabel{$⇔$-I}
+\BinaryInfC{$Γ ⊢ P ⇔ Q$}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{$P \Leftrightarrow Q$}
-\RightLabel{$\Leftrightarrow$-$E_l$}
-\UnaryInfC{$P \Rightarrow Q$}
+\AxiomC{$Γ ⊢ P ⇔ Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{$⇔$-$E_1$}
+\BinaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{$P \Leftrightarrow Q$}
-\RightLabel{$\Leftrightarrow$-$E_r$}
-\UnaryInfC{$Q \Rightarrow P$}
+\AxiomC{$Γ ⊢ P ⇔ Q$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{$⇔$-$E_2$}
+\BinaryInfC{$Γ ⊢ P$}
 \end{prooftree}
-
-
-
-
-#### Exercise
-
-Prove that $P \Rightarrow (Q \Rightarrow (Q \wedge P))$
-
-. . . 
-
-\begin{prooftree}
-\AxiomC{}
-\UnaryInfC{$Q^2$}
-\AxiomC{}
-\UnaryInfC{$P^1$}
-\BinaryInfC{$Q \wedge P$}
-\RightLabel{$\Rightarrow$-I 2}
-\UnaryInfC{$Q \Rightarrow (Q \wedge P)$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \Rightarrow (Q \Rightarrow (Q \wedge P))$}
-\end{prooftree}
-
 
 
 #### Discharging more than once
 
-Consider the following proof that $P \Rightarrow (P \wedge P)$
+Consider the following proof that $⊢ P ⇒ (P ∧ P)$
 
 \begin{prooftree}
 \AxiomC{}
-\UnaryInfC{$P^1$}
+\UnaryInfC{$P ⊢ P$}
 \AxiomC{}
-\UnaryInfC{$P^1$}
-\BinaryInfC{$P \wedge P$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \Rightarrow (P \wedge P)$}
+\UnaryInfC{$P ⊢ P$}
+\BinaryInfC{$P ⊢ P ∧ P$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$⊢ P ⇒ (P ∧ P)$}
 \end{prooftree}
 
-This example shows how we need to discharge **all** the occurrences of
-the assumption $P$ in the current proof subtree.
+This example shows how we can use an assumption *more than once* in
+different parts of the proof.
 
--
 
-#### Exercise
 
-Prove that $P \wedge \top \Leftrightarrow P$.
-
-. . . 
-
+\begin{Exercise}
+Give a derivation showing $⊢ P ∧ ⊤ ⇔ P$.
+\end{Exercise}
+\begin{Answer}
 \begin{prooftree}
 \AxiomC{ }
-\UnaryInfC{$P^1$}
+\UnaryInfC{$P ⊢ P$}
 \AxiomC{ }
-\RightLabel{$\top$-I}
-\UnaryInfC{$\top$}
-\RightLabel{$\wedge$-I}
-\BinaryInfC{$P \wedge \top$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \Rightarrow (P \wedge \top)$}
+\RightLabel{$⊤$-I}
+\UnaryInfC{$P ⊢ ⊤$}
+\RightLabel{$∧$-I}
+\BinaryInfC{$P ⊢ P ∧ ⊤$}
 \AxiomC{}
-\UnaryInfC{$(P \wedge \top)^2$}
-\RightLabel{$\wedge$-E$_l$}
-\UnaryInfC{$P$}
-\RightLabel{$\Rightarrow$-I 2}
-\UnaryInfC{$(P \wedge \top) \Rightarrow P$}
-\RightLabel{$\Leftrightarrow$-I}
-\BinaryInfC{$P \wedge \top \Leftrightarrow P$}
+\UnaryInfC{$P ∧ ⊤ ⊢ P ∧ ⊤$}
+\RightLabel{$∧$-E$_1$}
+\UnaryInfC{$P ∧ ⊤ ⊢ P$}
+\RightLabel{$⇔$-I}
+\BinaryInfC{$⊢ P ∧ ⊤ ⇔ P$}
 \end{prooftree}
+\end{Answer}
 
 
-
-#### What's missing?
+#### Disjunction
 
 The only thing remaining are the rules for disjunction.
 
 The *introduction* rules are easy:
 
-. . . 
-
-
 \begin{prooftree}
-\AxiomC{$P$}
-\RightLabel{$\vee$-$I_l$}
-\UnaryInfC{$P \vee Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{$∨$-$I_1$}
+\UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{$Q$}
-\RightLabel{$\vee$-$I_r$}
-\UnaryInfC{$P \vee Q$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{$∨$-$I_2$}
+\UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
 
-
-
-#### Disjuction elimination: proof strategy
+Disjunction elimination, however, is a bit more tricky. Recall the associated proof strategy:
 
 \begin{center}
 \begin{tcolorbox}[width=9cm]
@@ -985,27 +1122,15 @@ Therefore, $R$ is true, regardless of which of $P$ or $Q$ is true.
 \end{tcolorbox}
 \end{center}
 
-
-
-#### Disjuction elimination
-
 \begin{prooftree}
-\AxiomC{$P \vee Q$}
-\AxiomC{ }
-\UnaryInfC{$P^1$}
-\UnaryInfC{$\vdots$}
-\UnaryInfC{$R$}
-
-\AxiomC{ }
-\UnaryInfC{$Q^1$}
-\UnaryInfC{$\vdots$}
-\UnaryInfC{$R$}
-
-\RightLabel{$\vee$-E 1}
-\TrinaryInfC{$R$}
+\AxiomC{$Γ ⊢ P ∨ Q$}
+\AxiomC{$Γ, P ⊢ R$}
+\AxiomC{$Γ, Q ⊢ R$}
+\RightLabel{$∨$-E}
+\TrinaryInfC{$Γ ⊢ R$}
 \end{prooftree}
 
-If we know $P \vee Q$ holds...
+If we know $P ∨ Q$ holds...
 
 ... and we know that $R$ holds whenever $P$ does;
 
@@ -1015,55 +1140,47 @@ If we know $P \vee Q$ holds...
 
 
 
-#### Exercise
-
-Give a proof that $(P \vee \bot) \Rightarrow P$.
-
-. . .
-
+\begin{Exercise}
+Give a derivation showing $⊢ (P ∨ ⊥) ⇒ P$.
+\end{Exercise}
+\begin{Answer}
 \begin{prooftree}
 \AxiomC{ }
-\UnaryInfC{$(P \vee \bot)^1$}
+\UnaryInfC{$P ∨ ⊥ ⊢ P ∨ ⊥$}
 
 \AxiomC{ }
-\UnaryInfC{$P^2$}
+\UnaryInfC{$P ∨ ⊥, P ⊢ P$}
 
 \AxiomC{ }
-\UnaryInfC{$\bot^2$}
-\UnaryInfC{$P$}
+\UnaryInfC{$P ∨ ⊥, ⊥ ⊢ ⊥$}
+\RightLabel{⊥-E}
+\UnaryInfC{$P ∨ ⊥, ⊥ ⊢ P$}
 
-\RightLabel{$\vee$-E 2}
-\TrinaryInfC{$P$}
-\RightLabel{$\Rightarrow$-I 1}
-\UnaryInfC{$P \vee \bot \Rightarrow P$}
+\RightLabel{$∨$-E}
+\TrinaryInfC{$P ∨ ⊥ ⊢ P$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$⊢ P ∨ ⊥ ⇒ P$}
 \end{prooftree}
+\end{Answer}
 
 
+#### *Reductio ad absurdum*
 
-#### Final rules
-
-We need one final rule:
+To complet our natural deduction rules for classical logic, we need
+one final rule:
 
 \begin{prooftree}
-\AxiomC{ }
-\UnaryInfC{$\neg P^1$}
-\UnaryInfC{$\vdots$}
-\RightLabel{$\wedge$-E1}
-\UnaryInfC{$\bot$}
+\AxiomC{$Γ, ¬P ⊢ ⊥$}
 \RightLabel{RAA}
 \UnaryInfC{$P$}
 \end{prooftree}
 
 This rule, sometimes called *reductio ad absurdum*, states that if
-$\neg P$ leads to a contradiction, $P$ must hold.
+$¬ P$ leads to a contradiction, $P$ must hold.
 
 (Notice how it is the only rule that is not an
 introduction-elimination rule for a logical operator?)
 
-
-
-
-#### Beyond propositional logic...
 
 I've presented the rules for propositional logic -- but we can extend
 these rules to handle *predicate* logic.
@@ -1074,8 +1191,6 @@ rules to truth tables...
 
 But before I can do that, let's revisit what 'proof-by-truth-table'
 really means...
-
-
 
 ## Semantics of propositional logic
 
@@ -1096,8 +1211,6 @@ see the value of the entire proposotional formula.
 
 Can we make this more precise?
 
-
-
 We call a function $v : P$ → **Bool** a *truth assignment*.
 
 Such a function chooses the values of associated with each atomic propositional variables.
@@ -1105,64 +1218,48 @@ Such a function chooses the values of associated with each atomic propositional 
 **Claim** Given any truth assignment $v$ and propositional logic
 formula $p$, we can calculate the truth value of a $p$.
 
+#### Booleans vs propositions
 
-**Claim** Given any truth assignment $v$ and propositional logic
-formula $p$, we can calculate the truth value of a $p$.
+ $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
+
+Any propositional logic formula $p$ gives rise to a semantics:
+
+  $〚 p 〛: (P → \Bool) → \Bool$
+
+Before giving the semantics of propositional logic formulas, what are the booleans?
+
+Bool, &&, ||, not w
+
+\begin{align*}
+\llbracket \text{true} \rrbracket (v) \; = & \; \mathbf{\text{T}}\\
+\llbracket \text{false} \rrbracket (v) \; = & \; \mathbf{\text{F}}\\
+\llbracket \text{P} \rrbracket (v) \; = & \; v(\text{P})\\
+\llbracket \neg p \rrbracket (v) \; = & \; \text{not}(\llbracket p \rrbracket (v))\\
+\llbracket p \vee q \rrbracket (v) \; = & \; \text{or}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
+\llbracket p \wedge q \rrbracket (v) \; = & \; \text{and}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
+\llbracket p \Rightarrow q \rrbracket (v) \; = & \; \text{implies}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
+\end{align*}
 
 We can do this by induction on $p$. Recall that the propositional
 logic formulas are given by the following BNF:
 
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
-
-. . .
 
 * if $p$ is true, we return **T**;
 * if $p$ is false, we return **F**;
-* if $p$ is of the form $\neg q$, we can compute the value associated
+* if $p$ is of the form $¬ q$, we can compute the value associated
   with $q$. If this is **T**, we return **F**; if it is **F**, we
   return **T**.
-
-
-
-**Claim** Given any truth assignment $v$ and propositional logic
-formula $p$, we can calculate the truth value of a $p$.
-
-We can do this by induction on $p$. Recall that the propositional
-logic formulas are given by the following BNF:
-
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
-
-. . .
-
-* if $p$ is of the form $q_1 \wedge q_2$, we can compute the value
+* if $p$ is of the form $q_1 ∧ q_2$, we can compute the value
   associated with $q_1$ and $q_2$. If this both are **T**, we return
   **T**; otherwise we return **F**.
-* if $p$ is of the form $q_1 \vee q_2$, we can compute the value
+* if $p$ is of the form $q_1 ∨ q_2$, we can compute the value
   associated with $q_1$ and $q_2$. If this both are **F**, we return
   **F**; otherwise we return **T**.
 * similar cases exist for implication and logical equivalence.
-. . . 
-
 * but what about variables?
-
-
-
-**Claim** Given any truth assignment $v$ and propositional logic
-formula $p$, we can calculate the truth value of a $p$.
-
-We can do this by induction on $p$. Recall that the propositional
-logic formulas are given by the following BNF:
-
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
-
 * if $p$ is an atomic propositional variable $P$, we return $v(P)$.
 
 Our truth assignment tells us exactly how to treat atomic propositions.
-
-
-
-**Claim** Given any truth assignment $v$ and propositional logic
-formula $p$, we can calculate the truth value of a $p$.
 
 This defines the semantics of all propositional logic formulas,
 usually written $〚 p 〛$.
@@ -1276,10 +1373,68 @@ These results show just how clean and simple propositional logic is...
 
 But they break down as soon as you study richer predicate logics...
 
+
+## Curry Howard
+
+\newpage
+
+## The rules of natural deduction: an overview
+
+
+
 \newpage
 
 ## Exercises
 
+
+\begin{Exercise}
+Give a natural deduction proof of Q ⊢ (Q ⇒ R) ⇒ R.
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ ¬(A ∧ B) ⇒ ( A ⇒ ¬B)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of (P ∧ Q) ∧ R, S ∧ T ⊢ Q ∧ S
+
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ (A ⇒ C) ∧ (B ⇒ ¬C) ⇒ ¬(A ∧ B)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ (A ∧ B) ⇒ ((A ⇒ C) ⇒ ¬( B⇒ ¬C))
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ A ∨ B ⇒ B ∨ A
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ ¬A ∧ ¬B ⇒ ¬(A ∨ B)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ¬A ∨ ¬B ⊢ ¬(A ∧ B)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of A ⇔ B ⊢ (¬A ⇔ ¬B)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of ¬(A ⇔ ¬A)
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of A ∨ B ⊢ C ⇒ (A ∨ B) ∧ C
+\end{Exercise}
+
+\begin{Exercise}
+Give a natural deduction proof of (A ∨ (B ∧ A)) ⇒ A
+\end{Exercise}
 \newpage
 
 ## Solutions to exercises
@@ -1798,8 +1953,7 @@ postcondition!
 How can we write a derivation proving this? What are the *inference rules* that we can use?
 
 
-
-### Hoare logic
+## Hoare logic
 
 We'll give a handful of inference rules for proving statements of the
 form $\{ P \} \; p \; \{ Q \}$.
@@ -1900,8 +2054,8 @@ $Q$, the entire if-statement will.
 
 
 \begin{prooftree}
-\AxiomC{\{ $P \wedge b$ \} \; $p_1$ \; \{$Q$\}}
-\AxiomC{\{ $P \wedge \neg b$ \} \; $p_2$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p_1$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ ¬ b$ \} \; $p_2$ \; \{$Q$\}}
 \RightLabel{If}
 \BinaryInfC{\{ $P$ \} \quad if $b$ then $p_1$ else $p_2$ \quad \{ $Q$ \}}
 \end{prooftree}
@@ -1958,9 +2112,9 @@ To still be able to use such rules, we need an additional
 
 
 \begin{prooftree}
-\AxiomC{$P' \Rightarrow P$}
+\AxiomC{$P' ⇒ P$}
 \AxiomC{\{ $P$ \} \; $p$ \; \{$Q$\}}
-\AxiomC{$Q \Rightarrow Q'$}
+\AxiomC{$Q ⇒ Q'$}
 \RightLabel{Consequence}
 \TrinaryInfC{\{ $P'$ \} \quad $p$ \quad \{ $Q'$ \}}
 \end{prooftree}
@@ -1968,8 +2122,8 @@ To still be able to use such rules, we need an additional
 
 The **rule of consequence** states that we can change the pre- and postcondition provided:
 
-* the **precondition** is **stronger** -- that is, $P' \Rightarrow P$;
-* the **postcondition** is **weaker** -- that is, $Q \Rightarrow Q'$;
+* the **precondition** is **stronger** -- that is, $P' ⇒ P$;
+* the **postcondition** is **weaker** -- that is, $Q ⇒ Q'$;
 
 We can justify this rule by thinking back to what a statement of the
 form $\{ P \} \; p \; \{ Q \}$ means:
@@ -1985,9 +2139,9 @@ if executing $⟨ p , σ ⟩$ terminates in some final state τ, then τ must sa
 #### Hoare logic -- while
 
 \begin{prooftree}
-\AxiomC{\{ $??? \wedge b$ \} \; $p$ \; \{$???$\}}
+\AxiomC{\{ $??? ∧ b$ \} \; $p$ \; \{$???$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? \wedge \neg b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
 The general structure of the rule for loops should be along these lines:
@@ -2001,18 +2155,18 @@ But how should we fill in the question marks?
 
 
 \begin{prooftree}
-\AxiomC{\{ ${P} \wedge b$ \} \; $p$ \; \{$???$\}}
+\AxiomC{\{ ${P} ∧ b$ \} \; $p$ \; \{$???$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? \wedge \neg b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
 When we first enter the loop body, we know that $P$ still holds.
 
 
 \begin{prooftree}
-\AxiomC{\{ $P \wedge b$ \} \; $p$ \; \{${P}$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{${P}$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? \wedge \neg b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
 After completing the loop body, we may need to execute the loop body
@@ -2021,13 +2175,13 @@ again (and again and again and again).
 The precondition of $p$ should *continue to hold during execution*.
 
 \begin{prooftree}
-\AxiomC{\{ $P \wedge b$ \} \; $p$ \; \{$P$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{$P$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ ${P} \wedge \neg b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ ${P} ∧ ¬ b$ \}}
 \end{prooftree}
 
 After running the loop body over and over again, the postcondition of
-the entire while statement says that both $P$ and $\neg b$ hold.
+the entire while statement says that both $P$ and $¬ b$ hold.
 
 . . .
 
