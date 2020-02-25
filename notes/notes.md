@@ -570,19 +570,19 @@ atomic variables $P$ using the following BNF equation:
 
 This equation enables us to distinguish between those strings of
 symbols that correspond to well-formed formulas, such as $p ∨ ¬q$, and
-those that do no, such as $¬∨∨p$. But this does not yet tell us why a
+those that do not, such as $¬∨∨p$. But this does not yet tell us why a
 formula such as $p ⇒ p$ is always true, but $p ∨ p$ is not. How can we
 distinguish the propositional logic formulas that are true from those
 that are false? Or put differently, given some formula $p$, *what is a
 proof of $p$*? If we define the *syntax* of propositional logic as an
 inductively defined set, why should be not be able to give an
-inductive definition of a formula's semantics?
+inductive of a formula's semantics?
 
-So far, we have seen two different approaches to define a semantics
-for propositional logic: truth tables and proof strategies. Let's
-start to giving a formal account of proof strategies, before turning
-our attention to truth tables. Proof strategy are typically given by
-using the following notation:
+This chapter tries to answer this question in three parts by giving a
+formal account of proof strategies, a formal account of truth tables,
+a theorem relating the two.
+
+Proof strategies are typically given by using the following notation:
 
 \begin{center}
 \begin{tcolorbox}[width=6cm]
@@ -628,10 +628,11 @@ rules describing all possible proofs of a propositional logic
 formula. Clearly, we will need more rules than the conjunction
 introduction rule above. What about conjunction elimination?
 
-There were two strategies for conjunction elimination; here is the
-first:
+There were two strategies for conjunction elimination:
 
 \begin{center}
+\begin{tabular}{cp{5mm}c}
+\begin{minipage}{65mm}
 \begin{tcolorbox}[width=6cm]
 \begin{tcolorbox}[width=4cm]
 ⋮\\
@@ -641,25 +642,43 @@ Proof of $P ∧ Q$\\
 \vspace{2mm}
 Therefore, $P$ holds.
 \end{tcolorbox}
+\end{minipage}
+& & 
+\begin{minipage}{65mm}
+\begin{tcolorbox}[width=6cm]
+\begin{tcolorbox}[width=4cm]
+⋮\\
+Proof of $P ∧ Q$\\
+⋮
+\end{tcolorbox}
+\vspace{2mm}
+Therefore, $Q$ holds.
+\end{tcolorbox}
+\end{minipage}
+\end{tabular}
 \end{center}
 
 What should the corresponding inference rule for conjunction
 elimination be? There is very little creativity necessary to come up
-with the following rule:
+with the following two rules:
 
+\begin{tabular}{cp{5mm}c}
+\begin{minipage}{65mm}
 \begin{prooftree}
 \AxiomC{$P ∧ Q$}
 \RightLabel{$∧$-E$_1$}
 \UnaryInfC{$P$}
 \end{prooftree}
-
-Of course, there is also a second elimination rule for conjunction:
-
+\end{minipage}
+& &
+\begin{minipage}{65mm}
 \begin{prooftree}
 \AxiomC{$P ∧ Q$}
 \RightLabel{$∧$-E$_2$}
 \UnaryInfC{$Q$}
 \end{prooftree}
+\end{minipage}
+\end{tabular}
 
 Using these rules, we can start to write the following (incomplete)
 proof:
@@ -681,18 +700,17 @@ proof:
 
 This derivation fragment shows how to establish $Q ∧ P$ if we already
 have a proof of $P ∧ Q$. The derivation is, however, incomplete---we
-have not yet shown that $P ∧ Q$ holds. Nonetheless, this example shows
+have not yet shown that $P ∧ Q$ holds. Nonetheless, this example illustrates
 how different inference rules can be used to combine larger proofs.
 
-Can every proof strategy be adapted to an inference rule in this
-style? Unfortunately, it is not always quite this
-straightforward. Consider the following strategy for the introduction
-of an implication:
+To write a complete derivation, we might want to try proving $P ∧ Q ⇒
+Q ∧ P$. To do so, we will also need an inference rule corresponding to
+the introduction rule for implication:
 
 \begin{center}
-\begin{tcolorbox}[width=8cm]
+\begin{tcolorbox}[width=6cm]
 Assume $P$.\\
-\begin{tcolorbox}[width=5cm]
+\begin{tcolorbox}[width=4cm]
 ⋮\\
 Proof of $Q$.\\
 ⋮
@@ -712,15 +730,22 @@ proofs.
 
 ## Assumptions and contexts
 
-Keep track of list of assumptions that we are allowed to use:
-
+Instead of trying to define a *unary* relation on propositions
+corresponding to the set of valid propositions, we instead solve a
+more general problem: we will define a *binary* relation, written $Γ ⊢
+p$ that states that we can find a proof of $p$ from the assumptions
+$Γ$. Before we can do so, however, we need to be precise about the
+structure of our assumptions Γ. One way to model these assumptions is
+as a list of all the predicate logic formulas that we assume to hold:
 
  $Γ$  ::=  ε  |  Γ , $p$ 
 
-
-We can then define a relation on Γ × P, often written as $Γ ⊢ p$ to
-denote that we can find a proof of the formula $p$ from the list of
-assumptions $Γ$.
+This list of assumptions is sometimes referred to as a *context*.
+In the rest of this section, we will complete the definition of a
+relation on Γ × P, written as $Γ ⊢ P$, that states that there is a
+proof of the formula $P$ from the list of assumptions $Γ$. When we do
+not need any assumptions to prove $p$ holds, we will write $⊢ P$
+rather than $ε ⊢ P$.
 
 We can rephrase our previous rules for conjunction as follows:
 
@@ -743,7 +768,22 @@ We can rephrase our previous rules for conjunction as follows:
 \UnaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
 
-How to use the assumptions in our context?
+These rules did not use or change the context Γ, so the
+rules remain largely unchanged.
+
+The implication introduction rule, however, does add new assumptions:
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ Q$}
+\RightLabel{I⇒}
+\UnaryInfC{$Γ ⊢ P ⇒ Q$}
+\end{prooftree}
+
+Here we can see how Γ may change during a derivation. To show $P ⇒ Q$,
+we add $P$ to our list of assumptions and establish that $Q$ holds.
+
+Before we can complete the derivation of $⊢ P ∧ Q ⇒ Q ∧ P$, we need
+one last rule:
 
 \begin{prooftree}
 \AxiomC{$P ∈ Γ$}
@@ -751,7 +791,18 @@ How to use the assumptions in our context?
 \UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
-Now we give a proof of $P ∧ Q ⊢ Q ∧ P$.
+This rule allows us to *use* an assumption $P$. If we have previously
+assumed $P$ holds, for example by using the implication introduction
+rule, we can always conclude that $P$ holds. This seems like a very
+trivial rule – but it is the cornerstone of any formal proof. A
+derivation of $Γ ⊢ P$ shows how to establish $P$ holds from the
+assumptions Γ; read from top-to-bottom, each derivation starts from
+the assumptions, using them to establish other statements, until we
+can conclude that $P$ itself holds. This is the essence of formal
+proof.
+
+Using the rules we have seen so far, we can give a derivation of $⊢ P
+∧ Q ⇒ Q ∧ P$.
 
 \begin{prooftree}
 \AxiomC{$P ∧ Q ∈ P ∧ Q$}
@@ -768,9 +819,12 @@ Now we give a proof of $P ∧ Q ⊢ Q ∧ P$.
 
 \RightLabel{$∧$-I}
 \BinaryInfC{$P ∧ Q ⊢ Q ∧ P$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{⊢ $P ∧ Q ⇒ Q ∧ P$}
 \end{prooftree}
 
-Often, we will leave out the explicit application of the assumption rule, writing:
+Often, we will leave out the explicit premise of the assumption
+rule. For example, we might write the following in the proof above:
 
 \begin{prooftree}
 \AxiomC{}
@@ -779,133 +833,62 @@ Often, we will leave out the explicit application of the assumption rule, writin
 \UnaryInfC{$P ∧ Q ⊢ Q$}
 \end{prooftree}
 
-when it is obvious that $P ∧ Q ∈ P ∧ Q$.
+Here we have left out the (obvious) observation $P ∧ Q ∈ P ∧ Q$.
 
-
-What about the implication rule that was previously problematic?
-
-\begin{prooftree}
-\AxiomC{$Γ, P ⊢ Q$}
-\RightLabel{I⇒}
-\UnaryInfC{$Γ ⊢ P ⇒ Q$}
-\end{prooftree}
-
-
-#### Implication elimination
-
-\begin{center}
-\begin{tcolorbox}[width=8cm]
-\begin{tcolorbox}[width=5cm]
-Proof of $P ⇒ Q$.
-\end{tcolorbox}
-\vspace{5mm}
-\begin{tcolorbox}[width=5cm]
-Proof of $P$.
-\end{tcolorbox}
-Therefore, we can conclude $Q \quad \square$.
-\end{tcolorbox}
-\end{center}
-
-
-\begin{prooftree}
-\AxiomC{$Γ ⊢ P ⇒ Q$}
-\AxiomC{$Γ ⊢ P$}
-\RightLabel{E⇒}
-\BinaryInfC{$Γ ⊢ Q$}
-\end{prooftree}
-
-
-
-Natural deduction is modular
-Historical perspective
-
-show contraposition as an admissable rule
-
-
-
-
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ P ∨ Q$} -->
-<!-- \AxiomC{$Γ, P ⊢ C$} -->
-<!-- \AxiomC{$Γ, Q ⊢ C$} -->
-<!-- \RightLabel{∨E} -->
-<!-- \TrinaryInfC{$Γ ⊢ C$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ P$} -->
-<!-- \RightLabel{∨I₁} -->
-<!-- \UnaryInfC{$Γ ⊢ P ∨ Q$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ Q$} -->
-<!-- \RightLabel{∨I₂} -->
-<!-- \UnaryInfC{$Γ ⊢ P ∨ Q$} -->
-<!-- \end{prooftree} -->
-
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ ¬P$} -->
-<!-- \AxiomC{$Γ ⊢ P$} -->
-<!-- \RightLabel{¬E} -->
-<!-- \BinaryInfC{$Γ ⊢ ⊥$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ, P ⊢ ⊥$} -->
-<!-- \RightLabel{¬I} -->
-<!-- \UnaryInfC{$Γ ⊢ ¬P$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ ⊥$} -->
-<!-- \RightLabel{⊥E} -->
-<!-- \UnaryInfC{$Γ ⊢ C$} -->
-<!-- \end{prooftree} -->
-
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ, ¬P ⊢ ⊥$} -->
-<!-- \RightLabel{???} -->
-<!-- \UnaryInfC{$Γ ⊢ P$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{$Γ ⊢ ¬¬P$} -->
-<!-- \RightLabel{???} -->
-<!-- \UnaryInfC{$Γ ⊢ P$} -->
-<!-- \end{prooftree} -->
-
-<!-- \begin{prooftree} -->
-<!-- \AxiomC{} -->
-<!-- \RightLabel{???} -->
-<!-- \UnaryInfC{$Γ ⊢ P ∨ ¬P$} -->
-<!-- \end{prooftree} -->
-
-
-
+##### Example
+Using the rules we have seen so far, we can also prove that $⊢ P ⇒ (P ∧
+P)$ as follows:
 
 \begin{prooftree}
 \AxiomC{ }
 \UnaryInfC{$P ⊢ P$}
-\RightLabel{$⇒$-I}
-\UnaryInfC{$ ⊢ P ⇒ P$}
+\AxiomC{ }
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{∧-I}
+\BinaryInfC{$P ⊢ P ∧ P$}
+\RightLabel{⇒-I}
+\UnaryInfC{$ ⊢ P ⇒ P ∧ P$}
 \end{prooftree}
 
-This proof is *closed* -- meaning there are no open assumptions that
-it is making.
+Note that we use assumption $P$ in two separate parts of the proof; we
+can freely use an assumption more than once as long as it is occurs in
+the list of assumptions we currently have available.
+
+##### Non-example
+
+Whenever we use our assumption rule, we need to ensure that the
+assumption we are using is available *in the current list of
+assumptions*. Here is an example of an incorrect derivation that
+does not use the inference rules we have seen so far correctly:
+
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{⇒-I}
+\UnaryInfC{$ ⊢ P ⇒ P$}
+\AxiomC{}
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{∧-I}
+\BinaryInfC{$ ⊢ (P ⇒ P) ∧ P$}
+\end{prooftree}
+
+\begin{Exercise}
+Can you explain what is wrong with the above derivation?
+\end{Exercise}
+\begin{Answer}
+The implication introduction rule only introduces the assumption $P$
+in the *current* subtree of the derivation. In particular, we cannot
+use the assumption $P$ in the right-hand side of the conjunction, as
+we do here.
+\end{Answer}
 
 
 
-#### Wrong proofs
+##### Non-example
 
-The statement $(P ⇒ P) ⇒ P$ is not true in general.
-
-We previously saw how we 'abused' proof strategies to come up with an incorrect proof.
-
-What kind of mistakes can we make when we writing a proof using natural deduction?
+The statement $(P ⇒ P) ⇒ P$ is not true in general. Another way an
+incorrect proof by appear correct is by abusing assumptions. For
+example, here is an incorrect derivation showing $⊢ (P ⇒ P) ⇒ P$
 
 \begin{prooftree}
 \AxiomC{ }
@@ -914,9 +897,29 @@ What kind of mistakes can we make when we writing a proof using natural deductio
 \UnaryInfC{$ ⊢ (P ⇒ P) ⇒ P$}
 \end{prooftree}
 
-Here we can make the previous mistake more explicit: the assumption
-that we are allowed to use is $P ⇒ P$ rather than $P$ itself.
+Although we *are* allowed to assume that $P ⇒ P$ holds, we *cannot*
+assume that $P$ holds. In the lectures on proof strategies we saw a
+similar example that may appear correct, but subtly abused the
+strategies for implication. The only assumption we are allowed to make
+is that $P ⇒ P$ holds, but this is insufficient to show that $P$ also
+holds.
 
+##### Non-example
+
+As a final example of how derivations may be wrong, consider the
+following derivation:
+
+\begin{prooftree}
+\AxiomC{ }
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{$⇒-I$}
+\UnaryInfC{$ ⊢ (P ⇒ P) ⇒ P$}
+\end{prooftree}
+
+Here we have incorrectly used the implication introduction
+rule. Instead of introducing the assumption $P ⇒ P$, we have added the
+assumption $P$ to the context. Once again, the statement $(P ⇒ P) ⇒ P$
+does not hold in general and no derivation of $⊢ (P ⇒ P) ⇒ P$ exists.
 
 \begin{Exercise}
 Give a natural deduction proof of $⊢ P ⇒ (Q ⇒ (Q ∧ P))$
@@ -934,31 +937,90 @@ Give a natural deduction proof of $⊢ P ⇒ (Q ⇒ (Q ∧ P))$
 \UnaryInfC{$⊢ P ⇒ (Q ⇒ (Q ∧ P))$}
 \end{prooftree}
 \end{Answer}
-
-
-
+ 
 
 ## Natural deduction
 
-We'll go through the rules for natural deduction for propositional
-logic.
+In this section, we will give the inference rules for the remaining
+propositional logic operators. The resulting proof system, sometimes
+referred to as *natural deduction*, was originally developed by
+Gentzen [-@gentzen]. It tries to capture the way in which
+mathematicians naturally do proofs in a more formal fashion. One
+particularly pleasant property is that we can give the rules for each
+propositional logic operator independently of the others. As a result,
+we are free to explore other logics, where we may choose different
+operators ordifferent rules. Many of these rules closely mirror the
+proof strategies that we have seen previously -- which is no
+coincidence: the proof strategies were an informal presentation of
+natural deduction that we can finally formalize here.
 
-Many of these rules closely mirror the proof strategies that we have
-seen previously -- which is no coincidence of course.
-
-They should be fairly familiar.
-
-Once we've seen the rules for natural deduction proofs -- we can try
-to relate them to the *truth table semantics* from our first lecture.
 
 
+##### Implication elimination
 
-#### Truth and falsity
+Although we have seen the rule for implication introduction, we still
+need to give the corresponding elimination rule. The proof strategy
+for implication elimination had the following form:
 
-Most logic textbooks use $⊤$ for **T** (truth) and $⊥$ for **F**
-(falsity).
+\begin{center}
+\begin{tcolorbox}[width=6cm]
+\begin{tcolorbox}[width=4cm]
+Proof of $P ⇒ Q$.
+\end{tcolorbox}
+\vspace{5mm}
+\begin{tcolorbox}[width=4cm]
+Proof of $P$.
+\end{tcolorbox}
+Therefore, we can conclude $Q \quad \square$.
+\end{tcolorbox}
+\end{center}
 
-The introduction rule for truth is trivial:
+Once again, we can translate this to a inference rule by turning each
+sub-proofs into a premise:
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ⇒ Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{E⇒}
+\BinaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+
+
+
+\begin{Exercise}
+Give a natural deduction proof of $⊢ (P ⇒ Q) ⇒ ((Q ⇒ R) ⇒ (P ⇒ R))$
+\end{Exercise}
+\begin{Answer}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$P ⇒ Q, Q ⇒ R, P ⊢ Q ⇒ R$}
+\AxiomC{}
+\UnaryInfC{$P ⇒ Q, Q ⇒ R, P ⊢ P$}
+\AxiomC{}
+\UnaryInfC{$P ⇒ Q, Q ⇒ R, P ⊢ P ⇒ Q$}
+\RightLabel{$⇒$-E}
+\BinaryInfC{$P ⇒ Q, Q ⇒ R, P ⊢ Q$}
+\RightLabel{$⇒$-E}
+\BinaryInfC{$P ⇒ Q, Q ⇒ R, P ⊢ R$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$P ⇒ Q, Q ⇒ R ⊢ (P ⇒ R)$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$P ⇒ Q ⊢ (Q ⇒ R) ⇒ (P ⇒ R)$}
+\RightLabel{$⇒$-I}
+\UnaryInfC{$⊢ (P ⇒ Q) ⇒ ((Q ⇒ R) ⇒ (P ⇒ R))$}
+\end{prooftree}
+\end{Answer}
+
+
+#### Rules for truth and falsity
+
+Most logic textbooks use $⊤$ and $⊥$ rather than true and false
+respectively. We use the same notation in our inference rules. To give
+semantics to $⊤$ and $⊥$, we need to define their elimination and
+introduction rules. It turns out we only need *two* rules to define
+both connectives.
+
+First of all, the introduction rule for truth is trivial:
 
 \begin{prooftree}
 \AxiomC{$$}
@@ -966,14 +1028,15 @@ The introduction rule for truth is trivial:
 \UnaryInfC{$Γ ⊢ ⊤$}
 \end{prooftree}
 
-There is no introduction rule for falsity.
+This rule states that we can always find a proof that ⊤
+holds. Unfortunately, proving true is not particularly useful. There
+is no introduction rule for ⊥, as there should be no way to prove
+falsity. 
 
-
-
-#### Falsity elimination
+The elimination rule for falsity follows the following proof strategy:
 
 \begin{center}
-\begin{tcolorbox}[width=8cm]
+\begin{tcolorbox}[width=6cm]
 \begin{tcolorbox}
 Proof of a contradiction
 \end{tcolorbox}
@@ -982,7 +1045,9 @@ Therefore we conclude $P$.
 \end{tcolorbox}
 \end{center}
 
-Or written as an inference rule:
+This strategy says that if we have managed to prove a contradiction
+from our assumptions somehow, we can conclude whatever we like. We can
+formulate this as an inference rule in the following fashion:
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ ⊥$}
@@ -990,14 +1055,63 @@ Or written as an inference rule:
 \UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
+To see how this rule is used, consider the proof showing $P ⇒ ⊥, P ⊢ Q$:
 
-Example: P ∧ ¬P ⇒ Q
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$P ⇒ ⊥, P ⊢ P$}
+\AxiomC{}
+\UnaryInfC{$P ⇒ ⊥, P ⊢ P ⇒ ⊥$}
+\RightLabel{⇒-E}
+\BinaryInfC{$P ⇒ ⊥, P ⊢ ⊥$}
+\RightLabel{⊥-E}
+\UnaryInfC{$P ⇒ ⊥, P ⊢ Q$}
+\end{prooftree}
+
+This proof is quite strange: none of our assumptions mention $Q$, yet
+somehow we still manage to prove that $Q$ holds. The reasoning is that
+if both $P$ and $P ⇒ ⊥$ hold, then we can derive a contradiction. As
+no such contradiction should exist, we can draw any conclusion that we
+want.
+
+A similar situation also arose in the truth table for
+implication. Recall that the implication $P ⇒ Q$ always holds when $P$
+is false, regardless of $Q$. Similarly, if we manage to prove ⊥ from
+our assumptions, we can conclude that any arbitrary $Q$ holds.
 
 
-#### Negation rules
+#### Rules for negation
 
-Recall that $¬ P$ behaves just like $P ⇒ ⊥$.
+What about negation? We still need to define the introduction rule to
+prove $¬P$ and elimination rule to use an assumption of the form
+$¬P$. The *introduction strategy* for negation had the following form:
 
+\begin{center}
+\begin{tcolorbox}[width=6cm]
+Assume $P$\vspace{5mm}
+\begin{tcolorbox}
+\vdots
+Proof of a contradiction\\
+\vdots
+\end{tcolorbox}
+\vspace{2mm}
+Therefore we conclude $¬P$.
+\end{tcolorbox}
+\end{center}
+
+In words, this strategy says that if assuming $P$ does holds leads to a
+contradiction, we can conclude that $¬P$ holds. This matches our
+intuition that $¬ P$ behaves just like $P ⇒ ⊥$. We can turn this proof
+strategy into an inference rule readily enough:
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ ⊥$}
+\RightLabel{$¬$-I}
+\UnaryInfC{$Γ ⊢ ¬ P$}
+\end{prooftree}
+
+The intuition that $¬P$ behaves like $P ⇒ ⊥$ is also apparent in the
+*elimination* rule for negation:
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ ¬ P$}
@@ -1006,18 +1120,20 @@ Recall that $¬ P$ behaves just like $P ⇒ ⊥$.
 \BinaryInfC{$Γ ⊢ ⊥$}
 \end{prooftree}
 
-\begin{prooftree}
-\AxiomC{$Γ, P ⊢ ⊥$}
-\RightLabel{$¬$-I}
-\UnaryInfC{$Γ ⊢ ¬ P$}
-\end{prooftree}
+If we can prove both $P$ and $¬P$ from our assumptions Γ, we have
+established a contradiction ⊥; combined with the elimination rule for
+falsity, ⊥-E, we saw previously we can draw whatever conclusion we
+like.
 
 
-#### Equivalence rules
+\begin{Exercise} 
+Given that $P ⇔ Q$ is equivalent to $P ⇒ Q ∧ P ⇒ P$, devise suitable
+introduction and elimination rules for logical equivalence, $P ⇔ Q$.
+\end{Exercise}
 
-Similarly, $P ⇔ Q$ behaves the same as $P ⇒ Q
-∧ P ⇒ P$.
-
+\begin{Answer} 
+There are various variations of the following three
+rules that are all valid choices:
 
 \begin{prooftree}
 \AxiomC{$Γ, P ⊢ Q$}
@@ -1039,29 +1155,11 @@ Similarly, $P ⇔ Q$ behaves the same as $P ⇒ Q
 \RightLabel{$⇔$-$E_2$}
 \BinaryInfC{$Γ ⊢ P$}
 \end{prooftree}
-
-
-#### Discharging more than once
-
-Consider the following proof that $⊢ P ⇒ (P ∧ P)$
-
-\begin{prooftree}
-\AxiomC{}
-\UnaryInfC{$P ⊢ P$}
-\AxiomC{}
-\UnaryInfC{$P ⊢ P$}
-\BinaryInfC{$P ⊢ P ∧ P$}
-\RightLabel{$⇒$-I}
-\UnaryInfC{$⊢ P ⇒ (P ∧ P)$}
-\end{prooftree}
-
-This example shows how we can use an assumption *more than once* in
-different parts of the proof.
-
+\end{Answer}
 
 
 \begin{Exercise}
-Give a derivation showing $⊢ P ∧ ⊤ ⇔ P$.
+Use the rule you proposed in the previous exercise to prove $⊢ P ∧ ⊤ ⇔ P$.
 \end{Exercise}
 \begin{Answer}
 \begin{prooftree}
@@ -1082,45 +1180,58 @@ Give a derivation showing $⊢ P ∧ ⊤ ⇔ P$.
 \end{Answer}
 
 
-#### Disjunction
+#### Rules for disjunction
 
-The only thing remaining are the rules for disjunction.
-
-The *introduction* rules are easy:
+Although we have covered the inference rules for most logical
+operators, we still have not yet seen the rules for disjuction. The
+*disjunction introduction* rules are reassuringly simple:
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P$}
-\RightLabel{$∨$-$I_1$}
+\RightLabel{∨-I₁}
 \UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ Q$}
-\RightLabel{$∨$-$I_2$}
+\RightLabel{∨-I₂}
 \UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
-
-Disjunction elimination, however, is a bit more tricky. Recall the associated proof strategy:
+The rule for *disjunction elimination*, however, is a bit more
+tricky. The associated proof strategy was formulated as follows:
 
 \begin{center}
-\begin{tcolorbox}[width=9cm]
 \begin{tcolorbox}[width=6cm]
+\begin{tcolorbox}[width=4cm]
 Proof of $P ∨ Q$
 \end{tcolorbox}
 Assume that $P$ is true.\vspace{2mm}
-\begin{tcolorbox}[width=6cm]
+\begin{tcolorbox}[width=4cm]
 Proof of $R$
 \end{tcolorbox}
 \vspace{2mm}
 Next, assume $Q$ is true.
 \vspace{2mm}
-\begin{tcolorbox}[width=6cm]
+\begin{tcolorbox}[width=4cm]
 Proof of $R$
 \end{tcolorbox}
 \vspace{2mm}
 Therefore, $R$ is true, regardless of which of $P$ or $Q$ is true.
 \end{tcolorbox}
 \end{center}
+
+The problem with disjunction elimination is that it isn't clear how to
+use a proof of the form $P ∨ Q$ directly. If we know that either $P$
+holds or $Q$ holds, we cannot conclude that $P$ must hold or that $Q$
+must hold. Instead, we use the assumption $P ∨ Q$ to establish some
+third proposition $R$. To show that $R$ does hold, we need to provide
+two proofs: one that states that if $P$ holds then so does $R$; the
+second states that if $Q$ holds then so does $R$. Together these three
+ingredients guarantee that $R$ must hold, regardless of *whether* of
+$P$ or $Q$ holds.
+
+We can make all of this precise in the following inference rule:
+
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ∨ Q$}
@@ -1130,14 +1241,26 @@ Therefore, $R$ is true, regardless of which of $P$ or $Q$ is true.
 \TrinaryInfC{$Γ ⊢ R$}
 \end{prooftree}
 
-If we know $P ∨ Q$ holds...
+##### Example
 
-... and we know that $R$ holds whenever $P$ does;
+We can use the introduction and elimination rules for disjunction to
+prove that the disjunction operator is commutative, or more formally,
+that $P ∨ Q ⊢ Q ∨ P$:
 
-... and we know that $R$ holds whenever $Q$ does;
-
-... we can conclude that $R$ must always hold.
-
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$P ∨ Q ⊢ P ∨ Q$}
+\AxiomC{}
+\UnaryInfC{$P ⊢ P$}
+\RightLabel{∨-I₂}
+\UnaryInfC{$P ⊢ Q ∨ P$}
+\AxiomC{}
+\UnaryInfC{$Q ⊢ Q$}
+\RightLabel{∨-I₁}
+\UnaryInfC{$Q ⊢ Q ∨ P$}
+\RightLabel{∨-E}
+\TrinaryInfC{$P ∨ Q ⊢ Q ∨ P$}
+\end{prooftree}
 
 
 \begin{Exercise}
@@ -1166,33 +1289,168 @@ Give a derivation showing $⊢ (P ∨ ⊥) ⇒ P$.
 
 #### *Reductio ad absurdum*
 
-To complet our natural deduction rules for classical logic, we need
-one final rule:
+To complet our natural deduction rules for classical propositional
+logic, we need one final rule:
 
 \begin{prooftree}
 \AxiomC{$Γ, ¬P ⊢ ⊥$}
 \RightLabel{RAA}
-\UnaryInfC{$P$}
+\UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
-This rule, sometimes called *reductio ad absurdum*, states that if
-$¬ P$ leads to a contradiction, $P$ must hold.
+This rule, sometimes called *reductio ad absurdum*, states that if $¬
+P$ leads to a contradiction, $P$ must hold. Note that this rule is
+subtly different to the introduction rule for negation, that
+establishes $¬P$ when assuming $P$ leads to a contradiction. Besides
+our rule for using assumptions, this is the only rule that is not the
+introduction or elimination rule of one of the logical
+operators. There are valid philosophical reasons to avoid using this
+rule, or even reject it as a valid inference rule of our logic---as we
+will discuss at the end of this chapter.
 
-(Notice how it is the only rule that is not an
-introduction-elimination rule for a logical operator?)
+#### Derivable rules
 
+This completes our presentation of natural deduction. The complete
+overview of all the rules is given at the end of this chapter. An
+eagle-eyed reader may have spotted that there are certain proof
+strategies that do not have a corresponding inference rule. For
+example, the following strategy, sometimes referred to as a *proof by
+contraposition*, does not have a corresponding inference rule:
 
-I've presented the rules for propositional logic -- but we can extend
-these rules to handle *predicate* logic.
+\begin{center}
+\begin{tcolorbox}[width=6cm]
+Assume $¬Q$.\vspace{2mm}
+\begin{tcolorbox}[width=4cm]
+\vdots
+Proof of ¬P\\
+\vdots
+\end{tcolorbox}
+\vspace{2mm}
+Hence $P ⇒Q$ holds.
+\end{tcolorbox}
+\end{center}
 
-Rather than introduce a more complicated system for natural deduction
-for handling quantifiers, I'd rather relate the natural deduction
-rules to truth tables...
+Don't we need an inference rule to account for proof using this rule?
+We can formulate the corresponding inference rule readily enough:
 
-But before I can do that, let's revisit what 'proof-by-truth-table'
-really means...
+\begin{prooftree}
+\AxiomC{$Γ ⊢ ¬Q ⇒ ¬P$}
+\RightLabel{Contraposition}
+\UnaryInfC{$Γ ⊢ P ⇒ Q$}
+\end{prooftree}
+
+But adding haphazardly adding inference rules is not a good idea---we
+may accidentally add rules that break our logic in an unexpected
+way. Furthermore, the 'smaller' our collection of inference rules, the
+fewer cases we have to reason about when studying all possible proofs
+built from these rules. Instead of adding a new rule, we can instead
+try to *prove* this proof principle from the rules we have seen so
+far. To do so, we show that $¬Q ⇒ ¬P ⊢ P ⇒ Q$ holds for arbitrary
+propositions $P$ and $Q$. In any proof using the rule for
+contraposition above, we can replace the rule with the derivation
+below:
+
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ P$}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q ⇒ ¬P$}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q$}
+\BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬P$}
+\BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ⊥$}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P  ⊢ Q$}
+\UnaryInfC{$ ¬Q ⇒ ¬P  ⊢ P ⇒ Q$}
+\end{prooftree}
+
+Such general proof principles that can be proven from our inference
+rules are sometimes referred to as *derivable rules*.
+
+\begin{Exercise}
+Identify each inference rule that has been used to construct the proof above.
+\end{Exercise}
+\begin{Answer}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ P$}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q ⇒ ¬P$}
+\AxiomC{}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q$}
+\BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬P$}
+\RightLabel{¬-E}
+\BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ⊥$}
+\RightLabel{¬-I}
+\UnaryInfC{$ ¬Q ⇒ ¬P, P  ⊢ Q$}
+\RightLabel{⇒-I}
+\UnaryInfC{$ ¬Q ⇒ ¬P  ⊢ P ⇒ Q$}
+\RightLabel{⇒-I}
+\UnaryInfC{$ ⊢ (¬Q ⇒ ¬P) ⇒ P ⇒ Q$}
+\end{prooftree}
+\end{Answer}
+
+\begin{Exercise}
+Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
+\end{Exercise}
+\begin{Answer}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬(P ∨ ¬P)$}
+\AxiomC{}
+\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬P$}
+\RightLabel{∨-I₂}
+\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ P ∨ ¬P$}
+\BinaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ⊥$}
+\RightLabel{RAA}
+\AxiomC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
+\AxiomC{$$}
+\UnaryInfC{$¬(P ∨ ¬P), P ⊢ P$}
+\RightLabel{∨-I₁}
+\UnaryInfC{$¬(P ∨ ¬P), P ⊢ (P ∨ ¬P)$}
+\BinaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
+\UnaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
+\UnaryInfC{$¬(P ∨ ¬P) ⊢ ¬P$}
+\RightLabel{¬-E}
+\BinaryInfC{$¬(P ∨ ¬P) ⊢ ⊥$}
+\RightLabel{RAA}
+\UnaryInfC{$⊢ P ∨ ¬P$}
+\end{prooftree}
+TODO - fix overfull hbox
+\end{Answer}
+
+\begin{Exercise} 
+Given a propositional logic formula $P$ and context $Γ$. Is there
+always a derivation possible showing $Γ ⊢ P$? If so, explain why. If
+not, give an example proposition that has you believe should not have
+a proof. 
+\end{Exercise}
+\begin{Answer}
+TODO
+\end{Answer}
+\begin{Exercise}
+When $Γ ⊢ P$ holds, is this proof unique? If so, choose a
+propositional logic formula $P$ and context Γ such that there are
+different derivations showing $Γ ⊢ P$. If not, explain why all
+derivations are equal.
+\end{Exercise}
+\begin{Answer}
+TODO
+\end{Answer}
+
 
 ## Semantics of propositional logic
+
+In the previous section we introduced the system of *natural
+deduction*. We can use the inference rules presented therein to show
+how some propositional logic formula $P$ follows from a list of
+assumptions Γ. Yet this is not the first semantics for propositional
+logic that we have encountered---in the very first lecture we showed
+how to prove a propositional logic formula was a tautology using
+*truth tables*. How are truth tables and natural deduction related?
+
+Before we can answer this question, we need to give a more precise
+account of truth tables.
+
 
 When we fill out a truth table for some propositional formula $p$, we
 show how each choice of atomic propositional variables of $p$ results
@@ -1311,24 +1569,21 @@ as a truth table with $2^{\mid fv(p)\mid}$ rows.
 
 ## Relating natural deduction and semantics
 
-Given any propositional logic formula $p$, we can assign it semantics:
+In the previous section, we showed how to assign any propositional
+logic formula $p$ the following semantics:
 
   $〚 p 〛: (P → \Bool) → \Bool$
 
-But how is this semantics related to our natural deduction rules?
+This captures the 'truth table semantics' with which started the
+course. Yet at the beginning of this chapter, we gave a very different
+semantics for propositional logic, namely the system of *natural
+deduction*, defined by a collection of inference rules.  How can we
+relate these different semantics for propositional logic?
 
-Our inference rules for natural deduction all seem perfectly 'logical'.
+We would expect that for each derivation $Γ ⊢ p$, 
 
-But can we be sure that any propositional formula proven using this
-inference rules always holds?
 
 And can we be sure that we haven't left out any inference rules?
-
-Given a set of propositional logic formulas, $\Gamma$, we will write
-$\Gamma \vdash p$ whenever we can find a natural deduction proof of
-the formula $p$ using the assumptions from $\Gamma$.
-
-When we do not need any assumptions to show $p$, we write $\vdash p$.
 
 Given an truth assignment $v$ we write $v \models p$ if $\llbracket p
 \rrbracket v = \mathbf{T}$.
@@ -1374,11 +1629,133 @@ These results show just how clean and simple propositional logic is...
 But they break down as soon as you study richer predicate logics...
 
 
+
+
+I've presented the rules for propositional logic -- but we can extend
+these rules to handle *predicate* logic.
+
+Rather than introduce a more complicated system for natural deduction
+for handling quantifiers, I'd rather relate the natural deduction
+rules to truth tables...
+
+
+
 ## Curry Howard
 
 \newpage
 
 ## The rules of natural deduction: an overview
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{∧I}
+\BinaryInfC{$Γ ⊢ P ∧ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₁}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₂}
+\UnaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$P ∈ Γ$}
+\RightLabel{Assumption}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ Q$}
+\RightLabel{I⇒}
+\UnaryInfC{$Γ ⊢ P ⇒ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ⇒ Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{E⇒}
+\BinaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+
+
+\begin{prooftree}
+\AxiomC{$$}
+\RightLabel{$⊤$-I}
+\UnaryInfC{$Γ ⊢ ⊤$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ ⊥$}
+\RightLabel{$⊥$-E}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ ⊥$}
+\RightLabel{$¬$-I}
+\UnaryInfC{$Γ ⊢ ¬ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ ¬ P$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{$¬$-E}
+\BinaryInfC{$Γ ⊢ ⊥$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{∨-I₁}
+\UnaryInfC{$Γ ⊢ P ∨ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{∨-I₂}
+\UnaryInfC{$Γ ⊢ P ∨ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∨ Q$}
+\AxiomC{$Γ, P ⊢ R$}
+\AxiomC{$Γ, Q ⊢ R$}
+\RightLabel{$∨$-E}
+\TrinaryInfC{$Γ ⊢ R$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ, ¬P ⊢ ⊥$}
+\RightLabel{RAA}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ, P ⊢ Q$}
+\AxiomC{$Γ, Q ⊢ P $}
+\RightLabel{$⇔$-I}
+\BinaryInfC{$Γ ⊢ P ⇔ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ⇔ Q$}
+\AxiomC{$Γ ⊢ P$}
+\RightLabel{$⇔$-$E_1$}
+\BinaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ⇔ Q$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{$⇔$-$E_2$}
+\BinaryInfC{$Γ ⊢ P$}
+\end{prooftree}
 
 
 
