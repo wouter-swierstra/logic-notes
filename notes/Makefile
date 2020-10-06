@@ -6,3 +6,6 @@ notes.pdf:notes.md
 
 clean :
 	rm notes.aux notes.log notes.nav notes.out notes.snm notes.tex notes.toc
+
+todos :
+	grep -C 2 TODO notes.md

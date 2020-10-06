@@ -67,7 +67,7 @@ February 2020
 
 Throughout the lectures so far, we have seen various *inductive
 definitions*. For example, we can define the set
-all binary words $W$ using the following BNF equation:
+all binary words $\mathbf{W}$ using the following BNF equation:
 
  $w$  ::=   ε   |   0$w$   |   1$w$
 
@@ -103,7 +103,7 @@ consider the following examples:
 How can we give an *inductive* definition of this prefix relation? One way to
 characterise the relation is with the following three clauses:
 
-* for all $w ∈ W$, ε ≤ $w$;
+* for all $w ∈ \mathbf{W}$, ε ≤ $w$;
 * if $w ≤ w'$, then $0w ≤ 0w'$;
 * if $w ≤ w'$, then $1w ≤ 1w'$;
 
@@ -184,7 +184,7 @@ three rules in the following fashion:
 \end{prooftree}
 
 Such a proof is sometimes referred to a as *derivation*.  You may want
-to think of each inference rules describing a different 'lego piece'
+to think of each inference rules describing a different building block
 that can use to assemble more complex derivations. 
 
 Although the derivation above happens to use all three rules, other
@@ -256,7 +256,7 @@ back of $w$.
 
 The Step rule is a bit more interesting than the other rules we have
 seen so far: it has *more than one premise*. That is, to use the Step
-rule, we need to establish that **both** $a ∈ Σ$ and isPalindrom($w$).
+rule, we need to establish that **both** $a ∈ Σ$ and isPalindrome($w$).
 
 
 \begin{Exercise} 
@@ -303,9 +303,9 @@ inference rule that is applicable. This is not always the case
 however. To give a convincing example of a more complicated set of
 inference rules, however, requires a bit of work.
 
-Consider the alphabet $Σ = \{  [ , ] \}$, that is the set of all
-words built from the open bracket character '[' and closing
-bracket character ']'. Now consider the words over this alphabet, such as:
+Consider the alphabet $Σ = \{  [ , ] \}$, that the set
+containing the open bracket character '[' and closing
+bracket character ']'. Now consider the words over this alphabet, $Σ^{*}$ ,such as:
 
 * $[ ] ∈ Σ^{⋆}$
 * $[ ][ ] ∈ Σ^{⋆}$
@@ -434,7 +434,7 @@ construct a new derivation as follows:
 \BinaryInfC{isBalanced($w$)}
 \end{prooftree}
 
-Hence there are *infinitely* many possible derivations showing
+Hence there are \emph{infinitely} many possible derivations showing
 establishing isBalanced($w$) for balanced words $w$.
 
 The isPalindrome relation, however, is very different: there is
@@ -528,14 +528,113 @@ inference rules and the derivations we can write using them.
 
 ## Exercises
 
-TODO: add further exercises and solutions
+\begin{Exercise} 
 
-Define isEven
+Define an inductive relation on the natural numbers, isEven ⊆
+$\mathbb{N}$. The relation isEven($n$) should hold precisely when $n$
+is an even number.
 
-Define less than or equal prove that 2 < 4
+*Hint:* To define an inductive relation, you need to find an
+appropriate base case and inductive case.
 
-Define parity check
- 
+Show that isEven(4) holds.
+
+\end{Exercise}
+\begin{Answer}
+The easiest way to achiev this is using the following two rules:
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{ZeroEven}
+\UnaryInfC{isEven(Zero)}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{isEven(n)}
+\RightLabel{StepEven}
+\UnaryInfC{isEven(Succ(Succ(n)))}
+\end{prooftree}
+
+To establish that four is even, we provide the following derivation
+(using arabic numerals rather than Peano natural numbers):
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{ZeroEven}
+\UnaryInfC{isEven(0)}
+\RightLabel{StepEven}
+\UnaryInfC{isEven(2)}
+\RightLabel{StepEven}
+\UnaryInfC{isEven(4)}
+\end{prooftree}
+
+\end{Answer}
+
+
+\begin{Exercise} 
+
+Define a binary inductive relation on the natural numbers, ≤ ⊆
+$\mathbb{N} × \mathbb{N}$. The relation $n ≤ m$ should hold
+precisely when $n$ is less than or equal to $m$.
+
+Prove that 1 ≤ 3.
+
+Explain how you can use rule induction to prove that this relation is
+reflexive and transitive.
+
+\end{Exercise} 
+
+\begin{Answer} 
+
+There are a few different ways to define this relation. One way to do
+so is using the following two rules:
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{Base}
+\UnaryInfC{0 ≤ n}
+\end{prooftree}
+\begin{prooftree}
+\AxiomC{n ≤ m}
+\RightLabel{Step}
+\UnaryInfC{Succ(n) ≤ Succ(m)}
+\end{prooftree}
+
+We can then provide the following derivation showing that 1 ≤ 3:
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{Base}
+\UnaryInfC{0 ≤ 2}
+\RightLabel{Step}
+\UnaryInfC{1 ≤ 3}
+\end{prooftree}
+
+To prove that this relation is reflexive, we need to establish that:
+$∀ n, n ≤ n$. We do so by induction on $n$:
+
+* if $n = 0$ we can use the Base rule to prove that $0 ≤ 0$;
+* if $n$ = Succ $k$, we know from our induction hypothesis that $k ≤
+  k$. By using the Step rule, we can then show that Succ $k$ ≤ Succ
+  $k$ as required.
+  
+It is harder to prove that this relation is transitive. We assume that
+$n ≤ m$ and $m ≤ p$ and need to prove that $n ≤ p$. Now we use *rule
+induction* to inspect our first proof:
+
+* if $n ≤ m$ holds because of the Base rule, we know that $n = 0$,
+  hence we can use the Base rule to also establish that $n ≤ p$.
+  
+* if $n ≤ m$ holds because of the Step rule, we know that both $n$ and
+  $m$ are non-zero. We therefore know that $n$ = Succ $n'$ and $m$ =
+  Succ $m'$, for some natural numbers $n'$ and $m'$. But if $m$ is
+  non-zero, our second assumption ($m ≤ p$) cannot be built using the
+  Base rule. Hence, we can conclude that $p$ is also non-zero, i.e.,
+  $p$ = Succ $p'$, for some $p'$. By our induction hypthesis we can
+  establish that $n' ≤ p'$; using the Step rule, we can then show Succ
+  $n'$ ≤ Succ $p'$ as required.
+
+\end{Answer}
+
 
 \newpage
 
@@ -564,19 +663,22 @@ achieve just that.
 ## What is a proof?
 
 We can define the set of propositional logical formulas over a set of
-atomic variables $P$ using the following BNF equation:
+atomic propositional variables \PV\ using the following BNF equation:
 
- $p,q$  ::=  true  |  false  |  $P$  |  $¬p$  |  $p ∧ q$  |  $p ∨ q$  |  $p ⇒ q$  |  $p ⇔ q$ 
+ $p,q$  ::=  true  |  false  |  $PV$  |  $¬p$  |  $p ∧ q$  |  $p ∨ q$  |  $p ⇒ q$  |  $p ⇔ q$ 
 
-This equation enables us to distinguish between those strings of
+We will sometimes refer to the set of all propositional logic formulas
+as \PLF.
+
+This definition enables us to distinguish between those strings of
 symbols that correspond to well-formed formulas, such as $p ∨ ¬q$, and
 those that do not, such as $¬∨∨p$. But this does not yet tell us why a
 formula such as $p ⇒ p$ is always true, but $p ∨ p$ is not. How can we
 distinguish the propositional logic formulas that are true from those
 that are false? Or put differently, given some formula $p$, *what is a
-proof of $p$*? If we define the *syntax* of propositional logic as an
+proof of* $p$? If we define the *syntax* of propositional logic as an
 inductively defined set, why should be not be able to give an
-inductive of a formula's semantics?
+inductive definition of a formula's semantics?
 
 This chapter tries to answer this question in three parts by giving a
 formal account of proof strategies, a formal account of truth tables,
@@ -609,12 +711,18 @@ inference rule notation directly:
 \BinaryInfC{isTrue($P \wedge Q$)}
 \end{prooftree}
 
+In accordance with the notation used in the proof strategies in the
+book, we use capital letters, $P$ and $Q$ for our
+*metavariables*­­­that is $P$ and $Q$ stand for some arbitrary
+proposition, rather than an atomic proposition variable. It would
+perhaps be more precise to use $p$ and $q$ to avoid this confusion.
+
 In this style, we can try to define a unary relation isTrue on the
-formulas of propositional logic; the inference rules then define the
-set of all possible valid proofs. Most logical textbooks do not
-introduce an explicit name for the relation capturing 'truthfulness' –
-like our isTrue relation - but rather identify a formula with its
-semantics, writing:
+formulas of propositional logic, i.e., isTrue ⊆ \PLF; the
+inference rules then define the set of all possible valid proofs. Most
+logical textbooks do not introduce an explicit name for the relation
+capturing 'truthfulness' – like our isTrue relation - but rather
+identify a formula with its semantics, writing:
 
 \begin{prooftree}
 \AxiomC{$P$}
@@ -732,20 +840,22 @@ proofs.
 
 Instead of trying to define a *unary* relation on propositions
 corresponding to the set of valid propositions, we instead solve a
-more general problem: we will define a *binary* relation, written $Γ ⊢
-p$ that states that we can find a proof of $p$ from the assumptions
-$Γ$. Before we can do so, however, we need to be precise about the
-structure of our assumptions Γ. One way to model these assumptions is
-as a list of all the predicate logic formulas that we assume to hold:
+more general problem: we will define a *binary* relation that states
+that we can find a proof of some propositional logic formula $p$ using
+a set assumptions $Γ$. Before we can do so, however, we need to be
+precise about the structure of our assumptions Γ. One way to model
+these assumptions is as a list of all the predicate logic formulas
+that we assume to hold:
 
  $Γ$  ::=  ε  |  Γ , $p$ 
 
-This list of assumptions is sometimes referred to as a *context*.
-In the rest of this section, we will complete the definition of a
-relation on Γ × P, written as $Γ ⊢ P$, that states that there is a
-proof of the formula $P$ from the list of assumptions $Γ$. When we do
-not need any assumptions to prove $p$ holds, we will write $⊢ P$
-rather than $ε ⊢ P$.
+This list of assumptions is sometimes referred to as a *context*; we
+will sometimes refer to the set of these contexts as \Ctx. In the
+rest of this section, we will complete the inductive definition of a
+relation on \Ctx × \PLF. This relation, written as $Γ ⊢ P$, states that
+there is a proof of the formula $P$ from the list of assumptions
+$Γ$. When we do not need any assumptions to prove $P$ holds, we will
+write $⊢ P$ rather than $ε ⊢ P$.
 
 We can rephrase our previous rules for conjunction as follows:
 
@@ -791,15 +901,15 @@ one last rule:
 \UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
-This rule allows us to *use* an assumption $P$. If we have previously
-assumed $P$ holds, for example by using the implication introduction
-rule, we can always conclude that $P$ holds. This seems like a very
-trivial rule – but it is the cornerstone of any formal proof. A
-derivation of $Γ ⊢ P$ shows how to establish $P$ holds from the
-assumptions Γ; read from top-to-bottom, each derivation starts from
-the assumptions, using them to establish other statements, until we
-can conclude that $P$ itself holds. This is the essence of formal
-proof.
+This rule allows us to *use* an assumption $P$; this will be one of
+the few axioms of our system. If we have previously assumed $P$ holds,
+for example by using the implication introduction rule, we can always
+conclude that $P$ holds. This seems like a very trivial rule – but it
+is the cornerstone of any formal proof. A derivation of $Γ ⊢ P$ shows
+how to establish $P$ holds from the assumptions Γ; read from
+top-to-bottom, each derivation starts from the assumptions, using them
+to establish other statements, until we can conclude that $P$ itself
+holds. 
 
 Using the rules we have seen so far, we can give a derivation of $⊢ P
 ∧ Q ⇒ Q ∧ P$.
@@ -887,7 +997,7 @@ we do here.
 ##### Non-example
 
 The statement $(P ⇒ P) ⇒ P$ is not true in general. Another way an
-incorrect proof by appear correct is by abusing assumptions. For
+incorrect proof may appear correct is by abusing assumptions. For
 example, here is an incorrect derivation showing $⊢ (P ⇒ P) ⇒ P$
 
 \begin{prooftree}
@@ -949,7 +1059,7 @@ mathematicians naturally do proofs in a more formal fashion. One
 particularly pleasant property is that we can give the rules for each
 propositional logic operator independently of the others. As a result,
 we are free to explore other logics, where we may choose different
-operators ordifferent rules. Many of these rules closely mirror the
+operators or different rules. Many of these rules closely mirror the
 proof strategies that we have seen previously -- which is no
 coincidence: the proof strategies were an informal presentation of
 natural deduction that we can finally formalize here.
@@ -1222,13 +1332,13 @@ Therefore, $R$ is true, regardless of which of $P$ or $Q$ is true.
 
 The problem with disjunction elimination is that it isn't clear how to
 use a proof of the form $P ∨ Q$ directly. If we know that either $P$
-holds or $Q$ holds, we cannot conclude that $P$ must hold or that $Q$
-must hold. Instead, we use the assumption $P ∨ Q$ to establish some
-third proposition $R$. To show that $R$ does hold, we need to provide
-two proofs: one that states that if $P$ holds then so does $R$; the
-second states that if $Q$ holds then so does $R$. Together these three
-ingredients guarantee that $R$ must hold, regardless of *whether* of
-$P$ or $Q$ holds.
+holds or $Q$ holds, we cannot conclude that $P$ must hold; nor can we
+conclude that $Q$ must hold. Instead, we use the assumption $P ∨ Q$ to
+establish some third proposition $R$. To show that $R$ does hold, we
+need to provide two proofs: one that states that if $P$ holds then so
+does $R$; the second states that if $Q$ holds then so does
+$R$. Together these three ingredients guarantee that $R$ must hold,
+regardless of whether $P$ holds, $Q$ holds, or both hold.
 
 We can make all of this precise in the following inference rule:
 
@@ -1305,8 +1415,7 @@ establishes $¬P$ when assuming $P$ leads to a contradiction. Besides
 our rule for using assumptions, this is the only rule that is not the
 introduction or elimination rule of one of the logical
 operators. There are valid philosophical reasons to avoid using this
-rule, or even reject it as a valid inference rule of our logic---as we
-will discuss at the end of this chapter.
+rule, or even reject it as a valid inference rule of our logic.
 
 #### Derivable rules
 
@@ -1393,29 +1502,29 @@ Identify each inference rule that has been used to construct the proof above.
 Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
 \end{Exercise}
 \begin{Answer}
-\begin{prooftree}
-\AxiomC{}
-\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬(P ∨ ¬P)$}
-\AxiomC{}
-\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬P$}
-\RightLabel{∨-I₂}
-\UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ P ∨ ¬P$}
-\BinaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ⊥$}
-\RightLabel{RAA}
-\AxiomC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
-\AxiomC{$$}
-\UnaryInfC{$¬(P ∨ ¬P), P ⊢ P$}
-\RightLabel{∨-I₁}
-\UnaryInfC{$¬(P ∨ ¬P), P ⊢ (P ∨ ¬P)$}
-\BinaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
-\UnaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
-\UnaryInfC{$¬(P ∨ ¬P) ⊢ ¬P$}
-\RightLabel{¬-E}
-\BinaryInfC{$¬(P ∨ ¬P) ⊢ ⊥$}
-\RightLabel{RAA}
-\UnaryInfC{$⊢ P ∨ ¬P$}
-\end{prooftree}
-TODO - fix overfull hbox
+\begin{scprooftree}{0.75}
+   \AxiomC{}
+   \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬(P ∨ ¬P)$}
+   \AxiomC{}
+   \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬P$}
+  \RightLabel{∨-I₂}
+  \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ P ∨ ¬P$}
+  \BinaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ⊥$}
+  \RightLabel{RAA}
+  \AxiomC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
+  \AxiomC{$$}
+  \UnaryInfC{$¬(P ∨ ¬P), P ⊢ P$}
+  \RightLabel{∨-I₁}
+  \UnaryInfC{$¬(P ∨ ¬P), P ⊢ (P ∨ ¬P)$}
+  \BinaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
+  \UnaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
+  \UnaryInfC{$¬(P ∨ ¬P) ⊢ ¬P$}
+  \RightLabel{¬-E}
+  \BinaryInfC{$¬(P ∨ ¬P) ⊢ ⊥$}
+  \RightLabel{RAA}
+  \UnaryInfC{$⊢ P ∨ ¬P$}
+\end{scprooftree}
+
 \end{Answer}
 
 \begin{Exercise} 
@@ -1424,17 +1533,30 @@ always a derivation possible showing $Γ ⊢ P$? If so, explain why. If
 not, give an example proposition that has you believe should not have
 a proof. 
 \end{Exercise}
-\begin{Answer}
-TODO
+
+\begin{Answer} 
+
+This is not always possible. For example, in the empty context there
+is no proof showing that $P$ holds (for some atomic propositional
+variable $P$). For example, in the valuation mapping $v(P) =
+\mathbf{F}$, the formula $P$ is false; if there was a derivation
+showing that $⊢ P$ holds, this would contradict soundness.
+
 \end{Answer}
+
 \begin{Exercise}
 When $Γ ⊢ P$ holds, is this proof unique? If so, choose a
 propositional logic formula $P$ and context Γ such that there are
 different derivations showing $Γ ⊢ P$. If not, explain why all
 derivations are equal.
 \end{Exercise}
-\begin{Answer}
-TODO
+
+\begin{Answer} 
+
+The proofs are not necessarily unique. For example, there are two
+possible derivations of $P ∧ P ⊢ P$ using the two different rules for
+conjunction elimination.
+
 \end{Answer}
 
 
@@ -1451,42 +1573,118 @@ how to prove a propositional logic formula was a tautology using
 Before we can answer this question, we need to give a more precise
 account of truth tables.
 
+#### Booleans
+
+Each truth table shows how a formula from propositional logic can be
+*evaluated* to produce a *boolean value*, namely true (T) or false
+(F). To make this statement precise, let's start by defining the set
+of boolean values using the following BNF equation:
+
+ Bool  ::=  T  |  F
+
+We can define functions over the booleans by simply enumerating their
+behaviour on all possible inputs. For example, we can define the
+familiar functions `not` and `and` as follows:
+
+```
+not : Bool → Bool
+not(T) = F
+not(F) = T
+```
+
+```
+and : Bool × Bool → Bool
+and(F,F) = F
+and(F,T) = F
+and(T,F) = F
+and(T,T) = T
+```
+
+These functions should be familiar to anyone who has programmed with
+boolean values.
+
+\begin{Exercise}
+Define \texttt{or : Bool × Bool → Bool} and \texttt{implies : Bool ×
+Bool → Bool} in the same fashion as the definitions of \texttt{not}
+and \texttt{and} above.
+\end{Exercise}
+\begin{Answer}
+\begin{verbatim}
+or : Bool × Bool → Bool
+or(F,F) = F
+or(F,T) = T
+or(T,F) = T
+or(T,T) = T
+
+implies : Bool × Bool → Bool
+implies(F,F) = T
+implies(F,T) = T
+implies(T,F) = F
+implies(T,T) = T
+\end{verbatim}
+\end{Answer}
 
 When we fill out a truth table for some propositional formula $p$, we
 show how each choice of atomic propositional variables of $p$ results
-in a true/false value.
+in a boolean value for the entire formula. For instance, consider the
+following truth table, corresponding to the formula `¬(P ∨ Q) ⇒ ¬P ∧
+¬Q`.
 
 
-| `p`     | `q`    | `¬` | `(p` | `∨` | `q)` | `⇒`    | `(¬p` | `∧` | `¬q)` |
+| `P`     | `Q`    | `¬` | `(P` | `∨` | `Q)` | `⇒`    | `(¬P` | `∧` | `¬Q)` |
 |:-------:|:------:|:---:|:----:|:---:|:----:|:------:|:-----:|:---:|:-----:|
 |  F      |  F     |  T  |   F  |  F  |  F   |  **T** |   T   |  T  |   T   |
 |  F      |  T     |  F  |   F  |  T  |  T   |  **T** |   T   |  F  |   F   |
 |  T      |  F     |  F  |   T  |  T  |  F   |  **T** |   F   |  F  |   T   |
 |  T      |  T     |  F  |   T  |  T  |  T   |  **T** |   F   |  F  |   F   |
 
-For each value of `p` and `q`, we can check the corresponding row to
-see the value of the entire proposotional formula.
+For each possible boolean value that we might associate with the
+atomic propositional variables `P` and `Q`, we can consult the
+corresponding row of the truth table to determine the value of the
+entire propositional formula  `¬(P ∨ Q) ⇒ ¬P ∧ ¬Q`.
 
-Can we make this more precise?
+How can we describe these truth tables in terms of the familiar
+mathematical constructions on sets and functions that we have seen so
+far in this course?
 
-We call a function $v : P$ → **Bool** a *truth assignment*.
+Before we do so, we need to introduce the auxiliary notion of *truth
+assignment*. A *truth assignment* consists of a function $v : \PV$ →
+**Bool**, mapping *atomic propositional variables* to a Boolean
+value. For example, the third row from the truth table above, where
+`P` is T and `Q` is F, corresponds to the following truth assignment:
 
-Such a function chooses the values of associated with each atomic propositional variables.
+\begin{align*}
+v : \PV & → \Bool \\
+v(P) & = T \\
+v(Q) & = F
+\end{align*}
 
-**Claim** Given any truth assignment $v$ and propositional logic
-formula $p$, we can calculate the truth value of a $p$.
+Using the notion of truth assignment, we will show how to assign
+semantics to an entire propositional logic *formula*.
 
-#### Booleans vs propositions
+Given any truth assignment $v$ and propositional logic formula $p$, we
+can compute the boolean truth value of a $p$. To do so, recall that we
+defined the inductive set of all propositional logic formulas using
+the following BNF equation:
 
- $p,q$  ::=  true | false | $P$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
+ $p,q$  ::=  true | false | $PV$ | $¬p$ | $p ∧ q$ | $p ∨ q$ | $p ⇒ q$ | $p ⇔ q$ 
 
-Any propositional logic formula $p$ gives rise to a semantics:
+We would like to show how to assign semantics to these formulas, that
+is, to define a function that maps a truth assignment to the
+boolean value associated with the entire formula:
 
-  $〚 p 〛: (P → \Bool) → \Bool$
+  $\text{semantics}: \PLF × (\PV → \Bool) → \Bool$
 
-Before giving the semantics of propositional logic formulas, what are the booleans?
+Given a formula $p$ and truth assignment $v$, we compute the boolean
+value that states whether $p$ holds under this truth assignment or
+not. Traditionally, this function is written as `operator' using the
+notation $\llbracket p \rrbracket (v)$ rather than
+$\text{semantics}(p,v)$; despite this potentially confusing notation,
+the intention should be clear: define a function by induction on the
+propositional logic formula that determines whether the formula is
+true or false, given a certain truth assignment.
 
-Bool, &&, ||, not w
+This function is entirely straightforward to define:
 
 \begin{align*}
 \llbracket \text{true} \rrbracket (v) \; = & \; \mathbf{\text{T}}\\
@@ -1498,172 +1696,147 @@ Bool, &&, ||, not w
 \llbracket p \Rightarrow q \rrbracket (v) \; = & \; \text{implies}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
 \end{align*}
 
-We can do this by induction on $p$. Recall that the propositional
-logic formulas are given by the following BNF:
+This function is defined by induction over the structure of
+propositional logic formulas. In each case, we map the formula to a
+boolean value. In the base cases, true and false, we can immediately
+return the corresponding boolean value, T and F, respectively. In the
+cases for the operators from propositional logic, such as negation,
+disjunction, conjunction, and implication, we can compute the boolean
+value associated with the sub-formulas and combine the resulting
+boolean values using a suitable boolean operator, such as `not`, `or`,
+`and` and `implies` respectively. For example, the case for
+disjunction states:
 
+$\llbracket p \vee q \rrbracket (v) \; = \; \text{or}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))$
 
-* if $p$ is true, we return **T**;
-* if $p$ is false, we return **F**;
-* if $p$ is of the form $¬ q$, we can compute the value associated
-  with $q$. If this is **T**, we return **F**; if it is **F**, we
-  return **T**.
-* if $p$ is of the form $q_1 ∧ q_2$, we can compute the value
-  associated with $q_1$ and $q_2$. If this both are **T**, we return
-  **T**; otherwise we return **F**.
-* if $p$ is of the form $q_1 ∨ q_2$, we can compute the value
-  associated with $q_1$ and $q_2$. If this both are **F**, we return
-  **F**; otherwise we return **T**.
-* similar cases exist for implication and logical equivalence.
-* but what about variables?
-* if $p$ is an atomic propositional variable $P$, we return $v(P)$.
+To evaluate the disjunction $p ∨ q$ using the truth assignment $v$, we
+evaluate $p$ and $q$ to two boolean values. We combine these boolean
+values using the boolean `or` operator to assign a single boolean
+value to the entire formula.
 
-Our truth assignment tells us exactly how to treat atomic propositions.
+The only remaining case is that for atomic propositional
+variables. When we encounter an atomic propositional variable, we also
+need to compute a boolean result. To do so, we can consult our truth
+assignment $v$ that maps each atomic propositional variable to its
+corresponding boolean value.
 
-This defines the semantics of all propositional logic formulas,
-usually written $〚 p 〛$.
+This completely defines the semantics of all propositional logic
+formulas. That is, we have defined a function that maps each
+propositional logic formula $p$ into a function that, given a truth
+assignment for all atomic propositional variables, computes the truth
+value of the entire propositional logic formula $p$. This function is
+completely unsurprising –- but what does this have to do with truth
+tables?
 
-  $〚 p 〛: (P → \Bool) → \Bool$
-
-That is, we have defined a function that maps each propositional logic
-formula $p$ into a function that, given a truth assignment for all
-atomic propositional variables, computes the truth value of the entire
-propositional logic formula $p$.
-
-But what does this have to do with truth tables?
-
+## Truth tables and semantics
 
 If you think back to the lectures on functions and induction, we saw
 how to *define* a function on a *finite* domain by listing all it
 output value for every possible input value.
 
-Suppose I'm teaching a class with 5 students 
+For example, suppose I have three students in my class:
 
-S = \{Alice, Bob, Carroll, David, Eve \}.
+ S = \{Alice, Bob, Carroll \}.
 
-I can define a functions `marks` mapping $S \to \{1..10\}$ by giving
-each student their mark:
+I can define a function mapping assigning each student a mark between
+one and ten, that is, marks : $S \to \{1..10\}$, by simply listing the
+mark that each student has obtained:
+\begin{align*}
+\text{marks(Alice)}     & = 8 \\
+\text{marks(Bob)}       & = 6 \\
+\text{marks(Carroll)}   & = 7 
+\end{align*}
 
- marks(Alice)     = 8
+We sometimes refer to such a definition of a function with a finite
+domain as the *tabulation* of the marks function. Such a tabulation is
+in one-to-one correspondence with all possible functions marks : $S
+\to \{1..10\}$. 
 
- marks(Bob)       = 6
+Now consider the semantics of a given propositional logic formula $〚p
+〛$. This semantics consists of a function $(\PV → \Bool) → \Bool$.
+Now note that because $p$ only contains a finite number of atomic
+propositional variables, we can define this semantics by giving a
+*tabulation* of this semantics, i.e., giving the boolean value
+associated with *each possible truth assignment* – much as we defined
+a marks function by giving listing the mark value associated with each
+student. But such a listing the boolean value associated with each
+possible truth assignment is exactly what a truth table is!
 
- marks(Carroll)   = 7
-
- ...
- 
 When filling out a truth table for some propositional logic formula
 $p$, you are essentially computing the truth value of $p$ *for all
-possible choice of value for the atomic variables in p*.
+possible choice of value for the atomic variables in p*. That is, we
+are tabulating the function $〚 p 〛$.
 
-For any formula $p$, there are $2^{\mid fv(p)\mid}$ possible truth
-assignments for the free variables in $p$.
-
-Hence, you can give the semantics for $p$, that is the function:
-
-  $〚 p 〛: (P → \Bool) → \Bool$
-
-as a truth table with $2^{\mid fv(p)\mid}$ rows.
-
-**Truth tables are simply the tabulation of this semantics.**
+This shows how truth tables are in one-to-one correspondence with the
+semantics of propositional logic formulas, $〚 p 〛: (\PV → \Bool) →
+\Bool$.
 
 
 ## Relating natural deduction and semantics
 
-In the previous section, we showed how to assign any propositional
-logic formula $p$ the following semantics:
+In the previous section, we outlined one possible semantics for
+propositional logic formulas as truth tables, or equivalently, as
+functions $(\PV → \Bool) → \Bool$. Yet at the beginning of this chapter,
+we gave a very different semantics for propositional logic, namely the
+system of *natural deduction*, defined by a collection of inference
+rules.  How can we relate these different semantics for propositional
+logic?
 
-  $〚 p 〛: (P → \Bool) → \Bool$
+This is important---after all, how do we know we chose the right rules
+in our system of natural deduction? If there is a mistake in our
+rules, we might be able to prove false statements; or perhaps, we have
+forgotten to include certain rules, making it impossible to prove
+certain tautologies.
 
-This captures the 'truth table semantics' with which started the
-course. Yet at the beginning of this chapter, we gave a very different
-semantics for propositional logic, namely the system of *natural
-deduction*, defined by a collection of inference rules.  How can we
-relate these different semantics for propositional logic?
+To make this precise, we need to introduce some new notation. Given a
+truth assignment $v$ we write $v \models p$ if $\llbracket p
+\rrbracket v = \mathbf{T}$.  When $v \models p$ for *each* possible
+truth assignment $v$, we say write $\models p$. In this case, we have
+established that $p$ is a tautotology.
 
-We would expect that for each derivation $Γ ⊢ p$, 
+It turns out that natural deduction inference rules we have seen here
+satisfy two important properties:
 
+**Soundness** If $\vdash p$ then $\models p$. In other words, if we
+can find a proof of $p$ using the inference rules of natural
+deduction, then the truth table for $p$ has a **T** in each row.
 
-And can we be sure that we haven't left out any inference rules?
+**Completeness** If $\models p$ then $\vdash p$. In other words, if
+the truth table of $p$ has a **T** in each row, there is *some*
+derivation of $p$ using the inference rules of natural deduction.
 
-Given an truth assignment $v$ we write $v \models p$ if $\llbracket p
-\rrbracket v = \mathbf{T}$.
+To prove soundness and completeness requires is not easy -- but this
+can be done using the basic logical techniques that we have covered in
+this course. The proofs can be found in many introductory textbooks on
+logic [@van-dalen]. 
 
-If for all truth assignments $v$, we have $v \models p$ we say that $\models
-p$ (and $p$ is a tautotology).
+The system of natural deduction that we have seen can be used to prove
+statements in propositional logic. This system can be extended to also
+handle *predicate* logic, but we will refrain from doing so in these
+notes.
 
+\begin{Exercise} 
 
-It turns out that natural deduction inference rules above satisfy two
-important properties:
+Which statement would you expect is easier to prove: soundness or
+completeness? How would you go about proving these statements?
 
-**Soundness** If $\vdash p$ then $\models p$. In other words, if we can find a proof
-of $p$ using the inference rules of natural deduction, then the truth
-table of $p$ consists of only **T**.
+\end{Exercise}
+\begin{Answer}
 
-**Completeness** If $\models p$ then $\vdash p$. In other words, if the truth table of
-$p$ consists of only **T**, there is *some* derivation of $p$ using
-the inference rules of natural deduction.
+Soundness is a bit easier to show than completeness. To establish that
+our system of natural deduction rules is *sound*, it suffices to show
+that each of our rules holds. This is fairly easy to check using *rule
+induction* on the possible derivations of $⊢ p$.
 
-
-The proofs of soundness and completeness are a subject of a more
-advanced course on formal logic...
-
-...but in principle you have the reasoning techniques to understand
-them.
-
-
-* Soundness is relatively easy to show: given a derivation of some
-  formula $p$, we can do induction on this derivation. If we can show
-  each of our inference rules is safe to use, we can trust each proof
-  built using them.
-  
-* Completeness is harder: we don't have a derivation to do induction
-  on; instead we need to create a derivation for some arbitrary
-  formula $p$... The proof of completeness is usually much harder; the
-  lecture notes from last year give one proof, going via a
-  Hilbert-style proof system.
-
-
-
-These results show just how clean and simple propositional logic is...
-
-But they break down as soon as you study richer predicate logics...
+\end{Answer}
 
 
-
-
-I've presented the rules for propositional logic -- but we can extend
-these rules to handle *predicate* logic.
-
-Rather than introduce a more complicated system for natural deduction
-for handling quantifiers, I'd rather relate the natural deduction
-rules to truth tables...
-
-
-
-## Curry Howard
 
 \newpage
 
-## The rules of natural deduction: an overview
+## Overview of  natural deduction
 
-\begin{prooftree}
-\AxiomC{$Γ ⊢ P$}
-\AxiomC{$Γ ⊢ Q$}
-\RightLabel{∧I}
-\BinaryInfC{$Γ ⊢ P ∧ Q$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$Γ ⊢ P ∧ Q$}
-\RightLabel{∧E₁}
-\UnaryInfC{$Γ ⊢ P$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$Γ ⊢ P ∧ Q$}
-\RightLabel{∧E₂}
-\UnaryInfC{$Γ ⊢ Q$}
-\end{prooftree}
+#### Assumptions
 
 \begin{prooftree}
 \AxiomC{$P ∈ Γ$}
@@ -1671,57 +1844,97 @@ rules to truth tables...
 \UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 
+#### Truth and falsity
+
+\begin{minipage}{.45\linewidth}
+\begin{prooftree}
+\AxiomC{$$}
+\RightLabel{$⊤$-I}
+\UnaryInfC{$Γ ⊢ ⊤$}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}{.45\linewidth}
+\begin{prooftree}
+\AxiomC{$Γ ⊢ ⊥$}
+\RightLabel{$⊥$-E}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+\end{minipage}
+
+#### Implication
+
+\begin{minipage}{0.45\textwidth}
 \begin{prooftree}
 \AxiomC{$Γ, P ⊢ Q$}
 \RightLabel{I⇒}
 \UnaryInfC{$Γ ⊢ P ⇒ Q$}
 \end{prooftree}
-
+\end{minipage}
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇒ Q$}
 \AxiomC{$Γ ⊢ P$}
 \RightLabel{E⇒}
 \BinaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
+\end{minipage}
 
+#### Conjunction
 
+\begin{minipage}{0.45\textwidth}
 \begin{prooftree}
-\AxiomC{$$}
-\RightLabel{$⊤$-I}
-\UnaryInfC{$Γ ⊢ ⊤$}
+\AxiomC{$Γ ⊢ P$}
+\AxiomC{$Γ ⊢ Q$}
+\RightLabel{∧I}
+\BinaryInfC{$Γ ⊢ P ∧ Q$}
 \end{prooftree}
-
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
 \begin{prooftree}
-\AxiomC{$Γ ⊢ ⊥$}
-\RightLabel{$⊥$-E}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₁}
 \UnaryInfC{$Γ ⊢ P$}
 \end{prooftree}
+\begin{prooftree}
+\AxiomC{$Γ ⊢ P ∧ Q$}
+\RightLabel{∧E₂}
+\UnaryInfC{$Γ ⊢ Q$}
+\end{prooftree}
+\end{minipage}
 
+
+#### Negation
+
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ, P ⊢ ⊥$}
 \RightLabel{$¬$-I}
 \UnaryInfC{$Γ ⊢ ¬ P$}
 \end{prooftree}
-
+\end{minipage}
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ ¬ P$}
 \AxiomC{$Γ ⊢ P$}
 \RightLabel{$¬$-E}
 \BinaryInfC{$Γ ⊢ ⊥$}
 \end{prooftree}
+\end{minipage}
 
+#### Disjunction
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P$}
 \RightLabel{∨-I₁}
 \UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
-
 \begin{prooftree}
 \AxiomC{$Γ ⊢ Q$}
 \RightLabel{∨-I₂}
 \UnaryInfC{$Γ ⊢ P ∨ Q$}
 \end{prooftree}
-
+\end{minipage}
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ∨ Q$}
 \AxiomC{$Γ, P ⊢ R$}
@@ -1729,35 +1942,42 @@ rules to truth tables...
 \RightLabel{$∨$-E}
 \TrinaryInfC{$Γ ⊢ R$}
 \end{prooftree}
+\end{minipage}
 
-\begin{prooftree}
-\AxiomC{$Γ, ¬P ⊢ ⊥$}
-\RightLabel{RAA}
-\UnaryInfC{$Γ ⊢ P$}
-\end{prooftree}
-
+#### Logical equivalence
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ, P ⊢ Q$}
 \AxiomC{$Γ, Q ⊢ P $}
 \RightLabel{$⇔$-I}
 \BinaryInfC{$Γ ⊢ P ⇔ Q$}
 \end{prooftree}
-
+\end{minipage}
+\begin{minipage}{.45\linewidth}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ P$}
 \RightLabel{$⇔$-$E_1$}
 \BinaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
-
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ Q$}
 \RightLabel{$⇔$-$E_2$}
 \BinaryInfC{$Γ ⊢ P$}
 \end{prooftree}
+\end{minipage}
+
+#### Double negation
 
 
+\begin{minipage}{.45\linewidth}
+\begin{prooftree}
+\AxiomC{$Γ, ¬P ⊢ ⊥$}
+\RightLabel{RAA}
+\UnaryInfC{$Γ ⊢ P$}
+\end{prooftree}
+\end{minipage}
 
 \newpage
 
@@ -1814,7 +2034,7 @@ Give a natural deduction proof of (A ∨ (B ∧ A)) ⇒ A
 \end{Exercise}
 \newpage
 
-## Solutions to exercises
+## Solutions to selected exercises
 
 \shipoutAnswer
 \setcounter{Exercise}{0}
@@ -1822,127 +2042,222 @@ Give a natural deduction proof of (A ∨ (B ∧ A)) ⇒ A
 
 # Reasoning about programs
 
-We have already seen the syntax of a (toy) programming language, While
--- but what is its semantics?
+In this final chapter we show how to develop a *logic* to reason about
+*programs*. Where the previous chapter defined natural deduction, a
+set of proof rules to reason about propositional logic formulas, this
+chapter aims to achieve something similar for reasoning about (simple)
+imperative programming languages.
 
-## Semantics of expressions
 
- $e$  ::=  $n$ | $x$ | $e + e$ | $e × e$ | …
+## Syntax of programs
 
- $b$  ::=  true | false | $b₁$ || $b₂$ | $b₁$ && $b₂$ | $e₁$ < $e₂$ | …
+Before we can talk about semantics, we need to fix the (syntax of) the
+programming language that we will be studying. Here we fix the syntax
+for our programs $p$, (integer) expressions $e$ and boolean
+expressions $b$ using the following BNF equations:
 
-**Idea** We can write a pair of inductively defined functions that
-take *syntax*, evaluate it to a number or boolean.
+ $p$  ::=  $x := e$ 
 
-But – this doesn't quite work: what is the value of `x + 3`?
+   |   $p₁;p₂$ 
 
-. . .
+   |   if $b$ then $p₁$ else $p₂$ 
 
-This depends on the last value we assigned to the variable `x` -- we
-need to keep track of the computer's memory.
+   |   while $b$ do $p$
 
-#### Memory
+ $e$  ::=  $n$ | $x$ | $e + e$ | $e × e$ | $e - e$ 
 
-We can mode the contents of the computer's memory as a function $V \to
-\Int$  this function tells us for each variable in $V$ what its
-current value is.
+ $b$  ::=  true | false | $e₁ = e₂$ | $e₁ ≤ e₂$| ¬ $b$ | $b₁$ && $b₂$ 
 
-We can use this function to write a pair of inductively defined functions
-that take *syntax*, evaluate it to a number or boolean.
+Here we assume that $n$ is drawn from the set of integers; variables
+such as $x$ are drawn from some fixed set of variable names, \Var.
 
-   $〚 e 〛: (V \to \Int) \to \Int$
-   $〚 b 〛: (V \to \Int) \to \Bool$
+This is, of course, not a real programming language. There are many
+operations missing---such as the disjunction of booleans, division and
+exponents of numbers---but our aim is *not* to try and define the
+complete syntax of a realistic language, but rather to define a
+minimal language that is small enough to study. The more language
+features we add, the more complex our semantics will
+become. Similarly, our semantics will avoid many low-level details,
+such as integer overflows and memory management. Nonetheless, I hope
+that you can recognize the core of many programming languages in these
+definitions.
 
-Just as we saw for the semantics of propositional logic, we use this
-function to associate meaning with variables.
 
+## Semantics for expressions 
+
+Before we study the semantics of *programs*, we will define the
+semantics of expressions. To do so, we will define a pair of functions
+that map expressions and boolean expression to their corresponding
+integer and boolean respectively. 
+
+These functions follow the same pattern as the semantics for
+propositional logic formulas we saw in the previous chapter. In the
+previous chapter, we saw how passing in a *truth assignment* can be
+used to assign semantics to propositional logic variables. In the
+semantics of expressions, we have a similar problem: as our
+expressions may contain variables, such as `x + 3`, our semantics
+we cannot define a semantics mapping expressions to integers directly.
+
+To evaluate expressions containing variables, we need information
+about the current state of the computer's memory. To model this, our
+semantics will take an argument, σ : \Var\ → \Int, that maps each
+variable to its current value in memory. We can then define our
+semantics for integer expressions as follows:
+
+\begin{align*}
+〚 e 〛\quad : & \; (\Var → \Int) → \Int \\
+〚 n 〛 (σ) \; = & \; n\\
+〚 x 〛 (σ) \; = & \; σ(x)  \\
+〚 e₁ + e₂ 〛 (σ) \; = & \; 〚 e₁ 〛(σ) + 〚 e₂ 〛(σ)  \\
+〚 e₁ × e₂ 〛 (σ) \; = & \; 〚 e₁ 〛(σ) × 〚 e₂ 〛(σ)  \\
+〚 e₁ - e₂ 〛 (σ) \; = & \; 〚 e₁ 〛(σ) - 〚 e₂ 〛(σ)  \\
+\end{align*}
+
+Running this semantics on expressions is sometimes referred to as
+*evaluation*.
 
 
 #### Example
 
-Previously we didn't know the meaning of `x + 3` – but what if we are
-given the current memory $σ : V → \Int$ and we know that $σ(x) = 7$:
+Suppose we want to evaluate `x + 3`, given the current memory $σ : V →
+\Int$ for which we know that $σ(x) = 7$. We can then proceed as follows:
 
-  $〚 x + 3  〛_\sigma = 〚 x 〛_\sigma+〚 3 〛_\sigma= σ(x) + 3 = 7 + 3 = 10$
+  $〚 x + 3  〛(\sigma) = 〚 x 〛(\sigma) +〚 3 〛(\sigma)= σ(x) + 3 = 7 + 3 = 10$
 
-We can compute the integer associated with expressions and the boolean
-value associated with boolean expressions provided we know the current
-*state* of the computer's memory.
 
+It may seem like this semantics `does nothing'. How should we read the
+following line from the definition above?
+
+〚 e₁ + e₂ 〛 (σ) \; = \; 〚 e₁ 〛(σ) + 〚 e₂ 〛(σ) 
+
+It is important to distinguish the two occurrences of the `+` symbol
+in this formula. On the left hand side, we indicate that we are
+defining our semantics for the case that our expression is of the form
+$e₁ + e₂$. Here the `+` symbol is part of the *syntax* of our
+expression language. We could equally well have chosen to use a
+different operator to represent addition, such as $\oplus$. The second
+plus symbol, used on the right-hand side of the equation, is the
+regular addition between integers. The integers being added here are $
+〚 e₁ 〛(σ)$ and $〚 e₂ 〛(σ)$ corresponding to the two
+sub-expressions of the `+` operator of our expression
+language. Something similar appeared in our semantics for
+propositional logic in the previous chapter, where we mapped the
+disjunction of propositional logic formulas (∨) to the `or` operation on
+booleans.
+
+
+\begin{Exercise}
+Give a similar semantics for boolean expressions.
+\end{Exercise}
+\begin{Answer}
+\begin{align*}
+〚 b 〛\quad : & \; (\Var → \Int) → \Bool \\
+〚 \text{true} 〛 (σ) \; = & \; \mathbf{\text{T}}\\
+〚 \text{false} 〛 (σ) \; = & \; \mathbf{\text{F}}\\
+〚 e₁ = e₂ 〛 (σ) \; = & \;  \begin{cases} \mathbf{T} & \text{if~} 〚 e₁ 〛(σ) = 〚 e₂ 〛(σ) \\ \mathbf{F} & \text{otherwise} \end{cases}\\
+〚 e₁ ≤ e₂ 〛 (σ) \; = & \;  \begin{cases} \mathbf{T} & \text{if~} 〚 e₁ 〛(σ) ≤ 〚 e₂ 〛(σ) \\ \mathbf{F} & \text{otherwise} \end{cases}\\
+〚 \neg p 〛 (σ) \; = & \; \text{not}(〚 p 〛 (σ))\\
+〚 p \&\& q 〛 (σ) \; = & \; \text{and}(〚 p 〛 (σ),〚 q \rrbracket (σ))\\
+\end{align*}
+\end{Answer}
 
 
 ## Semantics for programs
 
- $p$  ::=  $x := e$ 
+Now that we have a semantics for expressions, we can focus on how to
+define a semantics of our *programs*. Where the semantics for
+(boolean) expressions closely resembles the semantics for
+propositional logic formulas we saw in the previous chapter, it is not
+quite so clear how to define the semantics of our programs. Consider a
+program such as:
+```c
+   x := 17
+```
 
-   | $p₁;p₂$ 
+What is the result of this program? The semantics we saw previously
+mapped expressions to integers and boolean expressions to
+booleans. But what value does this program return? We might adopt some
+convention, such as that the result of the above program is 17 – but
+this is not enough. Consider the following program that never terminates:
 
-   | if $b$ then $p₁$ else $p₂$ 
+```c
+while(true) do
+  {x := x + 1}
+```
 
-   | while $b$ do $p$
+What value does this program return? 
 
-How should I define a semantics?
-
-A statement such as:
-
-   $x := 17$
-
-doesn't return any interesting result -- but rather *modifies the state of our program*
-
-. . .
-
-Any semantics for our language should carefully describe how the state changes...
-
-
+These examples highlight two issues that we need to address. Firstly,
+programs *modify* the state of our computer's memory, rather than
+return a value. A consequence of this observation is that our
+semantics should account for *how* a program modifies the initial
+state of our computer's memory. Secondly, our programs may *diverge*,
+not returning any result at all–--any semantics we define to assign
+meaning to our programs must also account for programs that never
+terminate.
 
 
-#### Example execution
 
-\begin{tabular}{p{10mm}l}
- & \texttt{x := 3;}  \\
- &\texttt{p := 0;}  \\
- &\texttt{i := 1;}  \\
- &\texttt{while (i <= x)}  \\
- &\texttt{\{}  \\
- &\quad\quad \texttt{p := p+i;}  \\
- &\quad\quad \texttt{i := i+1;}  \\
- &\texttt{\}}  \\
-\end{tabular}
 
+
+
+#### Example: program execution
+
+Suppose we start have the following program:
+
+~~~~ {#mycode .c .numberLines startFrom="1"}
+x := 3;
+p := 0;
+i := 1;
+while (i ≤ x) do
+{
+  p := p+i;
+  i := i+1
+}
+~~~~~~~~~~~~~
 We start execution from some begin state -- let's assume that the
 variables `x`, `p` and `i` all start as 0,1,2 respectively.
-That is initially we're in a state $\sigma$ which satisfies:
+That is initially we're in a state $\sigma$ such that:
 
  $σ(\mathtt{x}) = 0$
  $σ(\mathtt{p}) = 1$
  $σ(\mathtt{i}) = 2$
 
-Now let's run this program step by step...
+To execute this program, we read through it line-by-line, performing
+the corresponding updates to our state. We can run our program by
+hand, storing the state of all three variables in the following table:
 
-This gives some idea of how a program is executed.
+| line    | change             | $σ(\mathtt{x})$  | $σ(\mathtt{p})$ |$σ(\mathtt{i})$ | 
+|:-------:|:-------------------|:----------------:|:---------------:|:--------------:|
+| 1       | initial state      |       0          |        1        |       2        | 
+| 2       | execute `x:=3`     |       3          |        1        |       2        | 
+| 3       | execute `p:=0`     |       3          |        0        |       2        | 
+| 4       | execute `i:=1`     |       3          |        0        |       1        | 
+| 6       | enter while and execute `p:=p+i` | 3  |        1        |       1        | 
+| 7       | execute `i:=i+1`   |   3              |        1        |       2        | 
+| 6       | enter while and execute `p:=p+i` | 3  |        3        |       2        | 
+| 7       | execute `i:=i+1`   |   3              |        3        |       3        | 
+| 6       | enter while and execute `p:=p+i` | 3  |        6        |       3        | 
+| 7       | execute `i:=i+1`   |   3              |        6        |       4        | 
 
-But this example raises some interesting questions:
 
-* What would have happened if we would have used a different initial
-  state? Would the results have been the same?
-  
-* Does every program terminate in a finite number of steps?
+Here we can see that our program terminates in the final state where
 
-* Can our program 'go wrong' somehow -- dividing by zero or accessing
-  unallocated memory?
-  
-My goal isn't to answer all these questions -- but just to highlight
-the kind of issues you need to address when making the semantics of
-programming languages precise.
+ $σ(\mathtt{x}) = 3$
+ $σ(\mathtt{p}) = 6$
+ $σ(\mathtt{i}) = 4$
 
-Let's try to give a mathematical account of program execution.
+This example intends to give some intuition of how a program is
+executed, modifying the state of the computer's memory along the way.
+In the next sections, we will try to nail down this intuition further,
+giving a precise mathematical account of program execution.
 
 #### Modelling state
 
 We model the current state of our computer's memory (storing the value
 of all our variables) as function:
 
-  $σ : V \to \Int$
+  $σ : V → \Int$
 
 If we want to know the value of a given variable $x$, we can simply
 look it up $σ(x)$;
@@ -1955,12 +2270,12 @@ variables in $V$ **except** $x$, where it stores the value $n$.
 In other words, this updates the current memory at one location,
 setting the value for $x$ to $n$.
 
-
-
-## The meaning of our programs
+### Operational semantics
 
 Using the *inference rule notation* from the previous lecture, we can
 formalize the semantics of our language.
+
+
 
 The key idea is that we define a relation on (While × State) × (While
 × State) – that is given the current state of the computer's memory
@@ -1970,10 +2285,6 @@ next state and remaining program to execute...
 This formalizes the example we had a few slides ago, where we 'stepped
 through' the execution of a program studying how the state changed at
 every step.
-
-
-
-## Notation
 
 We will write use the following notation:
 
@@ -1994,12 +2305,6 @@ producing the final state σ'.
 This relation gives an **operational semantics** for our programs,
 describing how to execute a program step by step.
 
-
-
-## Operational semantics
-
- $p$  ::=  $x := e$  |   $p₁;p₂$  |  if $b$ then $p₁$ else $p₂$ fi   |   while $b$ do $p$ end
-
 We have four language constructs -- we'll only need very few rules to
 describe their behaviour (in contrast to, say, natural deduction rules
 for propositional logic).
@@ -2019,7 +2324,7 @@ for propositional logic).
 \begin{prooftree}
 \RightLabel{Assignment}
 \AxiomC{$\llbracket e \rrbracket_\sigma = n$}
-\UnaryInfC{$\langle x := e , \sigma \rangle \; \to \; \sigma[x \mapsto n]$}
+\UnaryInfC{$\langle x := e , \sigma \rangle \; → \; \sigma[x \mapsto n]$}
 \end{prooftree}
 
 There is one rule for handling assignment.
@@ -2034,7 +2339,7 @@ command $x := y + 2$ by:
 
 \begin{prooftree}
 \AxiomC{$\llbracket y + 2 \rrbracket_\sigma = 5$}
-\UnaryInfC{$\langle x := y + 2 , \sigma \rangle \; \to \; \sigma[x \mapsto 5]$}
+\UnaryInfC{$\langle x := y + 2 , \sigma \rangle \; → \; \sigma[x \mapsto 5]$}
 \end{prooftree}
 
 

@@ -4,6 +4,7 @@
 \usepackage{stmaryrd}
 \usepackage{amsmath}
 \usepackage{amssymb}
+
 % Sweet unicode source
 \usepackage{newunicodechar}
 \newunicodechar{⇒}{\ensuremath{\Rightarrow}}
@@ -60,7 +61,11 @@
 \usepackage{bussproofs}
 
 \newcommand\Bool{\ensuremath{\text{\textbf{Bool}}}}
+\newcommand\PV{\ensuremath{\text{\textbf{PV}}}}
+\newcommand\PLF{\ensuremath{\text{\textbf{PLF}}}}
+\newcommand\Ctx{\ensuremath{\text{\textbf{PLF}}^{*}}}
 \newcommand\Int{\ensuremath{\text{\textbf{Int}}}}
+\newcommand\Var{\ensuremath{\text{\textbf{Var}}}}
 
 \definecolor{uuRed}{RGB}{192,10,53}
 \definecolor{uuYellow}{RGB}{255,205,0}
@@ -89,3 +94,7 @@ Exercise~\arabic{chapter}.\ExerciseHeaderNB}\smallskip\\}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}
+
+\newenvironment{scprooftree}[1]%
+  {\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+  {\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
