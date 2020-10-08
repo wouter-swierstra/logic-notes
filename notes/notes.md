@@ -774,7 +774,7 @@ with the following two rules:
 \begin{minipage}{65mm}
 \begin{prooftree}
 \AxiomC{$P ∧ Q$}
-\RightLabel{$∧$-E$_1$}
+\RightLabel{$∧$-E$₁$}
 \UnaryInfC{$P$}
 \end{prooftree}
 \end{minipage}
@@ -782,7 +782,7 @@ with the following two rules:
 \begin{minipage}{65mm}
 \begin{prooftree}
 \AxiomC{$P ∧ Q$}
-\RightLabel{$∧$-E$_2$}
+\RightLabel{$∧$-E$₂$}
 \UnaryInfC{$Q$}
 \end{prooftree}
 \end{minipage}
@@ -794,12 +794,12 @@ proof:
 \begin{prooftree}
 \AxiomC{…}
 \UnaryInfC{$P ∧ Q$}
-\RightLabel{$∧$-E$_2$}
+\RightLabel{$∧$-E$₂$}
 \UnaryInfC{$Q$}
 
 \AxiomC{…}
 \UnaryInfC{$P ∧ Q$}
-\RightLabel{$∧$-E$_1$}
+\RightLabel{$∧$-E$₁$}
 \UnaryInfC{$P$}
 
 \RightLabel{$∧$-I}
@@ -918,13 +918,13 @@ Using the rules we have seen so far, we can give a derivation of $⊢ P
 \AxiomC{$P ∧ Q ∈ P ∧ Q$}
 \RightLabel{Assumption}
 \UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
-\RightLabel{$∧$-E$_2$}
+\RightLabel{$∧$-E$₂$}
 \UnaryInfC{$P ∧ Q ⊢ Q$}
 
 \AxiomC{$P ∧ Q ∈ P ∧ Q$}
 \RightLabel{Assumption}
 \UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
-\RightLabel{$∧$-E$_1$}
+\RightLabel{$∧$-E$₁$}
 \UnaryInfC{$P ∧ Q ⊢ P$}
 
 \RightLabel{$∧$-I}
@@ -939,7 +939,7 @@ rule. For example, we might write the following in the proof above:
 \begin{prooftree}
 \AxiomC{}
 \UnaryInfC{$P ∧ Q ⊢ P ∧ Q$}
-\RightLabel{$∧$-E$_2$}
+\RightLabel{$∧$-E$₂$}
 \UnaryInfC{$P ∧ Q ⊢ Q$}
 \end{prooftree}
 
@@ -1255,14 +1255,14 @@ rules that are all valid choices:
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ P$}
-\RightLabel{$⇔$-$E_1$}
+\RightLabel{$⇔$-$E₁$}
 \BinaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
 
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ Q$}
-\RightLabel{$⇔$-$E_2$}
+\RightLabel{$⇔$-$E₂$}
 \BinaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 \end{Answer}
@@ -1282,7 +1282,7 @@ Use the rule you proposed in the previous exercise to prove $⊢ P ∧ ⊤ ⇔ P
 \BinaryInfC{$P ⊢ P ∧ ⊤$}
 \AxiomC{}
 \UnaryInfC{$P ∧ ⊤ ⊢ P ∧ ⊤$}
-\RightLabel{$∧$-E$_1$}
+\RightLabel{$∧$-E$₁$}
 \UnaryInfC{$P ∧ ⊤ ⊢ P$}
 \RightLabel{$⇔$-I}
 \BinaryInfC{$⊢ P ∧ ⊤ ⇔ P$}
@@ -1678,7 +1678,7 @@ boolean value associated with the entire formula:
 Given a formula $p$ and truth assignment $v$, we compute the boolean
 value that states whether $p$ holds under this truth assignment or
 not. Traditionally, this function is written as `operator' using the
-notation $\llbracket p \rrbracket (v)$ rather than
+notation $〚 p 〛 (v)$ rather than
 $\text{semantics}(p,v)$; despite this potentially confusing notation,
 the intention should be clear: define a function by induction on the
 propositional logic formula that determines whether the formula is
@@ -1687,13 +1687,13 @@ true or false, given a certain truth assignment.
 This function is entirely straightforward to define:
 
 \begin{align*}
-\llbracket \text{true} \rrbracket (v) \; = & \; \mathbf{\text{T}}\\
-\llbracket \text{false} \rrbracket (v) \; = & \; \mathbf{\text{F}}\\
-\llbracket \text{P} \rrbracket (v) \; = & \; v(\text{P})\\
-\llbracket \neg p \rrbracket (v) \; = & \; \text{not}(\llbracket p \rrbracket (v))\\
-\llbracket p \vee q \rrbracket (v) \; = & \; \text{or}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
-\llbracket p \wedge q \rrbracket (v) \; = & \; \text{and}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
-\llbracket p \Rightarrow q \rrbracket (v) \; = & \; \text{implies}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))\\
+〚 \text{true} 〛 (v) \; = & \; \mathbf{\text{T}}\\
+〚 \text{false} 〛 (v) \; = & \; \mathbf{\text{F}}\\
+〚 \text{P} 〛 (v) \; = & \; v(\text{P})\\
+〚 \neg p 〛 (v) \; = & \; \text{not}(〚 p 〛 (v))\\
+〚 p \vee q 〛 (v) \; = & \; \text{or}(〚 p 〛 (v),〚 q 〛 (v))\\
+〚 p \wedge q 〛 (v) \; = & \; \text{and}(〚 p 〛 (v),〚 q 〛 (v))\\
+〚 p \Rightarrow q 〛 (v) \; = & \; \text{implies}(〚 p 〛 (v),〚 q 〛 (v))\\
 \end{align*}
 
 This function is defined by induction over the structure of
@@ -1707,7 +1707,7 @@ boolean values using a suitable boolean operator, such as `not`, `or`,
 `and` and `implies` respectively. For example, the case for
 disjunction states:
 
-$\llbracket p \vee q \rrbracket (v) \; = \; \text{or}(\llbracket p \rrbracket (v),\llbracket q \rrbracket (v))$
+$〚 p \vee q 〛 (v) \; = \; \text{or}(〚 p 〛 (v),〚 q 〛 (v))$
 
 To evaluate the disjunction $p ∨ q$ using the truth assignment $v$, we
 evaluate $p$ and $q$ to two boolean values. We combine these boolean
@@ -1789,8 +1789,8 @@ forgotten to include certain rules, making it impossible to prove
 certain tautologies.
 
 To make this precise, we need to introduce some new notation. Given a
-truth assignment $v$ we write $v \models p$ if $\llbracket p
-\rrbracket v = \mathbf{T}$.  When $v \models p$ for *each* possible
+truth assignment $v$ we write $v \models p$ if $〚 p
+〛 v = \mathbf{T}$.  When $v \models p$ for *each* possible
 truth assignment $v$, we say write $\models p$. In this case, we have
 established that $p$ is a tautotology.
 
@@ -1957,13 +1957,13 @@ induction* on the possible derivations of $⊢ p$.
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ P$}
-\RightLabel{$⇔$-$E_1$}
+\RightLabel{$⇔$-$E₁$}
 \BinaryInfC{$Γ ⊢ Q$}
 \end{prooftree}
 \begin{prooftree}
 \AxiomC{$Γ ⊢ P ⇔ Q$}
 \AxiomC{$Γ ⊢ Q$}
-\RightLabel{$⇔$-$E_2$}
+\RightLabel{$⇔$-$E₂$}
 \BinaryInfC{$Γ ⊢ P$}
 \end{prooftree}
 \end{minipage}
@@ -2069,7 +2069,8 @@ expressions $b$ using the following BNF equations:
  $b$  ::=  true | false | $e₁ = e₂$ | $e₁ ≤ e₂$| ¬ $b$ | $b₁$ && $b₂$ 
 
 Here we assume that $n$ is drawn from the set of integers; variables
-such as $x$ are drawn from some fixed set of variable names, \Var.
+such as $x$ are drawn from some fixed set of variable names, \Var. We
+will refer to this set of inductively defined programs as \While.
 
 This is, of course, not a real programming language. There are many
 operations missing---such as the disjunction of booleans, division and
@@ -2122,7 +2123,7 @@ Running this semantics on expressions is sometimes referred to as
 Suppose we want to evaluate `x + 3`, given the current memory $σ : V →
 \Int$ for which we know that $σ(x) = 7$. We can then proceed as follows:
 
-  $〚 x + 3  〛(\sigma) = 〚 x 〛(\sigma) +〚 3 〛(\sigma)= σ(x) + 3 = 7 + 3 = 10$
+  $〚 x + 3  〛(σ) = 〚 x 〛(σ) +〚 3 〛(σ)= σ(x) + 3 = 7 + 3 = 10$
 
 
 It may seem like this semantics `does nothing'. How should we read the
@@ -2157,7 +2158,7 @@ Give a similar semantics for boolean expressions.
 〚 e₁ = e₂ 〛 (σ) \; = & \;  \begin{cases} \mathbf{T} & \text{if~} 〚 e₁ 〛(σ) = 〚 e₂ 〛(σ) \\ \mathbf{F} & \text{otherwise} \end{cases}\\
 〚 e₁ ≤ e₂ 〛 (σ) \; = & \;  \begin{cases} \mathbf{T} & \text{if~} 〚 e₁ 〛(σ) ≤ 〚 e₂ 〛(σ) \\ \mathbf{F} & \text{otherwise} \end{cases}\\
 〚 \neg p 〛 (σ) \; = & \; \text{not}(〚 p 〛 (σ))\\
-〚 p \&\& q 〛 (σ) \; = & \; \text{and}(〚 p 〛 (σ),〚 q \rrbracket (σ))\\
+〚 p \&\& q 〛 (σ) \; = & \; \text{and}(〚 p 〛 (σ),〚 q 〛 (σ))\\
 \end{align*}
 \end{Answer}
 
@@ -2217,7 +2218,7 @@ while (i ≤ x) do
 ~~~~~~~~~~~~~
 We start execution from some begin state -- let's assume that the
 variables `x`, `p` and `i` all start as 0,1,2 respectively.
-That is initially we're in a state $\sigma$ such that:
+That is initially we're in a state $σ$ such that:
 
  $σ(\mathtt{x}) = 0$
  $σ(\mathtt{p}) = 1$
@@ -2240,6 +2241,10 @@ hand, storing the state of all three variables in the following table:
 | 6       | enter while and execute `p:=p+i` | 3  |        6        |       3        | 
 | 7       | execute `i:=i+1`   |   3              |        6        |       4        | 
 
+The 'line' column refers to the line number of the statement we are
+executing; the 'change' gives a (human-readable) description of what
+has happened; the other three columns contain the current value of the
+three variables in which we are interested.
 
 Here we can see that our program terminates in the final state where
 
@@ -2254,33 +2259,45 @@ giving a precise mathematical account of program execution.
 
 #### Modelling state
 
-We model the current state of our computer's memory (storing the value
-of all our variables) as function:
+Just as we did for our semantics for expressions, we will need to
+model the current state of our computer's memory, storing the value of
+all the variables. We can do so using a function, mapping variable
+names to the values they store:
 
-  $σ : V → \Int$
+  $σ : \Var → \Int$
 
-If we want to know the value of a given variable $x$, we can simply
-look it up $σ(x)$;
+In what follows, we will sometimes refer to the set of functions $\Var
+→ \Int$ as the set of all possible states, $\State$.
 
-We will sometimes also need to *update* the current memory.
+Given a state σ, if we want to know the value of a given variable `x`,
+we can simply look up the corresponding value by passing it as
+argument to this function, $σ(\mathtt{x})$.
 
-We write $σ[x ↦ n]$ for the memory that is the same as σ for all
-variables in $V$ **except** $x$, where it stores the value $n$.
+We will sometimes also need to *update* the current state. To do so,
+we write $σ[y ↦ n]$ for the memory that is the same as σ for all
+variables in \Var\ *except* $y$, where it stores the value $n$. In
+other words, this updates the current memory at one location, setting
+the value for $y$ to $n$.
 
-In other words, this updates the current memory at one location,
-setting the value for $x$ to $n$.
+More formally, the new state σ' of our memory after the update $σ[y ↦
+n]$ is defined as follows:
+
+\begin{align*}
+σ'(x) =
+  \begin{cases} 
+    n & \text{if~} x = y\\ 
+    σ(x) & \text{otherwise} 
+  \end{cases} 
+\end{align*}
+
 
 ### Operational semantics
 
-Using the *inference rule notation* from the previous lecture, we can
-formalize the semantics of our language.
-
-
-
-The key idea is that we define a relation on (While × State) × (While
-× State) – that is given the current state of the computer's memory
-and the program that we're executing, this relation determines the
-next state and remaining program to execute...
+We can now define an inductive relation capturing the semantics of our
+programming language.  The key idea is that we define a relation on
+(\While × \State)) × \State – that is given the current
+state of the computer's memory and the program that we're executing,
+executes the program to produce some final state.
 
 This formalizes the example we had a few slides ago, where we 'stepped
 through' the execution of a program studying how the state changed at
@@ -2288,88 +2305,104 @@ every step.
 
 We will write use the following notation:
 
-  ⟨ p , σ ⟩ → ⟨ p' , σ' ⟩
+  ⟨ p , σ ⟩ → σ'
 
 To mean that the program $p$ running with the current state σ can
-perform a single step of execution, yielding a new state σ' and
-remaining program to execute $p'$.
-
-If running $p$ for one step causes our program to terminate we write:
+executed to terminate in some final state σ'.
 
 
-  ⟨ p , σ ⟩ → σ' 
+<!-- If running $p$ for one step causes our program to terminate we write: -->
 
-To mean the program $p$ running in the state σ terminates in one step,
-producing the final state σ'.
+<!--   ⟨ p , σ ⟩ → σ'  -->
 
-This relation gives an **operational semantics** for our programs,
-describing how to execute a program step by step.
+<!-- To mean the program $p$ running in the state σ terminates in one step, -->
+<!-- producing the final state σ'. So to be be slightly more precise, the -->
+<!-- inductive relation that we will define is not on (\While × \State)) × -->
+<!-- (\While × \State), but rather on (\While × \State) × (\While? × -->
+<!-- \State), where \While? is defined as: -->
 
-We have four language constructs -- we'll only need very few rules to
-describe their behaviour (in contrast to, say, natural deduction rules
-for propositional logic).
+<!--   \While?   :=   \While   ∪   \{ Done \} -->
+
+<!-- Where 'Done' is a special value indicating the program has -->
+<!-- terminated. To be even more precise, we should then write: -->
+
+<!--   ⟨ p , σ ⟩ → ⟨ Done , σ' ⟩ -->
+
+<!-- rather than  -->
+
+<!--   ⟨ p , σ ⟩ → σ'  -->
+
+<!-- but our intention should be clear. -->
+
+This relation defines what is called an **operational semantics** for
+our programs, describing how to execute a program step by step.  Our
+programming language has four language constructs:
 
 * Assignments -- $x := e$
 
-* Sequential composition -- $p₁;p₂$
-
 * Conditionals -- if $b$ then $p₁$ else $p₂$ fi
+
+* Sequential composition -- $p₁;p₂$
 
 * Loops -- while $b$ do $p$ end
 
-
+We will now give rules describing the meaning of each of these
+constructs one by one.
 
 #### Assignment
 
+There is a single rule describing the behaviour of assigments:
+
 \begin{prooftree}
 \RightLabel{Assignment}
-\AxiomC{$\llbracket e \rrbracket_\sigma = n$}
-\UnaryInfC{$\langle x := e , \sigma \rangle \; → \; \sigma[x \mapsto n]$}
+\AxiomC{$〚 e 〛(σ) = n$}
+\UnaryInfC{$\langle x := e , σ \rangle \; → \; σ[x \mapsto n]$}
 \end{prooftree}
 
-There is one rule for handling assignment.
+This rule shows that each assignment statement terminates in a single
+step. Here we use the notation introduced previously, σ[x ↦ n], to
+describe the final state after executing the assignment. This final
+state is identitical to the initial state, σ, but the variable x now
+has the value n.
 
-The assignment statement always terminates in one step.
+##### Example: executing assignments
 
-Starting in the state σ, executing $x := e$ produces a new state, σ[x
-↦ n], that updates the memory location for $x$ to store the value of $e$.
-
-For example, given a state σ satisfying $σ(y) = 3$, we can execute the
-command $x := y + 2$ by:
+Given a state σ satisfying $σ(y) = 3$, we can describe the
+behaviour of the command $x := y + 2$ as follows:
 
 \begin{prooftree}
-\AxiomC{$\llbracket y + 2 \rrbracket_\sigma = 5$}
-\UnaryInfC{$\langle x := y + 2 , \sigma \rangle \; → \; \sigma[x \mapsto 5]$}
+\AxiomC{$〚 y + 2 〛(σ) = 5$}
+\UnaryInfC{$\langle x := y + 2 , σ \rangle \; → \; σ[x \mapsto 5]$}
 \end{prooftree}
-
 
 
 #### Conditionals
 
+In contrast to assignments, we need to rules to describe how to
+evaluate an if-then-else statement, one for each possible execution
+path:
 
 \begin{prooftree}
 \RightLabel{If-true}
-\AxiomC{$\llbracket b \rrbracket_\sigma = true $}
-\UnaryInfC{⟨ if $b$ then $p_1$ else $p_2$ fi  , σ ⟩ → ⟨ $p_1$ , σ ⟩}
+\AxiomC{$〚 b 〛(σ) = \text{true} $}
+\AxiomC{$⟨ p₁ , σ ⟩ → σ'$}
+\BinaryInfC{⟨ if  $b$  then $p₁$  else  $p₂$  fi  , σ ⟩ → σ'}
 \end{prooftree}
 
 \begin{prooftree}
 \RightLabel{If-false}
-\AxiomC{$\llbracket b \rrbracket_\sigma = false $}
-\UnaryInfC{⟨ if $b$ then $p_1$ else $p_2$ fi  , σ ⟩ → ⟨ $p_2$ , σ ⟩}
+\AxiomC{$〚 b 〛(σ) = \text{false} $}
+\AxiomC{$⟨ p₂ , σ ⟩ → σ'$}
+\BinaryInfC{⟨ if  $b$  then  $p₁$  else  $p₂$  fi  , σ ⟩ → σ'}
 \end{prooftree}
 
-There are two rules for evaluating if-then-else statements:
-
-* if the guard $b$ is true, we continue evaluating the then branch, leaving the state unchanged;
-
-* if the guard $b$ is false, we continue evaluating the else branch, leaving the state unchanged;
-
+Both these rules begin by evaluating the 'guard' $b$.  If the guard
+$b$ evaluates to true, we continue executing the `then` branch,
+leaving the state unchanged. If the guard $b$ evaluates to false, we
+continue executing the `else` branch, leaving the state unchanged.
 
 
-
-#### Example
-
+##### Example: executing a conditional
 
 Suppose we start from a state σ satisfying σ(x) = 3 and σ(y) = 10
 
@@ -2379,293 +2412,242 @@ We can execute the following program:
 if x < y then r := x else r := y
 ```
 
-Using the previous derivation rules:
+Using the previous derivation rules, we can show:
 
 
 \begin{prooftree}
 \RightLabel{If-true}
-\AxiomC{$\llbracket x < y \rrbracket_\sigma = true $}
-\UnaryInfC{⟨ if $x < y$ then $r := x$ else $r := y$ fi  , σ ⟩ → ⟨ $r := x$ , σ ⟩}
-\end{prooftree}
-
-
-\begin{prooftree}
+\AxiomC{$〚 x < y 〛(σ) = \text{true} $}
+\AxiomC{$〚 x 〛(σ) = 3 $}
 \RightLabel{Assignment}
-\AxiomC{$\llbracket x < y \rrbracket_\sigma = true $}
 \UnaryInfC{⟨ $r := x$  , σ ⟩ → σ[r ↦ 3]}
+\BinaryInfC{⟨ if $x < y$ then $r := x$ else $r := y$ fi  , σ ⟩ → σ[r ↦ 3]}
 \end{prooftree}
 
+<!-- If we execute the resulting program-state pair one step further, we -->
+<!-- see that the program terminates with the final state σ[r ↦ 3]: -->
 
+<!-- \begin{prooftree} -->
+<!-- \RightLabel{Assignment} -->
+<!-- \AxiomC{$〚 x < y 〛(σ) = \text{true} $} -->
+<!-- \UnaryInfC{⟨ $r := x$  , σ ⟩ → σ[r ↦ 3]} -->
+<!-- \end{prooftree} -->
 
+<!-- This example shows one drawback of the current semantics: it can -->
+<!-- execute a *single* step, but oftentimes we are interested in executing -->
+<!-- *multiple* steps of our program (until it terminates in some final -->
+<!-- state). As the rule being applied is often clear, we will chain -->
+<!-- together multiple execution steps as follows: -->
 
-#### Notation
+<!--  ⟨ if $x < y$ then $r := x$ else $r := y$ fi  , σ ⟩  →  ⟨ $r := x$ , σ ⟩  →  σ[r ↦ 3] -->
 
-It's often clear enough which rule is being applied.
-
-For reasons of space, I may sometimes write:
-
-⟨ if $x < y$ then $r := x$ else $r := y$ fi  , σ ⟩ → ⟨ $r := x$ , σ ⟩ → σ[r ↦ 3]
-
-In other words, our original progam halts in the state where r has become 3.
-
-
+<!-- Of course, we need to check the side conditions of the various rules -->
+<!-- being applied. For instance, in the the example above, we need to -->
+<!-- ensure that $〚 x < y 〛(σ) = \text{true}$. -->
 
 
 #### Sequential composition
 
-\begin{prooftree}
-\RightLabel{seq-a}
-\AxiomC{⟨ $p_1$ , σ ⟩ → $σ'$}
-\UnaryInfC{⟨ $(p_1 ; p_2)$ , σ ⟩ → ⟨ $p_2$ , $σ'$ ⟩}
-\end{prooftree}
+We now turn our attention to the penultimate language construct:
+sequential composition, $p₁ ; p₂$:
 
 \begin{prooftree}
-\RightLabel{seq-b}
-\AxiomC{⟨ $p_1$ , σ ⟩ → ⟨ $p_1'$, $σ'$ ⟩}
-\UnaryInfC{⟨ $(p_1 ; p_2)$ , σ ⟩ → ⟨ $(p_1' ; p_2$) , $σ'$ ⟩}
+\RightLabel{seq}
+\AxiomC{⟨ $p₁$ , σ ⟩ → $σ'$}
+\AxiomC{⟨ $p₂$ , σ' ⟩ → $σ''$}
+\BinaryInfC{⟨ $(p₁ ; p₂)$ , σ ⟩ → $σ''$}
 \end{prooftree}
 
-There are two rules for sequential composition:
+Here we see how nicely our inference rule notation can be used to
+capture the intended behaviour of sequential composition: we execute
+$p₁$ until it terminates in some state $σ'$, which we then use to
+start execution of $p₂$. When $p₂$ terminates in some state $σ''$, the
+composite program $p₁ ; p₂$ terminates in this state.
 
-* if the first program, $p_1$, stops after one step in the state $σ'$,
-  we continue executing the second program $p_2$ from $σ'$;
-* otherwise, we continue evaluating the remaining program $p_1'$ until
-  it is done.
-
-
-
-
-#### Sequential composition
-
-\begin{prooftree}
-\RightLabel{seq-a}
-\AxiomC{⟨ $p_1$ , σ ⟩ → $σ'$}
-\UnaryInfC{⟨ $(p_1 ; p_2)$ , σ ⟩ → ⟨ $p_2$ , $σ'$ ⟩}
-\end{prooftree}
-
-\begin{prooftree}
-\RightLabel{seq-b}
-\AxiomC{⟨ $p_1$ , σ ⟩ → ⟨ $p_1'$, $σ'$ ⟩}
-\UnaryInfC{⟨ $(p_1 ; p_2)$ , σ ⟩ → ⟨ $(p_1' ; p_2$) , $σ'$ ⟩}
-\end{prooftree}
-
-There are two rules for sequential composition:
-
-* if $p_1$ is done in one step (like an assignment) -- we'll generally use the first rule;
-* if $p_1$ needs more steps, like the if-then-else rules or loops,
-  we'll use the second rule.
-
-
-
+<!-- ##### Example: sequential composition -->
 
 #### Loops
 
+Finally, we turn our attention to the last language construct:
+while-loops. Just as we saw for conditionals, we need two separate
+rules, depending whether or no the guard $b$ holds. The first rule,
+when the guard evaluates to false, is the easiest of the two:
+
 \begin{prooftree}
 \RightLabel{While-false}
-\AxiomC{$\llbracket b \rrbracket_\sigma = false $}
+\AxiomC{$〚 b 〛(σ) = false $}
 \UnaryInfC{⟨ while $b$ do $p$ od  , σ ⟩ → σ}
 \end{prooftree}
 
+If the guard $b$ evaluates to false, we do not have to do any further
+work to execute the while loop and we terminate in the final state
+σ. When the guard is true, however, the semantics is a bit more complex:
+
 \begin{prooftree}
 \RightLabel{While-true}
-\AxiomC{$\llbracket b \rrbracket_\sigma = true $}
-\UnaryInfC{⟨ while $b$ do $p$ od  , σ ⟩ → ⟨ $p$ ; while $b$ do $p$ od , σ ⟩}
+\AxiomC{$〚 b 〛(σ) = true $}
+\AxiomC{⟨ $p$ , σ ⟩ → σ'}
+\AxiomC{⟨ while $b$ do $p$ od  , σ' ⟩ → σ''}
+\TrinaryInfC{⟨ while $b$ do $p$ od  , σ ⟩ → σ''}
 \end{prooftree}
 
-Just as we saw for conditionals, we need two rules to handle loops:
+This second rule combines many of the elements of sequential
+composition and conditional evaluation that we saw previously. If the
+guard $b$ evaluates to true, we execute the loop body $p$. If this
+terminates and results in some final state σ', we execute the while
+loop again, now starting with the state σ'. If this (eventually)
+terminates in the final state σ'', the entire while loop terminates in
+σ''.
 
-* if the guard $b$ is false, we do not enter the loop body or change
-  the state -- but rather halt in the current state σ;
-* if the guard $b$ is true, we execute the loop body $p$, and then
-  continue executing the main while loop.
+<!-- TODO ##### Example: loops -->
 
-
-
-These seven rules determine precisely how a program is executed.
-
-Given any initial state σ and program $p$, we can repeatedly apply
-these rules to determine if the program terminates or not.
-
-This formalizes the process I went through with large example I did at
-the beginning of the lecture: showing how to evaluate an example
-program from some initial state.
-
-Let's extend our operational semantics to handle many execution steps
-
-
-
-#### More than one step
-
-We say a given program $p$ and starting state σ **terminates** in τ
-precisely if:
-
-* ⟨ $p$ , σ ⟩ → $\tau$
-* or ⟨ $p$ , σ ⟩ → ⟨ $p'$ , $σ'$ ⟩ and ⟨ $p'$ , $σ'$ ⟩ terminates in τ;
-
-Our initial example showed how the following program terminates
-
-```
-x := 3; p:= 0; i := 1;
-while (i <= x) {
-  p:=p+i; i:=i+1; }
-```
- in the state
-
- $σ(\mathtt{x}) = 3$
- $σ(\mathtt{p}) = 6$
- $σ(\mathtt{i}) = 4$
-
-by repeatedly applying the rules from our operational semantics.
-
-
-
-
-<!-- ## Labelled transition systems -->
-
-<!-- This semantics forms a **labelled transition system**: -->
-
-<!-- * the set of states are the current program $p$ and memory σ; -->
-<!-- * our operational semantics determine the transition relation between -->
-<!--   our states; -->
-<!-- * if we extend our language with other effects, such as opening a -->
-<!--   window or writing to stdout -- we can add further *actions* to our -->
-<!--   system to observe these effects. -->
-
-
+<!-- TODO Exercises applying these rules -->
 
 ## From operational semantics to program logic
 
-These operational semantics determine how a program is executed from a given initial state σ.
+These operational semantics determine how a program is executed. For
+each program $p$ and initial state $σ$, we can repeatedly apply the
+rules from our semantics to try and find a state $σ'$ such that:
 
-But consider the following mini-program:
+ ⟨ $p$ , σ ⟩ → σ'.
+
+But now consider the following program:
 
 ```c
 if x < y then r := x else r := y
 ```
 
-Can we prove that after execution `r` will store the minimal value of `x` and `y`?
+Can we prove that after execution `r` will *always* store the minimal
+value of `x` and `y`? Using our operational semantics, we can find a
+derivation, witnessing the execution this program for a specific
+intitial state---but what if we want to reason about *all* possible
+initial states?
 
-This requires reasoning about *all* possible states -- rather than *one* initial state.
-
-To perform this kind of reasoning, we need a logic to reason about **all possible** executions.
-
-. . .
-
-This motivates the shift from *operational semantics* to *program logic*.
-
-
+This motivates the shift from *operational semantics* to *program
+logic*. In the remainder of this chapter, we will describe
+*specifications*, that describe how a program should behave, together
+with a logic for *proving* that a particular program satisfies its
+specification. Finally, we will relate this logic to the operational
+semantics we saw in the previous chapter.
 
 #### Specifications
 
-A **formal specification** is a mathematical description of what a program should do.
+A **formal specification** is a mathematical description of what a
+program should do.
 
 Such a specification ignores many important details, such as the
 *non-functional* requirements about how fast the program is, the
-language used for its implementation, the development cost, etc.
+language used for its implementation, the open-source license under
+which it is available, or the hardware on which it must run.
 
-Instead, we use a formal specification to answer one question:
+Instead, we will use a formal specification to answer one question:
 
-**Is this program doing what it should?**
+*Is this program doing what it should?*
 
-
-We will give specifications in the form of a pre- and post-condition
-that are predicates on our states.
-
-Intuitively, the precondition captures the assumptions the program
-makes about the initial state;
-
-The postcondition expresses the properties that are guaranteed to hold
+There are different ways to specify a program's behaviour. In this
+chapter, we consider a *specification* to consist of a *preconditian*
+and a *postcondition*. Intuitively, the precondition captures the
+assumptions the program makes about the initial state; the
+postcondition expresses the properties that are guaranteed to hold
 after the program has finished executing.
 
+##### Examples
 
+Previously, we saw the following program that assigns to `r` the
+miminum of `x` and `y`.
+
+```c
+if x < y then r := x else r := y
+```
+
+As this program does not make any assumption about the initial state,
+the precondition is simply `true`---which holds of any state. The
+postcondition states that `r = min(x,y)`, i.e., after execution the
+value assigned to `r` is the minimum of `x` and `y`.
+
+Another simple programming task might be to write a few lines of code
+that swaps the values of two variables, `x` and `y`. We can write the
+specification for this program as follows:
+
+* The precondition assumes that `x` and `y` have some value `N` and
+  `M` respectively. Written more formally: `x = N ∧ y = M`;
+
+* The postcondition states that the values of `x` and `y` have been
+  swapped, that is, `x = M ∧ y = N`.
 
 #### Notation
 
-To define our logic for reasoning about programs, we introduce the following notation:
+To define our logic for reasoning about programs, we introduce some
+new notation. In what follows, we will write
 
-\begin{center}
-\begin{tabular}{ccc}
-\large{$\{\ P \ \}$} & \large{$p$} & \large{$\{\ Q \ \}$}\\
-&&\\
-pre-condition & programme & post-condition
-\end{tabular}
-\end{center}
+ \{ $P$ \}  $p$  \{ $Q$ \}
 
-For each state σ that satisfies the precondition $P$, 
+to state that for any initial state σ satisfying the precondition $P$,
+whenever executing the program $p$ terminates in some final state σ',
+then σ' satisfies the postcondition $Q$. Such a triple of
+precondition, program and postcondition is sometimes referred to as a
+*Hoare triple*, in honour of the British computer scientist Tony
+Hoare, who was one of the pioneers of this approach to reasoning about
+programs.
 
-if executing $⟨ p , σ ⟩$ terminates in some final state τ, then τ must satisfy $Q$.
-
-We'll define this -- once again -- using inference rules. But's let
-look at some examples first.
+In a sense, we will use this notation to denote a relation
+on $\State\ × \While\ × \State$.
 
 #### Examples
 
+Let's consider some examples of Hoare triples that we expect should
+hold.
+
 * \{ x = 3\}  `x := x + 1`  \{ x = 4\}
 
-Unsurprising: if x = 3, after executing `x := x + 1`, we know x = 4.
+Unsurprising: if `x = 3`, after executing `x := x + 1`, we should be able to establish that `x = 4`.
 
-* \{ x = A ∧ y = B\}  z:= x; x := y; y := z  \{ x = B ∧ y = A\}
+* \{ x = N ∧ y = M \}  z:= x; x := y; y := z  \{ x = M ∧ y = N \}
 
 This is more interesting: it works for *any* values of A and B -- this
 describes many possible executions, starting from some state for which
 the precondition holds.
 
-* \{ true \} while true do p := 0 od  \{p = 500 \}
+* \{ true \}  while true do p := 0 od  \{p = 500 \}
 
-Note that the postcondition only makes a statement about the final
-state. If the program never terminates, it trivially satisfies any
-postcondition!
+This final example is more devious: remember that we need to show that
+*if* our program terminates in a state σ', the postcondition
+holds----but this program never terminates! Hence we can make any
+claim we like about the final state, as it is never reached.
 
-
-
-#### Examples
-
-\{ true \} 
-```c
-  x := 3;
-  p := 0;
-  i := 1;
-  while i <= x do
-        p := p + i;
-        i := i+1
-  od
-```
-\{ p = 6 \}
-
-How can we write a derivation proving this? What are the *inference rules* that we can use?
-
+There are variations of the logic we will present here that can be
+used to establish that a program terminates and satisfies the
+postcondition. This is sometimes referred to as *total correctness*;
+for the sake of simplicity, however, we ignore termination issues for
+the moment.
 
 ## Hoare logic
 
-We'll give a handful of inference rules for proving statements of the
-form $\{ P \} \; p \; \{ Q \}$.
+We have given a handful of examples of Hoare triples that we expect to
+hold, but we haven't yet defined *when* a given Hoare triple holds, or
+how it can be established. This is akin to giving formulas in
+predicate logic that should be true, without making precise how they
+can be proven.
 
-Together these define a logic known as *Hoare logic* -- named after
-Tony Hoare, a British computer scientist who pioneered the approach
-together with Edsger Dijkstra, Robert Floyd, and others.
-
-
+In this chapter, we will define a handful of inference rules for
+proving Hoare triples of the form $\{ P \} \; p \; \{ Q \}$. Once
+again, we present the rules one by one for all of the constructs in
+our little programming language.
 
 #### Hoare logic -- assignment
 
 What rule should we use for assignment? We've seen one example:
 
-\{ x = 3\}  `x := x + 1`  \{ x = 4\}
+  \{ x = 3\}  `x := x + 1`  \{ x = 4\}
 
 We could generalise this:
 
-\{ x = N\}  `x := x + 1`  \{ x = N + 1\}
+ \{ x = N\}  `x := x + 1`  \{ x = N + 1\}
 
-. . .
-
-But what if we want to assign another expression than `x + 1`?
-
-Or what if the pre- and postcoditions are not a simple equality?
-
-. . .
-
-What's the most general rule?
-
+But what if we want to assign another expression than `x + 1`? We
+should try to find a single rule capable of reasoning about *all*
+assignments. This leads to the following general rule for reasoning
+about assignment statements:
 
 \begin{prooftree}
 \AxiomC{}
@@ -2673,31 +2655,33 @@ What's the most general rule?
 \UnaryInfC{\{ $Q[x \backslash e]$ \}  x := e  \{ $Q$ \}}
 \end{prooftree}
 
-* We write $Q[x \backslash e]$ for the result of replacing all the
-  occurrences of $x$ with $e$ in $Q$.
+Here we write $Q[x \backslash e]$ for the result of replacing all the
+occurrences of $x$ with $e$ in $Q$.  The easiest way to read this rule
+is starting from the postcondition. Under what precondition does the
+postcondition $Q$ hold, after performing the assignment $x := e$? Well,
+the assigment statement will not magically cause $Q$ to hold; the only
+thing the statement changes is the value of $x$, replacing it with the
+value associated with the expression $e$. As a result, the $Q$ should
+already hold, where the occurrences of $x$ are replaced with $e$,
+which is exactly what the precondition $Q[x \backslash e]$ states.
 
-* This rule seems backwards! It helps to read it back to front: in
-  order for $Q$ to hold after the assignment x := e, the precondition
-  $Q[x \backslash e]$ should already hold.
-  
-Let's look at some examples...
-
-
-
-\begin{prooftree}
-\AxiomC{}
-\RightLabel{Assign}
-\UnaryInfC{\{ $Q[x \backslash e]$ \}  x := e  \{ $Q$ \}}
-\end{prooftree}
-
-Here are three different examples of this rule in action:
+Let's look at a few examples of this rule in action.
 
 \begin{prooftree}
 \AxiomC{}
 \RightLabel{Assign}
-\UnaryInfC{\{ y = 3 \} x := 3 \{ y = x \}}
+\UnaryInfC{\{ $y = 3$ \} $x := 3$ \{ $y = x$ \}}
 \end{prooftree}
 
+This example derivation shows that if the precondition $y = 3$ holds,
+after the assignment $x := 3$, we can conclude that $x$ and $y$ are
+equal. To be more precise, the precondition should read 
+
+  $(x = y)[x \backslash 3]$
+
+but we have simplified this to the equivalent predicate, $y = 3$.
+
+Here is a slightly more general example:
 
 \begin{prooftree}
 \AxiomC{}
@@ -2705,12 +2689,6 @@ Here are three different examples of this rule in action:
 \UnaryInfC{\{ x = N + 1 \} x := x - 1 \{ x = N \}}
 \end{prooftree}
 
-
-\begin{prooftree}
-\AxiomC{}
-\RightLabel{Assign}
-\UnaryInfC{\{ x + y = V \} z := x + y \{ z = V \}}
-\end{prooftree}
 
 
 
@@ -2725,7 +2703,7 @@ Here are three different examples of this rule in action:
 \AxiomC{????}
 \AxiomC{????}
 \RightLabel{If}
-\BinaryInfC{\{ $P$ \} \quad if $b$ then $p_1$ else $p_2$ \quad \{ $Q$ \}}
+\BinaryInfC{\{ $P$ \} \quad if $b$ then $p₁$ else $p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
 
 What happens when we execute an if statement?
@@ -2736,10 +2714,10 @@ $Q$, the entire if-statement will.
 
 
 \begin{prooftree}
-\AxiomC{\{ $P ∧ b$ \} \; $p_1$ \; \{$Q$\}}
-\AxiomC{\{ $P ∧ ¬ b$ \} \; $p_2$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p₁$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ ¬ b$ \} \; $p₂$ \; \{$Q$\}}
 \RightLabel{If}
-\BinaryInfC{\{ $P$ \} \quad if $b$ then $p_1$ else $p_2$ \quad \{ $Q$ \}}
+\BinaryInfC{\{ $P$ \} \quad if $b$ then $p₁$ else $p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
 
 
@@ -2759,32 +2737,32 @@ Use the two rules we have seen so far to show that:
 #### Hoare logic -- composition
 
 \begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p_1$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p_2$ \; \{$Q$\}}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
 \RightLabel{Seq}
-\BinaryInfC{\{ $P$ \} \quad $p_1 ; p_2$ \quad \{ $Q$ \}}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
 
 The rule for composition of programs is beautiful – it may remind you
 of function composition.
 
-If we know that $P$ holds of our initial state, we can run $p_1$ to
+If we know that $P$ holds of our initial state, we can run $p₁$ to
 reach a state satisfying $R$;
 
-But now we can run $p_2$ on this state, to produce a state satisfying $Q$.
+But now we can run $p₂$ on this state, to produce a state satisfying $Q$.
 
 
 #### Hoare logic -- rule of consequence
 
 \begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p_1$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p_2$ \; \{$Q$\}}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
 \RightLabel{Seq}
-\BinaryInfC{\{ $P$ \} \quad $p_1 ; p_2$ \quad \{ $Q$ \}}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
 
 If you look at this rule though, you may need to be very lucky to be
-able to use it: the postcondition of $p_1$ and precondition of $p_2$
+able to use it: the postcondition of $p₁$ and precondition of $p₂$
 must match **exactly**...
 
 This rarely happens in larger derivations.
