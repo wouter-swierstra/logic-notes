@@ -20,8 +20,6 @@ classoption: oneside
 sansfont: Open Sans
 monofont: Ubuntu Mono
 
-filters:
-  - pandoc-citeproc
 bibliography: "notes.bib"
 link-citations: true
 
@@ -1824,9 +1822,9 @@ completeness? How would you go about proving these statements?
 \begin{Answer}
 
 Soundness is a bit easier to show than completeness. To establish that
-our system of natural deduction rules is *sound*, it suffices to show
-that each of our rules holds. This is fairly easy to check using *rule
-induction* on the possible derivations of $⊢ p$.
+our system of natural deduction rules is \emph{sound}, it suffices to show
+that each of our rules holds. This is fairly easy to check using \emph{rule
+induction} on the possible derivations of $⊢ p$.
 
 \end{Answer}
 
@@ -2295,7 +2293,7 @@ n]$ is defined as follows:
 
 We can now define an inductive relation capturing the semantics of our
 programming language.  The key idea is that we define a relation on
-(\While × \State)) × \State – that is given the current
+\While × \State × \State – that is given the current
 state of the computer's memory and the program that we're executing,
 executes the program to produce some final state.
 
@@ -2307,36 +2305,11 @@ We will write use the following notation:
 
   ⟨ p , σ ⟩ → σ'
 
-To mean that the program $p$ running with the current state σ can
-executed to terminate in some final state σ'.
-
-
-<!-- If running $p$ for one step causes our program to terminate we write: -->
-
-<!--   ⟨ p , σ ⟩ → σ'  -->
-
-<!-- To mean the program $p$ running in the state σ terminates in one step, -->
-<!-- producing the final state σ'. So to be be slightly more precise, the -->
-<!-- inductive relation that we will define is not on (\While × \State)) × -->
-<!-- (\While × \State), but rather on (\While × \State) × (\While? × -->
-<!-- \State), where \While? is defined as: -->
-
-<!--   \While?   :=   \While   ∪   \{ Done \} -->
-
-<!-- Where 'Done' is a special value indicating the program has -->
-<!-- terminated. To be even more precise, we should then write: -->
-
-<!--   ⟨ p , σ ⟩ → ⟨ Done , σ' ⟩ -->
-
-<!-- rather than  -->
-
-<!--   ⟨ p , σ ⟩ → σ'  -->
-
-<!-- but our intention should be clear. -->
-
-This relation defines what is called an **operational semantics** for
-our programs, describing how to execute a program step by step.  Our
-programming language has four language constructs:
+To mean that executing the program $p$ with the initial state σ
+terminates in some final state σ'. This relation defines what is
+called an **operational semantics** for our programs, describing how
+to execute a program step by step.  Our programming language has four
+language constructs:
 
 * Assignments -- $x := e$
 
@@ -2376,7 +2349,7 @@ behaviour of the command $x := y + 2$ as follows:
 \end{prooftree}
 
 
-#### Conditionals
+#### Conditional statements
 
 In contrast to assignments, we need to rules to describe how to
 evaluate an if-then-else statement, one for each possible execution
@@ -2452,7 +2425,7 @@ We now turn our attention to the penultimate language construct:
 sequential composition, $p₁ ; p₂$:
 
 \begin{prooftree}
-\RightLabel{seq}
+\RightLabel{Seq}
 \AxiomC{⟨ $p₁$ , σ ⟩ → $σ'$}
 \AxiomC{⟨ $p₂$ , σ' ⟩ → $σ''$}
 \BinaryInfC{⟨ $(p₁ ; p₂)$ , σ ⟩ → $σ''$}
@@ -2464,7 +2437,43 @@ $p₁$ until it terminates in some state $σ'$, which we then use to
 start execution of $p₂$. When $p₂$ terminates in some state $σ''$, the
 composite program $p₁ ; p₂$ terminates in this state.
 
-<!-- ##### Example: sequential composition -->
+
+\begin{Exercise} 
+Let $p$ refer to the program:
+
+\texttt{x := x + y; y := x + 3}
+
+Now let σ be a state such that:
+ $σ(\mathtt{x}) = 1$
+ $σ(\mathtt{y}) = 1$
+
+Give a state τ and derivation showing that ⟨ $p$ , σ ⟩ → τ.
+\end{Exercise}
+
+\begin{Answer}
+Define σ be a state such that:
+ $σ'(\mathtt{x}) = 2$
+ $σ'(\mathtt{y}) = 1$
+
+And τ be a state such that:
+ $τ(\mathtt{x}) = 2$
+ $τ(\mathtt{y}) = 5$
+
+Now we can give the following derivation:
+\begin{prooftree}
+\AxiomC{ }
+\RightLabel{Assign}
+\UnaryInfC{⟨ y := x + 3 , σ ⟩ → τ}
+\AxiomC{ }
+\RightLabel{Assign}
+\UnaryInfC{⟨ x:= x + y , σ ⟩ → σ'}
+\RightLabel{Seq}
+\BinaryInfC{⟨ $p$ , σ ⟩ → τ}
+\end{prooftree}
+
+We leave it to the reader to check that σ' and τ are used correctly in
+the assignment rules.
+\end{Answer}
 
 #### Loops
 
@@ -2476,7 +2485,7 @@ when the guard evaluates to false, is the easiest of the two:
 \begin{prooftree}
 \RightLabel{While-false}
 \AxiomC{$〚 b 〛(σ) = false $}
-\UnaryInfC{⟨ while $b$ do $p$ od  , σ ⟩ → σ}
+\UnaryInfC{⟨ while $b$ do $p$ , σ ⟩ → σ}
 \end{prooftree}
 
 If the guard $b$ evaluates to false, we do not have to do any further
@@ -2487,8 +2496,8 @@ work to execute the while loop and we terminate in the final state
 \RightLabel{While-true}
 \AxiomC{$〚 b 〛(σ) = true $}
 \AxiomC{⟨ $p$ , σ ⟩ → σ'}
-\AxiomC{⟨ while $b$ do $p$ od  , σ' ⟩ → σ''}
-\TrinaryInfC{⟨ while $b$ do $p$ od  , σ ⟩ → σ''}
+\AxiomC{⟨ while $b$ do $p$  , σ' ⟩ → σ''}
+\TrinaryInfC{⟨ while $b$ do $p$  , σ ⟩ → σ''}
 \end{prooftree}
 
 This second rule combines many of the elements of sequential
@@ -2499,9 +2508,104 @@ loop again, now starting with the state σ'. If this (eventually)
 terminates in the final state σ'', the entire while loop terminates in
 σ''.
 
-<!-- TODO ##### Example: loops -->
 
-<!-- TODO Exercises applying these rules -->
+\begin{Exercise} 
+Given the following program $p$:
+
+\texttt{while(i ≤ n) do \{ x := x * i; i := i + 1\} } 
+
+Given an initial state σ that satisfies:
+ $σ'(\mathtt{x}) = 1$
+ $σ'(\mathtt{i}) = 1$
+
+Describe the size and shape of possible derivations ⟨ $p$ , σ ⟩ → σ'
+in terms of the initial value of \texttt{n} in σ. What does this program
+compute?
+
+\end{Exercise} 
+
+\begin{Answer} 
+
+If \texttt{n} is greater than one, a derivation will apply the
+While-true rule \texttt{n} - 1 times. In each iteration, \texttt{i} is
+incremented and \texttt{x} is overwritten with a new value. When the
+program terminates, \texttt{x} will have the value $1 × 2 × 3 × … ×
+n$, that is, \texttt{n}!.
+\end{Answer}
+
+\begin{Exercise} 
+Given the following program $p$:
+
+\texttt{while(true) do x := x + 1} 
+
+Are there states σ and σ' such that there is a derivation showing ⟨ $p$ , σ ⟩ → σ'?
+
+\end{Exercise}
+\begin{Answer}
+
+To give a derivation of the form⟨ $p$ , σ ⟩ → σ' we need to use one of
+the rules for while-loops. Given that the guard associated with the
+while loop in $p$ is always true, we can only use the While-true
+rule. But since the While-true rules requires that we can (eventually)
+end the derivation using the While-false rule, no such derivation can
+exist.
+\end{Answer}
+
+\begin{Exercise} 
+The semi-colon operator is used to compose two programs, running one
+after the other. Given three programs, we can compose them in two
+possible ways: $(p₁ ; p₂) ; p₃$ or $p₁ ; (p₂ ; p₂)$. Does the order of
+composition matter? If so, give a program that illustrates this; if
+not, argue why using the operational semantics presented in this
+section. What about $p₁ ; p₂$ and $p₂ ; p₁$? Are these the same?
+\end{Exercise} 
+
+\begin{Answer} 
+
+The associativity does not matter: $(p₁ ; p₂) ; p₃$ and $p₁ ; (p₂ ;
+p₂)$ will always behave the same. More formally, for all states σ and
+σ', $⟨ (p₁ ; p₂) ; p₃ , σ ⟩ → σ'$ if and only if $⟨ p₁ ; (p₂ ; p₃) , σ
+⟩ → σ'$. To see why this holds, we will prove the implication in one
+direction. Consider the possible derivations of $⟨ (p₁ ; p₂) ; p₃ , σ
+⟩ → σ'$; these must use the rule for sequential composition twice. As
+a result, it has the following form:
+
+\begin{prooftree}
+\AxiomC{ ⟨ $p₁$ , σ ⟩ → τ₁}
+\AxiomC{ ⟨ $p₂$ , τ₁ ⟩ → τ₂}
+\RightLabel{Seq}
+\BinaryInfC{⟨ $p₁ ; p₂$ , σ ⟩ → τ₂}
+\AxiomC{ }
+\UnaryInfC{⟨ $p₃$ , τ₂⟩ → σ'}
+\RightLabel{Seq}
+\BinaryInfC{⟨ $(p₁ ; p₂) ; p₃ $ , σ ⟩ → σ'}
+\end{prooftree}
+
+But then we can always construct the following derivation:
+
+\begin{prooftree}
+\AxiomC{⟨ $p₁$ , σ⟩ → τ₁}
+\AxiomC{ ⟨ $p₂$ , τ₁ ⟩ → τ₂}
+\AxiomC{ ⟨ $p₃$ , τ₂ ⟩ → σ'}
+\RightLabel{Seq}
+\BinaryInfC{⟨ $p₂ ; p₃$ , τ₁ ⟩ → σ'}
+\BinaryInfC{⟨ $p₁ ; (p₂ ; p₃) $ , σ ⟩ → σ'}
+\end{prooftree}
+
+This shows that the placement of the parentheses does not impact the
+semantics of such expressions.
+
+In general, however, $p₁ ; p₂$ and $p₂ ; p₁$ are not the same. Consider for example:
+
+x := x + 1 ; x := 3
+
+and 
+
+x := 3 ; x := x + 1
+
+In a state where x is initially 0, these two programs behave differently.
+
+\end{Answer}
 
 ## From operational semantics to program logic
 
@@ -2573,7 +2677,8 @@ specification for this program as follows:
   `M` respectively. Written more formally: `x = N ∧ y = M`;
 
 * The postcondition states that the values of `x` and `y` have been
-  swapped, that is, `x = M ∧ y = N`.
+  swapped, that is, after execution the proposition `x = M ∧ y = N`
+  should hold.
 
 #### Notation
 
@@ -2608,7 +2713,7 @@ This is more interesting: it works for *any* values of A and B -- this
 describes many possible executions, starting from some state for which
 the precondition holds.
 
-* \{ true \}  while true do p := 0 od  \{p = 500 \}
+* \{ true \}  while true do p := 0  \{p = 500 \}
 
 This final example is more devious: remember that we need to show that
 *if* our program terminates in a state σ', the postcondition
@@ -2632,7 +2737,7 @@ can be proven.
 In this chapter, we will define a handful of inference rules for
 proving Hoare triples of the form $\{ P \} \; p \; \{ Q \}$. Once
 again, we present the rules one by one for all of the constructs in
-our little programming language.
+the While 'programming language.'
 
 #### Hoare logic -- assignment
 
@@ -2681,37 +2786,64 @@ equal. To be more precise, the precondition should read
 
 but we have simplified this to the equivalent predicate, $y = 3$.
 
-Here is a slightly more general example:
 
-\begin{prooftree}
-\AxiomC{}
-\RightLabel{Assign}
-\UnaryInfC{\{ x = N + 1 \} x := x - 1 \{ x = N \}}
-\end{prooftree}
+\begin{Exercise} 
+What is the result of performing the following substitutions?
+\begin{enumerate}
+\item $(x + y ≥ 3)[x \backslash 3]$
+\item $(x + y ≥ 3)[y \backslash x + 2]$
+\item $(x + y ≥ 3)[z \backslash y]$
+\item $(x + y ≥ 3)[y \backslash z]$
+\item $(x + x ≥ x)[x \backslash 0]$
+\item $(x + x ≥ y)[x \backslash y]$
+\item $(x + x ≥ y)[y \backslash x]$
+\end{enumerate}
+\end{Exercise}
 
+\begin{Answer}
+\begin{enumerate}
+\item $3 + y ≥ 3$
+\item $x + (x + 2) ≥ 3$
+\item $x + y ≥ 3$
+\item $x + z ≥ 3$
+\item $0 + 0 ≥ 0$
+\item $y + y ≥ y$
+\item $x + x ≥ x$
+\end{enumerate}
+\end{Answer}
 
+\begin{Exercise} 
 
+Use the Assignment rule to give the precondition
+associated with each of the following Hoare triples:
 
+\begin{enumerate}
+\item \{ ? \} x := x + 1 \{x ≥ 10\}
+\item \{ ? \} x := y + 1 \{x ≥ y\}
+\item \{ ? \} x := y + 1 \{x ≤ y\}
+\item \{ ? \} x := x + 1 \{x = x\}
+\end{enumerate}
+Can you simplify the preconditions you find any further?
+\end{Exercise}
 
+\begin{Answer}
+\begin{enumerate}
+\item \{x + 1 ≥ 10\} x := x + 1 \{x ≥ 10\}
+or \{x  ≥ 9\} x := x + 1 \{x ≥ 10\}
+\item \{y + 1 ≥ y \} x := y + 1 \{x ≥ y\}
+or \{ true \} x := y + 1 \{x ≥ y\}
+\item \{y + 1 ≤ y\} x := y + 1 \{x ≤ y\}
+or \{ false \} x := y + 1 \{x ≤ y\}
+\item \{x + 1 = x + 1\} x := x + 1 \{x = x\}
+or \{ true \} x := x + 1 \{true\}
+\end{enumerate}
 
+\end{Answer}
 
+#### Hoare logic -- if
 
-#### Hoare logic -- conditional
-
-
-\begin{prooftree}
-\AxiomC{????}
-\AxiomC{????}
-\RightLabel{If}
-\BinaryInfC{\{ $P$ \} \quad if $b$ then $p₁$ else $p₂$ \quad \{ $Q$ \}}
-\end{prooftree}
-
-What happens when we execute an if statement?
-
-We will continue executing either the 'then-branch' or the
-'else-branch'; if both branches manage to end in a state satisfying
-$Q$, the entire if-statement will.
-
+Next, we consider the inference rule that can be used to reason about
+if-statements:
 
 \begin{prooftree}
 \AxiomC{\{ $P ∧ b$ \} \; $p₁$ \; \{$Q$\}}
@@ -2720,218 +2852,427 @@ $Q$, the entire if-statement will.
 \BinaryInfC{\{ $P$ \} \quad if $b$ then $p₁$ else $p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
 
+A conditional statement of the form 'if $b$ then $p₁$ else $p₂$' will
+execute either $p₁$ or $p₂$. In order for the postcondition $Q$ to
+hold after executing the conditional statement, we require that $Q$
+holds after executing both $p₁$ and $p₂$---but the associated
+preconditions change.  By checking whether the guard $b$ holds or not,
+we learn something. As a result, the precondition changes in both
+branches of the if-statement: we may assume that $P ∧ b$ holds when
+taking the then branch; and similarly, that $P ∧ ¬b$ holds when taking
+the else branch.
 
-By checking whether the guard $b$ holds or not, we learn something. As
-a result, the precondition changes in both branches of the if-statement.
+Note that these rules use the guard $b$ as if it is a predicate on
+states, just like $P$. It would be a bit more precise to write $\{ P
+\; ∧ \; 〚b〛(σ) \}$ to indicate that the boolean expression $b$
+should be evaluated to a truth value.
 
-. . . 
 
-#### Question
+##### Example
 
 Use the two rules we have seen so far to show that:
 
+\begin{center}
   \{ 0 ≤ x ≤ 5 \}  if x < 5 then x := x+1 else x := 0 fi  \{ 0 ≤ x ≤ 5 \}
+\end{center}
 
 
-
-#### Hoare logic -- composition
-
-\begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
-\RightLabel{Seq}
-\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
-\end{prooftree}
-
-The rule for composition of programs is beautiful – it may remind you
-of function composition.
-
-If we know that $P$ holds of our initial state, we can run $p₁$ to
-reach a state satisfying $R$;
-
-But now we can run $p₂$ on this state, to produce a state satisfying $Q$.
-
-
-#### Hoare logic -- rule of consequence
+If use the variable P to refer to the condition that 0 ≤ x ≤ 5, the
+derivation has the following structure:
 
 \begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
-\RightLabel{Seq}
-\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
+\AxiomC{ }
+\RightLabel{Assign}
+\UnaryInfC{  \{ P ∧ x < 5 \}  x := x+1  \{ P \}}
+\AxiomC{ }
+\RightLabel{Assign}
+\UnaryInfC{  \{ P ∧ x > 5 \}  x := 0  \{ P \}}
+\RightLabel{If}
+\BinaryInfC{\{ P \}  if x < 5 then x := x+1 else x := 0 fi  \{ P \}}
 \end{prooftree}
 
-If you look at this rule though, you may need to be very lucky to be
-able to use it: the postcondition of $p₁$ and precondition of $p₂$
-must match **exactly**...
-
-This rarely happens in larger derivations.
-
-To still be able to use such rules, we need an additional
-'bookkeeping' rule.
-
+While the If-rule is used correctly here, it is less obvious that the
+two assignment rules are correct. Indeed, neither is precisely of the
+form:
 
 \begin{prooftree}
-\AxiomC{$P' ⇒ P$}
-\AxiomC{\{ $P$ \} \; $p$ \; \{$Q$\}}
-\AxiomC{$Q ⇒ Q'$}
-\RightLabel{Consequence}
-\TrinaryInfC{\{ $P'$ \} \quad $p$ \quad \{ $Q'$ \}}
+\AxiomC{}
+\RightLabel{Assign}
+\UnaryInfC{\{ $Q[x \backslash e]$ \}  x := e  \{ $Q$ \}}
 \end{prooftree}
 
+So is there a problem with this proof? 
 
-The **rule of consequence** states that we can change the pre- and postcondition provided:
+#### Hoare logic -- rule of consequence 
 
-* the **precondition** is **stronger** -- that is, $P' ⇒ P$;
-* the **postcondition** is **weaker** -- that is, $Q ⇒ Q'$;
+The example above shows that oftentimes the pre- and postconditions
+that arise when writing out a derivation do not line up *exactly* with
+the expected pre- and postconditions. We have already seen an example
+of this in the assignment rule, where we wrote $y = 3$, rather than
+the precondition that our rule for assignments requires:
+
+  $(x = y)[x \backslash 3]$
+
+Clearly, we should be allowed to replace our pre- and postconditions
+with logically equivalent conditions. More formally, the following
+rule should hold:
+
+\begin{prooftree}
+\AxiomC{$P ⇔ P'$}
+\AxiomC{\{ $P'$ \} \; $p$ \; \{$Q'$\}}
+\AxiomC{$Q ⇔ Q'$}
+\TrinaryInfC{\{ $P$ \} \quad $p$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+However, we there is an even more general rule in Hoare logic,
+sometimes referred to as the *rule of consequence*:
+
+\begin{prooftree}
+\AxiomC{$P ⇒ P'$}
+\AxiomC{\{ $P'$ \} \; $p$ \; \{$Q'$\}}
+\AxiomC{$Q' ⇒ Q$}
+\RightLabel{Consq}
+\TrinaryInfC{\{ $P$ \} \quad $p$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+This rule says that, in order to establish that \{ $P$ \}  $p$   \{
+$Q$ \} holds, it suffices to show that:
+
+* \{ $P'$ \}  $p$   \{$Q'$ \} holds;
+* for some *precondition* $P'$ that is *stronger*, that is, $P' ⇒ P$;
+* for some *postcondition* $Q'$ is *weaker*, that is, $Q ⇒ Q'$.
 
 We can justify this rule by thinking back to what a statement of the
 form $\{ P \} \; p \; \{ Q \}$ means:
 
+> For each state σ that satisfies the precondition $P$, if executing our
+> program $p$ in the initial state σ terminates in some state σ', that
+> is, $⟨ p , σ ⟩ → σ'$, then σ' must satisfy $Q$. 
 
-For each state σ that satisfies the precondition $P$, 
+This intuition can be used to motivate why the rule of consequence
+holds. Let us focus on the postcondition for the moment.
 
-if executing $⟨ p , σ ⟩$ terminates in some final state τ, then τ must satisfy $Q$.
+If $\{ P \} \; p \; \{ Q' \}$ holds and $Q' ⇒ Q$. If we execute our
+program $p$, yielding some final state $σ'$, we know that $σ'$
+satisfies $Q'$. From our second assumption, however, we also know that
+$σ'$ satisfies $Q$. Hence we can conclude that $\{ P \} \; p \; \{ Q
+\}$ as required.
 
 
+While we will sometimes silently rewrite pre- and postconditions to
+equivalent logical expressions, we will try to be explicit about where
+we apply the rule of consequence.
 
 
-#### Hoare logic -- while
+\begin{Exercise}
+Give a similar argument showing that if $\{ P' \} \; p \; \{ Q \}$
+holds and $P ⇒ P'$, then $\{ P \} \; p \; \{ Q \}$ also holds.
+\end{Exercise}
+\begin{Answer}
+Assume $\{ P' \} \; p \; \{ Q \}$ holds and $P ⇒ P'$. Then we know
+that if σ satisfies $P'$ and execution terminates, then $Q$ will
+hold. If we start from some initial state $σ$ that satisfies $P$, our
+second assumption guarantees that $P'$ also holds. Hence, from our
+first assumption, we know that if $p$ terminates, $Q$ will hold in the
+final state. Hence we conclude $\{ P \} \; p \; \{ Q \}$.
+\end{Answer}
+
+\begin{Exercise}
+Suppose that the following Hoare triple holds:
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; if $b$ then $p₁$ else $p₂$ \; \{$R$\}}
+\end{prooftree}
+
+Prove that the following statement also holds:
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; if $¬b$ then $p₂$ else $p₁$ \; \{$R$\}}
+\end{prooftree}
+
+\end{Exercise}
+
+\begin{Answer}
+If we assume that the following statement holds:
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; if $b$ then $p₁$ else $p₂$ \; \{$R$\}}
+\end{prooftree}
+It must be constructed using a derivation using the if-rule as follows:
+\begin{prooftree}
+\AxiomC{\{ $P ∧ b$ \} \; $p₁$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ ¬ b$ \} \; $p₂$ \; \{$Q$\}}
+\RightLabel{If}
+\BinaryInfC{\{ $P$ \} \; if $b$ then $p₁$ else $p₂$ \; \{ $Q$ \}}
+\end{prooftree}
+By swapping the branches and negating the guard, we can construct the following derivation:
+\begin{prooftree}
+\AxiomC{\{ $P ∧ ¬b$ \} \; $p₂$ \; \{$Q$\}}
+\AxiomC{\{ $P ∧ ¬¬ b$ \} \; $p₁$ \; \{$Q$\}}
+\RightLabel{If}
+\BinaryInfC{\{ $P$ \} \; if $¬b$ then $p₂$ else $p₁$ \; \{ $Q$ \}}
+\end{prooftree}
+Now note that $¬¬b$ is equivalent to $b$, which gives us the required proof.
+\end{Answer}
+
+
+#### Hoare logic -- composition
+
+To compose larger programs, we need a rule for sequential composition:
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+The rule for composition of programs is particularly beautiful – it
+may remind you of function composition.
+
+If we know that $P$ holds of our initial state, we can run $p₁$ to
+reach a state satisfying $R$; but now we can run $p₂$ on this state,
+to produce a state satisfying $Q$. In this way, we can break the
+verification of a big program into smaller parts.
+
+<!-- TODO exercise: many assignments;  -->
+\begin{Exercise} 
+In a previous exercise, we used the operational semantics to argue
+that $(p₁ ; p₂) ; p₃$ and $p₁ ; (p₂ ; p₃)$ always behave the
+same. Argue that these two programs are the same using the Seq-rule
+from Hoare logic described above.
+\end{Exercise}
+
+\begin{Answer}
+
+Similar to our previous argument, we can show that for any
+precondition $P$ and postcondition $S$, we have $\{ P \}   (p₁ ; p₂) ;
+p₃  \{ S \}$ if and only if $\{ P \}   p₁ ; (p₂ ; p₃)  \{ S \}$. To see
+why this is the case, consider the a possible derivation of $\{ P \}  (p₁ ; p₂) ; p₃  \{ S \}$:
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
+\AxiomC{\{ $Q$ \} \; $p₃$ \; \{$S$\}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $P$ \} \quad $(p₁ ; p₂) ; p₃$ \quad \{ $S$ \}}
+\end{prooftree}
+
+We can always reorganize this proof as follows:
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
+\AxiomC{\{ $Q$ \} \; $p₃$ \; \{$S$\}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $R$ \} \quad $p₂ ; p₃$ \quad \{ $S$ \}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $P$ \} \quad $(p₁ ; p₂) ; p₃$ \quad \{ $S$ \}}
+\end{prooftree}
+\end{Answer}
+
+#### Hoare logic -- while-loops
+
+The final rule we need to complete our treatment of Hoare logic is the
+rule to handle while-loops. It turns out that the while-rule is one of
+the most subtle rules in Hoare logic. We would expect this rule to have the
+following form:
 
 \begin{prooftree}
 \AxiomC{\{ $??? ∧ b$ \} \; $p$ \; \{$???$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
-The general structure of the rule for loops should be along these lines:
+Given what we know about the behaviour of while-loops and the rule for
+conditionals we saw previously, we would expect that:
 
 * some precondition $P$ should hold initially;
 * the loop body may assume that the guard $b$ is true;
-* after completion, we know that the guard $b$ is no longer true.
+* after having run to completion, we know that the guard $b$ is no
+  longer true.
 
-But how should we fill in the question marks?
-
-
+But how should we fill in the question marks? When we first enter the
+loop body, we know that the precondition of the entire while-loop,
+$P$, still holds:
 
 \begin{prooftree}
-\AxiomC{\{ ${P} ∧ b$ \} \; $p$ \; \{$???$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{$???$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
-When we first enter the loop body, we know that $P$ still holds.
-
+After running the loop body once, we may need to execute the loop body
+again (and again and again and again). As a result, we observe that
+the condition $P$ *must hold after every iteration of the loop body*:
 
 \begin{prooftree}
 \AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{${P}$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ $??? ∧ ¬ b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ $??? ∧ ¬ b$ \}}
 \end{prooftree}
 
-After completing the loop body, we may need to execute the loop body
-again (and again and again and again).
-
-The precondition of $p$ should *continue to hold during execution*.
+This leaves just one set of question marks: the postcondition of the
+entire loop. After
 
 \begin{prooftree}
 \AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{$P$\}}
 \RightLabel{While}
-\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ od \quad \{ ${P} ∧ ¬ b$ \}}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ ${P} ∧ ¬ b$ \}}
 \end{prooftree}
 
 After running the loop body over and over again, the postcondition of
-the entire while statement says that both $P$ and $¬ b$ hold.
+the entire while statement says that both $P$ and $¬ b$ hold. We call
+$P$ the **loop invariant** -- it continues to hold after every
+execution of the body of the while loop. Finding the right loop
+invariant is one of the key creative steps necessary when reasoning
+about programs.
 
-. . .
+By itself, it may seem strange that a while-loop as (almost) the same
+pre- and postcondition. How can we ever use it to compute anything
+interesting? Remember, however, that the body of the while loop may
+modify the current state of our program; even if the condition $P$
+must remain true during execution, it may refer to variables whose
+values change after an assignment in the body of the loop.
 
-We call $P$ the **loop invariant** -- it continues to hold throughout
-the execution of the while loop.
+##### Example
 
-
-
-#### Example
-
-Give a derivation of the following statement:
+To illustrate how loops work, we give a derivation proving the following statement:
 
 \{ x ≥ 5 \}  `while x > 5 do x := x - 1 od`  \{ x ≥ 5 ∧ x ≤ 5\}
 
-. . .
+This loops assumes that x is at least 5 and counts down until x is
+precisely 5.  Note how the postcondition is equivalent to \{ x = 5
+\}. We have kept it in this form, to illustrate how the rule for
+while-loops works.
 
 \begin{prooftree}
+\AxiomC{ }
 \RightLabel{Assignment}
-\AxiomC{ \{ x - 1 ≥ 5 \}  x := x -1   \{ x ≥ 5 \}}    
+\UnaryInfC{ \{ x - 1 ≥ 5 \}  x := x -1   \{ x ≥ 5 \}}    
 \RightLabel{Consq}
 \UnaryInfC{ \{ x ≥ 5 ∧ x > 5 \}  x := x -1   \{ x ≥ 5 \}}
 \RightLabel{While}
-\UnaryInfC{\{ x ≥ 5 \}  while x > 5 do x := x - 1 od  \{ x ≥ 5 ∧ x ≤ 5\}}
+\UnaryInfC{\{ x ≥ 5 \}  while x > 5 do x := x - 1 \{ x ≥ 5 ∧ x ≤ 5\}}
 \end{prooftree}
 
+In several points during this proof, we have not written the simplest
+pre- or postcondition. For example, clearly \{ x ≥ 5 ∧ x > 5 \} can
+equally well be written as \{ x > 5 \}; writing out the conjunction
+explicitly, however, makes it easier to establish that the While-rule
+has been applied correctly.
 
+<!-- TODO case study: gcd -->
 
 ## Soundness and completeness
 
-How can we be sure that we chose the right set of inference rules?
-
-Once again, we can show that these rules are **sound** and
-**complete** with respect to our operational semantics.
-
+How can we be sure that we chose the right set of inference rules? We
+could have made a mistake in the definition of our inference rules for
+Hoare logic. A good check to convince ourselves that our rules are the
+right ones, is by relating them to our operational semantics
+somehow. In particular, we can show that the inference rules for Hoare
+logic that we have presented are both *sound* and *complete* with
+respect to our operational semantics.
 
 **Soundness** If we can prove $\{ P \} \; p \; \{ Q \}$ then for all
-states σ such that $P(σ)$, if ⟨ p , σ ⟩ → τ then $Q(τ)$
+states σ such that $P(σ)$, if ⟨ p , σ ⟩ → σ' then $Q(σ')$
 
 **Completeness** For all states σ and τ and programs $p$,
-such that ⟨ p , σ ⟩ → τ. Then for all preconditions $P$ and
-postconditions $Q$ for which $P(σ) ⇒ Q(τ)$, there exists a
+such that ⟨ p , σ ⟩ → σ'. Then for all preconditions $P$ and
+postconditions $Q$ for which $P(σ) ⇒ Q(σ')$, there exists a
 derivation showing $\{ P \} \; p \; \{ Q \}$.
 
-**We can reason about all possible program behaviours
-using the rules of Hoare logic.**
+In other words, the rules for Hoare logic can be used to reason about
+*all possible program behaviours*! Where the operational semantics
+make explicit how a program is executed, these properties establish
+that we can prove a program meets its specification *without having to
+execute it*. 
 
-Put differently, we never need to *execute* code to prove its correctness.
+\begin{Exercise} 
+Argue that for all programs $p$ and propositions $P$,
+the following Hoare triples hold:
+\begin{enumerate}
+\item \{ false \} \; $p$ \; \{ $P$ \}
+\item \{ $P$ \} \; $p$ \; \{ true \}
+\end{enumerate}
+\end{Exercise}
+\begin{Answer}
+\begin{enumerate}
+\item \{ false \} \; $p$ \; \{$P$\} makes a statement about all the
+states that satisfy the precondition false. As no such states exist,
+the statement is trivially true.
+
+\item \{ $P$ \} \; $p$ \; \{true\} guarantees that if $p$ terminates
+in a state σ', the postcondition true will hold in σ'. As the
+postcondition true always holds, this statement is trivially true.
+\end{enumerate}
+
+\end{Answer}
+
+## Discussion
+
+The While programming language describes the core of many imperative
+programming languages, but it hopelessly incomplete. There are
+numerous language features in modern programming languages such as C\#
+or Java that are missing, such as:
+
+- *Objects* -- Many modern programming languages have some notion of
+  *class*, with both methods and variables associated. These classes
+  may be abstract or contain virtual methods; both methods and
+  variables may be inherited from super-classes. None of these
+  features is present in our While language.
+- *Primitive types* -- In the While language, every variable is an
+  integer. There is no support for other types such as strings,
+  arrays, characters, bytes, or binary words.
+- *Exceptions* -- programs in the While language may loop, but cannot
+  throw an exception. The control flow associated with throwing and
+  catching exceptions can be quite subtle, and the rules for Hoare
+  logic that we have presented here cannot be used to reason about
+  code that may throw an exception.
+- *Concurrency* -- many programs run using separate *threads*, that
+  execute at the same time. These threads may read and write from the
+  same memory locations. Reasoning about concurrent programs is
+  notoriously hard, but there are extensions to the Hoare logic rules
+  we have seen here that make this possible.
+- *Et cetera* -- While programs cannot print or read from the command
+  line, let alone open a window or observe a mouse click. There is no
+  interaction with the operating system; there are no network
+  primitives; almost every feature imaginable that modern programming
+  languages support, cannot be handled by these rules.
+  
+So what is the point? Reading this list, you may feel like Hoare logic
+is of little no practical use---but the contrary is true! The ideas
+presented here form the basis of many modern verification tools and
+static analyzers. These tools try to detect all kinds of bugs
+automatically; if a user annotates a method with pre- and
+postconditions, these verification tools try to prove that the code
+satisfies its specification---using rules like those presented
+here. Even if there are no pre- and postconditions, these tools can
+identify possible null pointer exceptions or memory safety
+issues. These modern verification tools are built and used by some of
+the largest software development companies in the world.
+
+<!-- ## Exercises -->
+
+<!-- TODO exercises and solutions -->
+
+## Solutions to selected exercises
+
+\shipoutAnswer
+\setcounter{Exercise}{0}
 
 
-
-#### From While to C\#
-
-We still need to consider a bucketload of missing features to turn our
-simple imperative language into a more realistic programming language:
-
-* Classes, objects, inheritance, abstract classes, virtual methods, ...
-* Strings, arrays, and other richer types
-* Exceptions;
-* Concurrency;
-* Recursion;
-* Shared memory;
-* Standard libraries;
-* Compiler primitives;
-* Foreign function interfaces;
-* ...
-
-
-#### Program calculation
-
-#### Problem\vspace{2mm}
-
-Given a precondition $P$ and postcondition $Q$, find a program $p$
-such that $\{ P \} \; p \; \{ Q \}$ holds.
-
-There is a rich field of research on **program calculation** that tries to solve this problem.
-
-Approaches include the refinement calculus, pioneered by people such
-as Edsger Dijkstra, Tony Hoare, and many others.
 
 # References
 
-
 <!-- TODO: fix local variables to also run pandoc-citeproc -->
-<!-- TODO: move filters etc from YAML header to separate default file -- cf Makefile -->
-
 
 <!-- Local Variables:  -->
 <!-- pandoc/template: "data/eisvogel-template.tex" -->
 <!-- pandoc/include-in-header: "data/header.tex" -->
 <!-- pandoc/number-sections: t -->
 <!-- pandoc/top-level-division: "chapter" -->
+<!-- pandoc/filter: "pandoc-citeproc" -->
 <!-- End:  -->
 
