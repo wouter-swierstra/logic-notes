@@ -532,7 +532,7 @@ Define an inductive relation on the natural numbers, isEven ⊆
 $\mathbb{N}$. The relation isEven($n$) should hold precisely when $n$
 is an even number.
 
-*Hint:* To define an inductive relation, you need to find an
+\emph{Hint:} To define an inductive relation, you need to find an
 appropriate base case and inductive case.
 
 Show that isEven(4) holds.
@@ -610,19 +610,21 @@ We can then provide the following derivation showing that 1 ≤ 3:
 To prove that this relation is reflexive, we need to establish that:
 $∀ n, n ≤ n$. We do so by induction on $n$:
 
-* if $n = 0$ we can use the Base rule to prove that $0 ≤ 0$;
-* if $n$ = Succ $k$, we know from our induction hypothesis that $k ≤
+\begin{itemize}
+\item if $n = 0$ we can use the Base rule to prove that $0 ≤ 0$;
+\item if $n$ = Succ $k$, we know from our induction hypothesis that $k ≤
   k$. By using the Step rule, we can then show that Succ $k$ ≤ Succ
   $k$ as required.
+\end{itemize}
   
 It is harder to prove that this relation is transitive. We assume that
 $n ≤ m$ and $m ≤ p$ and need to prove that $n ≤ p$. Now we use *rule
 induction* to inspect our first proof:
 
-* if $n ≤ m$ holds because of the Base rule, we know that $n = 0$,
+\begin{itemize}
+\item if $n ≤ m$ holds because of the Base rule, we know that $n = 0$,
   hence we can use the Base rule to also establish that $n ≤ p$.
-  
-* if $n ≤ m$ holds because of the Step rule, we know that both $n$ and
+\item if $n ≤ m$ holds because of the Step rule, we know that both $n$ and
   $m$ are non-zero. We therefore know that $n$ = Succ $n'$ and $m$ =
   Succ $m'$, for some natural numbers $n'$ and $m'$. But if $m$ is
   non-zero, our second assumption ($m ≤ p$) cannot be built using the
@@ -630,7 +632,7 @@ induction* to inspect our first proof:
   $p$ = Succ $p'$, for some $p'$. By our induction hypthesis we can
   establish that $n' ≤ p'$; using the Step rule, we can then show Succ
   $n'$ ≤ Succ $p'$ as required.
-
+\end{itemize}
 \end{Answer}
 
 
@@ -1814,18 +1816,14 @@ handle *predicate* logic, but we will refrain from doing so in these
 notes.
 
 \begin{Exercise} 
-
 Which statement would you expect is easier to prove: soundness or
 completeness? How would you go about proving these statements?
-
 \end{Exercise}
 \begin{Answer}
-
 Soundness is a bit easier to show than completeness. To establish that
 our system of natural deduction rules is \emph{sound}, it suffices to show
 that each of our rules holds. This is fairly easy to check using \emph{rule
 induction} on the possible derivations of $⊢ p$.
-
 \end{Answer}
 
 
@@ -1979,8 +1977,7 @@ induction} on the possible derivations of $⊢ p$.
 
 \newpage
 
-## Exercises
-
+## Further exercises
 
 \begin{Exercise}
 Give a natural deduction proof of Q ⊢ (Q ⇒ R) ⇒ R.
@@ -2196,10 +2193,6 @@ meaning to our programs must also account for programs that never
 terminate.
 
 
-
-
-
-
 #### Example: program execution
 
 Suppose we start have the following program:
@@ -2289,7 +2282,7 @@ n]$ is defined as follows:
 \end{align*}
 
 
-### Operational semantics
+#### Operational semantics
 
 We can now define an inductive relation capturing the semantics of our
 programming language.  The key idea is that we define a relation on
@@ -2813,17 +2806,15 @@ What is the result of performing the following substitutions?
 \end{Answer}
 
 \begin{Exercise} 
-
-Use the Assignment rule to give the precondition
-associated with each of the following Hoare triples:
-
+Use the Assignment rule to find a suitable precondition
+so that each of the following Hoare triples holds::
 \begin{enumerate}
 \item \{ ? \} x := x + 1 \{x ≥ 10\}
 \item \{ ? \} x := y + 1 \{x ≥ y\}
 \item \{ ? \} x := y + 1 \{x ≤ y\}
 \item \{ ? \} x := x + 1 \{x = x\}
 \end{enumerate}
-Can you simplify the preconditions you find any further?
+Can you simplify the preconditions you found any further?
 \end{Exercise}
 
 \begin{Answer}
@@ -2840,7 +2831,7 @@ or \{ true \} x := x + 1 \{true\}
 
 \end{Answer}
 
-#### Hoare logic -- if
+#### Hoare logic -- if statements
 
 Next, we consider the inference rule that can be used to reason about
 if-statements:
@@ -3015,7 +3006,7 @@ Now note that $¬¬b$ is equivalent to $b$, which gives us the required proof.
 \end{Answer}
 
 
-#### Hoare logic -- composition
+#### Hoare logic -- sequential composition
 
 To compose larger programs, we need a rule for sequential composition:
 
@@ -3034,7 +3025,49 @@ reach a state satisfying $R$; but now we can run $p₂$ on this state,
 to produce a state satisfying $Q$. In this way, we can break the
 verification of a big program into smaller parts.
 
-<!-- TODO exercise: many assignments;  -->
+\begin{Exercise}
+Use the Assignment and Seq rules to find a suitable precondition
+so that each of the following Hoare triples holds:
+\begin{enumerate}
+\item \{ ? \} y := x; z := y \{z ≥ 10\}
+\item \{ ? \} x := y; z := x + 5 \{z ≥ 10\}
+\item \{ ? \} x := z + 3; y := y + x \{y ≥ 10\}
+\end{enumerate}
+Can you simplify the preconditions you found any further?
+\end{Exercise}
+
+\begin{Answer}
+\begin{enumerate}
+\item \{ y ≥ 10 \} y := x; z := y \{z ≥ 10\}
+\item \{ y ≥ 5 \} x := y; z := x + 5 \{z ≥ 10\}
+\item \{ y + z ≥ 7 \} x := z + 3; y := y + x \{y ≥ 10\}
+\end{enumerate}
+
+\end{Answer}
+
+\begin{Exercise} 
+In the question above, you are given a *postcondition* and are asked
+to compute a *precondition*. Give an example explaining why it is not
+possible using these rules, to compute the postcondition given the
+precondition.
+\end{Exercise} 
+
+\begin{Answer}
+Consider the following (incomplete) Hoare triple:
+
+\{ 5 ≥ y \}  x := 5  \{ ? \}
+
+We don't know what the postcondition should be. For example, either of
+the following might be possible:
+\begin{itemize}
+\item \{ x ≥ y \}
+\item \{ 5 ≥ y \}
+\end{itemize}
+Without further information, we do not know which of these is
+preferable.
+\end{Answer}
+
+
 \begin{Exercise} 
 In a previous exercise, we used the operational semantics to argue
 that $(p₁ ; p₂) ; p₃$ and $p₁ ; (p₂ ; p₃)$ always behave the
@@ -3256,6 +3289,8 @@ the largest software development companies in the world.
 <!-- ## Exercises -->
 
 <!-- TODO exercises and solutions -->
+
+\newpage 
 
 ## Solutions to selected exercises
 
