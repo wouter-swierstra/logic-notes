@@ -38,9 +38,9 @@ include-in-header: ["data/header.tex"]
 
 These course notes are intended for the undergraduate course *Logic
 for Computer Science* that I teach at the University of Utrecht. In
-the first part of the course, I cover the first part of *Modelling
-Computing Systems* [@modelling]; in these lecture notes I assume
-students have some familiarity with basic logic, (structural)
+the first part of the course, I cover the first half of the book
+*Modelling Computing Systems* [@modelling]; in these lecture notes I
+assume students have some familiarity with basic logic, (structural)
 induction, and a bit of programming experience.
 
 The contents of these notes are cobbled together from several sources,
@@ -56,7 +56,7 @@ induction.
 
 Wouter Swierstra
 
-February 2020
+October 2020
 
 \mainmatter
 
@@ -527,7 +527,6 @@ inference rules and the derivations we can write using them.
 ## Exercises
 
 \begin{Exercise} 
-
 Define an inductive relation on the natural numbers, isEven ⊆
 $\mathbb{N}$. The relation isEven($n$) should hold precisely when $n$
 is an even number.
@@ -569,7 +568,6 @@ To establish that four is even, we provide the following derivation
 
 
 \begin{Exercise} 
-
 Define a binary inductive relation on the natural numbers, ≤ ⊆
 $\mathbb{N} × \mathbb{N}$. The relation $n ≤ m$ should hold
 precisely when $n$ is less than or equal to $m$.
@@ -3031,7 +3029,8 @@ so that each of the following Hoare triples holds:
 \begin{enumerate}
 \item \{ ? \} y := x; z := y \{z ≥ 10\}
 \item \{ ? \} x := y; z := x + 5 \{z ≥ 10\}
-\item \{ ? \} x := z + 3; y := y + x \{y ≥ 10\}
+\item \{ ? \} x := y; z := y + 5 \{z ≥ 10\}
+\item \{ ? \} x := y + 3; z := z + x \{z ≥ 10\}
 \end{enumerate}
 Can you simplify the preconditions you found any further?
 \end{Exercise}
@@ -3040,7 +3039,8 @@ Can you simplify the preconditions you found any further?
 \begin{enumerate}
 \item \{ y ≥ 10 \} y := x; z := y \{z ≥ 10\}
 \item \{ y ≥ 5 \} x := y; z := x + 5 \{z ≥ 10\}
-\item \{ y + z ≥ 7 \} x := z + 3; y := y + x \{y ≥ 10\}
+\item \{ y ≥ 5 \} x := y; z := y + 5 \{z ≥ 10\}
+\item \{ y + z ≥ 7 \} x := y + 3; z := z + x \{z ≥ 10\}
 \end{enumerate}
 
 \end{Answer}
@@ -3196,9 +3196,139 @@ equally well be written as \{ x > 5 \}; writing out the conjunction
 explicitly, however, makes it easier to establish that the While-rule
 has been applied correctly.
 
-<!-- TODO case study: gcd -->
+#### Case study: gcd
 
-## Soundness and completeness
+To illustrate how to use the rule for while-loops, let's consider
+small---but non-trivial---program $p$:
+
+```c
+  while x != y {
+    if (x > y) {
+      x := x-y} 
+    else {
+      y := y-x}
+  }
+```
+
+What does this program compute? In this section, I will argue that
+this program computes the *greatest common divisor* of x and y.
+More precisely, provided x and y are greater than zero in the
+initial state σ, this program terminates in a final state σ' such
+that:
+
+  σ'(x)  =  σ'(y)  =  gcd(σ(x),σ(y))
+
+How can we prove this? I will not give the complete derivation, but
+explain how to use the rules of Hoare logic we saw previously to
+establish this program is correct.
+
+First, let us make precise what the pre- and postconditions are that
+we wish to establish for our program $p$. The precondition is a bit
+unusual. The program may repeatedly updates both x and y; as
+the value of x and y in the *final state* should be equal to the
+greatest common divisor of the value of x and y in the *initial
+state*, we will need a way to record the initial value of x and
+y. One way to achieve this is by introducing so-called 'ghost
+variables', N and M, that do not occur in our program but can be used
+to relate the initial and final values of our variables. We therefore
+propose the following precondition:
+
+  x = N ∧ y = M
+
+The postcondition is a bit easier. Upon completion, x and y should
+be equal to the greatest common divisor of N and M, which we formalize
+in the following postcondition:
+
+  x = gcd(N,M) ∧ x = y
+
+We would now like to prove the following statement:
+
+  \{ x = N ∧ y = M \}   $p$   \{ x = gcd(N,M) ∧ x = y \}
+
+As $p$ starts with a while-loop, we need to apply our while-rule to
+establish this statement. What invariant should we choose? This is not
+at all obvious and requires some creativity. The key insight that
+makes this algorithm work, however, is that during execution the
+greatest common divisor of x and y is is equal to the greatest
+common divisor of N and M. Using the rule of consequence, we therefore
+rephrase the Hoare triple we wish to establish as:
+
+  \{ gcd(N,M) = gcd(x,y) \}   $p$   \{ gcd(N,M) = gcd(x,y) ∧ x = y \}
+
+Now that we have identified the loop invariant, we can use the
+while-rule. Doing so, leaves the following proof obligation:
+
+  \{ gcd(N,M) = gcd(x,y) ∧ x ≠ y \}  if (x > y) then x := x-y else y := y-x  \{ gcd(N,M) = gcd(x,y) \}
+
+Here we can apply the if-rule to leave two proof obligations. For the
+moment, we focus on the then-branch:
+
+  \{ gcd(N,M) = gcd(x,y) ∧ x > y \}  x := x-y  \{ gcd(N,M) = gcd(x,y) \}
+
+To prove this, we would like to use the Hoare logic rule for
+assignments, that is, we need to show that if x > y then
+
+  gcd(x,y) = gcd(x - y, x)
+
+At this point, we have boiled the verification of the program $p$ down
+to establishing the above property of greatest common divisors. We no
+longer need Hoare logic to reason about $p$, but can now rely on some
+simple algebra.
+
+To prove the above property, suppose that k divides both x and y. More
+formally, there are numbers n and m such that:
+
+  x = k × n ∧ y = k × m
+
+But then k also divides x - y since:
+
+  x - y = (k × n) - (k × m) = k × (n - m)
+
+Hence if k is a divisor of both x and y it is also a divisor of
+x - y as required. 
+
+To complete the proof, there are still a few steps missing, which we
+leave as exercises to the reader.
+
+\begin{Exercise}
+Show that k is the \emph{greatest} common divisor of x and y if and
+only if it also the greatest common divisor a divisor of x - y and y.
+\end{Exercise}
+\begin{Exercise}
+Give a similar argument to establish that the else-branch of $p$ is correct.
+\end{Exercise}
+
+The above proof is not a *formal* proof. It does not provide a
+complete derivation in terms of the rules of Hoare logic that we have
+seen---but arguably it is still a valid proof.  Most proofs in
+mathematics are not given by providing a derivation using natural
+deduction, but rather explain to the reader why a statement holds,
+appealing to their intuition; with enough effort, such proofs can be
+phrased in terms of the rules of natural deduction. The same is true
+of this proof: using the intuition we have developed previously, we
+can reason about a program's behaviour. This reasoning can be made
+precise in the form of a derivation. These derivations, however, are
+easy for a machine to check, but hide some of the thought process
+that went into their construction. For that reason, it can be more
+illuminating to give a 'proof' that leaves out some of the details
+that a formal derivation must include, but focuses no presenting the
+key creative steps instead.
+
+\begin{Exercise}
+Consider the following program:
+
+\begin{verbatim}
+r := 0
+while (r × r < n)
+  { r := r + 1}
+\end{verbatim}
+
+Give a similar argument for why this program computes the integer
+square root of n. Can you think of a more efficient search strategy
+for finding the integer square root?
+\end{Exercise}
+
+#### Soundness and completeness
 
 How can we be sure that we chose the right set of inference rules? We
 could have made a mistake in the definition of our inference rules for
@@ -3282,14 +3412,12 @@ automatically; if a user annotates a method with pre- and
 postconditions, these verification tools try to prove that the code
 satisfies its specification---using rules like those presented
 here. Even if there are no pre- and postconditions, these tools can
-identify possible null pointer exceptions or memory safety
-issues. These modern verification tools are built and used by some of
-the largest software development companies in the world.
+identify possible null pointer exceptions or memory safety issues. The
+logic presented here powers modern verification tools that are built
+and used by some of the largest software development companies in the
+world.
 
-<!-- ## Exercises -->
-
-<!-- TODO exercises and solutions -->
-
+<!-- TODO references? -->
 \newpage 
 
 ## Solutions to selected exercises
