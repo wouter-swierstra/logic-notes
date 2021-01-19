@@ -152,7 +152,7 @@ The part above the horizontal line in each rule are the *premises* -
 these are the statements that you must establish in order to use this
 rule. The statement under the horizontal line is the *conclusion* that
 you can draw once you have established the premises hold. A rule
-without premises is sometimes called an *axiom*.
+without (recursive) premises is sometimes called an *axiom*.
 
 These inference rules state that there are three ways to prove that $w
 ≤ w'$ for a given pair of  words $w$ and $w'$:
@@ -1359,13 +1359,13 @@ that $P ∨ Q ⊢ Q ∨ P$:
 \AxiomC{}
 \UnaryInfC{$P ∨ Q ⊢ P ∨ Q$}
 \AxiomC{}
-\UnaryInfC{$P ⊢ P$}
+\UnaryInfC{$P ∨ Q, P ⊢ P$}
 \RightLabel{∨-I₂}
-\UnaryInfC{$P ⊢ Q ∨ P$}
+\UnaryInfC{$P ∨ Q, P ⊢ Q ∨ P$}
 \AxiomC{}
-\UnaryInfC{$Q ⊢ Q$}
+\UnaryInfC{$P ∨ Q, Q ⊢ Q$}
 \RightLabel{∨-I₁}
-\UnaryInfC{$Q ⊢ Q ∨ P$}
+\UnaryInfC{$P ∨ Q, Q ⊢ Q ∨ P$}
 \RightLabel{∨-E}
 \TrinaryInfC{$P ∨ Q ⊢ Q ∨ P$}
 \end{prooftree}
