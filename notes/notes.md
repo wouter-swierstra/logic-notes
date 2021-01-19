@@ -1038,6 +1038,7 @@ Give a natural deduction proof of $⊢ P ⇒ (Q ⇒ (Q ∧ P))$
 \UnaryInfC{$P, Q ⊢ Q$}
 \AxiomC{}
 \UnaryInfC{$P, Q ⊢ P$}
+\RightLabel{$∧$-I}
 \BinaryInfC{$P, Q ⊢ Q ∧ P$}
 \RightLabel{$⇒$-I}
 \UnaryInfC{$P ⊢ Q ⇒ (Q ∧ P)$}
@@ -1235,7 +1236,7 @@ like.
 
 
 \begin{Exercise} 
-Given that $P ⇔ Q$ is equivalent to $P ⇒ Q ∧ P ⇒ P$, devise suitable
+Given that $P ⇔ Q$ is equivalent to $P ⇒ Q ∧ Q ⇒ P$, devise suitable
 introduction and elimination rules for logical equivalence, $P ⇔ Q$.
 \end{Exercise}
 
@@ -1484,6 +1485,7 @@ Identify each inference rule that has been used to construct the proof above.
 \UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q ⇒ ¬P$}
 \AxiomC{}
 \UnaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬Q$}
+\RightLabel{⇒-E}
 \BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬P$}
 \RightLabel{¬-E}
 \BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ⊥$}
@@ -1507,15 +1509,16 @@ Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
    \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬P$}
   \RightLabel{∨-I₂}
   \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ P ∨ ¬P$}
+  \RightLabel{¬-E}    
   \BinaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ⊥$}
-  \RightLabel{RAA}
   \AxiomC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
   \AxiomC{$$}
   \UnaryInfC{$¬(P ∨ ¬P), P ⊢ P$}
   \RightLabel{∨-I₁}
   \UnaryInfC{$¬(P ∨ ¬P), P ⊢ (P ∨ ¬P)$}
+  \RightLabel{RAA}
   \BinaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
-  \UnaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
+  \RightLabel{¬-I}  
   \UnaryInfC{$¬(P ∨ ¬P) ⊢ ¬P$}
   \RightLabel{¬-E}
   \BinaryInfC{$¬(P ∨ ¬P) ⊢ ⊥$}
