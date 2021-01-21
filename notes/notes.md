@@ -1489,7 +1489,7 @@ Identify each inference rule that has been used to construct the proof above.
 \BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ¬P$}
 \RightLabel{¬-E}
 \BinaryInfC{$ ¬Q ⇒ ¬P, P, ¬Q  ⊢ ⊥$}
-\RightLabel{¬-I}
+\RightLabel{RAA}
 \UnaryInfC{$ ¬Q ⇒ ¬P, P  ⊢ Q$}
 \RightLabel{⇒-I}
 \UnaryInfC{$ ¬Q ⇒ ¬P  ⊢ P ⇒ Q$}
@@ -1511,12 +1511,15 @@ Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
   \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ P ∨ ¬P$}
   \RightLabel{¬-E}    
   \BinaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ⊥$}
-  \AxiomC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
-  \AxiomC{$$}
+  \RightLabel{RAA}
+  \UnaryInfC{$¬(P ∨ ¬P) ⊢ P$}
+  \AxiomC{}
+  \UnaryInfC{$¬(P ∨ ¬P), P ⊢ ¬(P ∨ ¬P)$}
+  \AxiomC{}
   \UnaryInfC{$¬(P ∨ ¬P), P ⊢ P$}
   \RightLabel{∨-I₁}
   \UnaryInfC{$¬(P ∨ ¬P), P ⊢ (P ∨ ¬P)$}
-  \RightLabel{RAA}
+  \RightLabel{¬-E}
   \BinaryInfC{$¬(P ∨ ¬P), P ⊢ ⊥$}
   \RightLabel{¬-I}  
   \UnaryInfC{$¬(P ∨ ¬P) ⊢ ¬P$}
