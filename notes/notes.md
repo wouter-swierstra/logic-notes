@@ -1502,7 +1502,7 @@ Identify each inference rule that has been used to construct the proof above.
 Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
 \end{Exercise}
 \begin{Answer}
-\begin{scprooftree}{0.75}
+\begin{scprooftree}{0.5}
    \AxiomC{}
    \UnaryInfC{$¬(P ∨ ¬P), ¬P ⊢ ¬(P ∨ ¬P)$}
    \AxiomC{}
@@ -1986,51 +1986,289 @@ induction} on the possible derivations of $⊢ p$.
 \begin{Exercise}
 Give a natural deduction proof of Q ⊢ (Q ⇒ R) ⇒ R.
 \end{Exercise}
+\begin{Answer}
+  \begin{prooftree}
+\AxiomC{}
+\UnaryInfC{Q , Q ⇒ R ⊢ Q ⇒ R}
+\AxiomC{}
+\UnaryInfC{Q , Q ⇒ R ⊢ Q}
+\RightLabel{⇒-E}
+\BinaryInfC{Q , Q ⇒ R ⊢ R}\RightLabel{⇒-I}
+\UnaryInfC{Q ⊢ (Q ⇒ R) ⇒ R}
+  \end{prooftree}
+\end{Answer}
 
 \begin{Exercise}
-Give a natural deduction proof of ⊢ ¬(A ∧ B) ⇒ ( A ⇒ ¬B)
+Give a natural deduction proof of ⊢ ¬(P ∧ Q) ⇒ (P ⇒ ¬Q)
 \end{Exercise}
+
+\begin{Answer}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{ ¬(P ∧ Q) , P , Q ⊢  ¬(P ∧ Q)}
+\AxiomC{}
+\UnaryInfC{ ¬(P ∧ Q) , P , Q ⊢ P}
+\AxiomC{}
+\UnaryInfC{ ¬(P ∧ Q) , P , Q ⊢ Q}
+\RightLabel{∧-I}
+\BinaryInfC{ ¬(P ∧ Q) , P , Q ⊢ P ∧ Q}
+\RightLabel{¬-E}
+\BinaryInfC{ ¬(P ∧ Q) , P , Q ⊢ ⊥}\RightLabel{⊥-E}
+\UnaryInfC{ ¬(P ∧ Q) , P , Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{ ¬(P ∧ Q) , P ⊢  ¬Q}\RightLabel{⇒-I}
+\UnaryInfC{ ¬(P ∧ Q) ⊢ P ⇒  ¬Q}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢  ¬(P ∧ Q) ⇒ P ⇒  ¬Q}
+\end{prooftree}
+\end{Answer}
 
 \begin{Exercise}
 Give a natural deduction proof of (P ∧ Q) ∧ R, S ∧ T ⊢ Q ∧ S
-
 \end{Exercise}
-
-\begin{Exercise}
-Give a natural deduction proof of ⊢ (A ⇒ C) ∧ (B ⇒ ¬C) ⇒ ¬(A ∧ B)
-\end{Exercise}
-
-\begin{Exercise}
-Give a natural deduction proof of ⊢ (A ∧ B) ⇒ ((A ⇒ C) ⇒ ¬( B⇒ ¬C))
-\end{Exercise}
-
-\begin{Exercise}
-Give a natural deduction proof of ⊢ A ∨ B ⇒ B ∨ A
-\end{Exercise}
-
-\begin{Exercise}
-Give a natural deduction proof of ⊢ ¬A ∧ ¬B ⇒ ¬(A ∨ B)
-\end{Exercise}
+\begin{Answer}
+\begin{prooftree}
+\AxiomC{}
+\UnaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ (P ∧ Q) ∧ R}\RightLabel{∧-E1}
+\UnaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ P ∧ Q}\RightLabel{∧-E2}
+\UnaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ Q}
+\AxiomC{}
+\UnaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ S ∧ T}\RightLabel{∧-E1}
+\UnaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ S}
+\RightLabel{∧-I}
+\BinaryInfC{S ∧ T , (P ∧ Q) ∧ R ⊢ Q ∧ S}
+\end{prooftree}
+\end{Answer}
 
 \begin{Exercise}
-Give a natural deduction proof of ¬A ∨ ¬B ⊢ ¬(A ∧ B)
+Give a natural deduction proof of ⊢ (P ⇒ R) ∧ (Q ⇒ ¬R) ⇒ ¬(P ∧ Q)
 \end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+\AxiomC{}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ (P ⇒ R) ∧ (Q ⇒  ¬R)}\RightLabel{∧-E2}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ Q ⇒  ¬R}
+\AxiomC{}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ P ∧ Q}\RightLabel{∧-E2}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ Q}
+\RightLabel{⇒-E}
+\BinaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢  ¬R}
+\AxiomC{}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ (P ⇒ R) ∧ (Q ⇒  ¬R)}\RightLabel{∧-E1}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ P ⇒ R}
+\AxiomC{}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ P ∧ Q}\RightLabel{∧-E1}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ P}
+\RightLabel{⇒-E}
+\BinaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ R}
+\RightLabel{¬-E}
+\BinaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) , P ∧ Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{(P ⇒ R) ∧ (Q ⇒  ¬R) ⊢  ¬(P ∧ Q)}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢ (P ⇒ R) ∧ (Q ⇒  ¬R) ⇒  ¬(P ∧ Q)}
+  \end{scprooftree}
+\end{Answer}
 
 \begin{Exercise}
-Give a natural deduction proof of A ⇔ B ⊢ (¬A ⇔ ¬B)
+Give a natural deduction proof of ⊢ (P ∧ Q) ⇒ ((P ⇒ R) ⇒ ¬( Q⇒ ¬R))
 \end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+    \AxiomC{}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ Q ⇒  ¬R}
+\AxiomC{}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ P ∧ Q}\RightLabel{∧-E2}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ Q}
+\RightLabel{⇒-E}
+\BinaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢  ¬R}
+\AxiomC{}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ P ⇒ R}
+\AxiomC{}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ P ∧ Q}\RightLabel{∧-E1}
+\UnaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ P}
+\RightLabel{⇒-E}
+\BinaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ R}
+\RightLabel{¬-E}
+\BinaryInfC{P ∧ Q , P ⇒ R , Q ⇒  ¬R ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{P ∧ Q , P ⇒ R ⊢  ¬(Q ⇒  ¬R)}\RightLabel{⇒-I}
+\UnaryInfC{P ∧ Q ⊢ (P ⇒ R) ⇒ ¬(Q ⇒  ¬R)}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢ P ∧ Q ⇒ (P ⇒ R) ⇒ ¬(Q ⇒ ¬R)}
+  \end{scprooftree}
+\end{Answer}
 
 \begin{Exercise}
-Give a natural deduction proof of ¬(A ⇔ ¬A)
+Give a natural deduction proof of ⊢ P ∨ Q ⇒ Q ∨ P
 \end{Exercise}
+\begin{Answer}
+  \begin{prooftree}
+\AxiomC{}
+\UnaryInfC{P ∨ Q ⊢ P ∨ Q}
+\AxiomC{}
+\UnaryInfC{P ∨ Q , P ⊢ P}\RightLabel{∨-I2}
+\UnaryInfC{P ∨ Q , P ⊢ Q ∨ P}
+\AxiomC{}
+\UnaryInfC{P ∨ Q , Q ⊢ Q}\RightLabel{∨-I1}
+\UnaryInfC{P ∨ Q , Q ⊢ Q ∨ P}
+\RightLabel{∨-E}
+\TrinaryInfC{P ∨ Q ⊢ Q ∨ P}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢ P ∨ Q ⇒ Q ∨ P}
+  \end{prooftree}
+\end{Answer}
+
 
 \begin{Exercise}
-Give a natural deduction proof of A ∨ B ⊢ C ⇒ (A ∨ B) ∧ C
+Give a natural deduction proof of ⊢ ¬P ∧ ¬Q ⇒ ¬(P ∨ Q)
 \end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+\AxiomC{}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q ⊢ P ∨ Q}
+\AxiomC{}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , P ⊢  ¬P ∧  ¬Q}\RightLabel{∧-E1}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , P ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , P ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{ ¬P ∧  ¬Q , P ∨ Q , P ⊢ ⊥}
+\AxiomC{}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , Q ⊢  ¬P ∧  ¬Q}\RightLabel{∧-E2}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , Q ⊢  ¬Q}
+\AxiomC{}
+\UnaryInfC{ ¬P ∧  ¬Q , P ∨ Q , Q ⊢ Q}
+\RightLabel{¬-E}
+\BinaryInfC{ ¬P ∧  ¬Q , P ∨ Q , Q ⊢ ⊥}
+\RightLabel{∨-E}
+\TrinaryInfC{ ¬P ∧  ¬Q , P ∨ Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{ ¬P ∧  ¬Q ⊢  ¬(P ∨ Q)}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢  ¬P ∧  ¬Q ⇒  ¬(P ∨ Q)}
+  \end{scprooftree}
+\end{Answer}
 
 \begin{Exercise}
-Give a natural deduction proof of (A ∨ (B ∧ A)) ⇒ A
+Give a natural deduction proof of ¬P ∨ ¬Q ⊢ ¬(P ∧ Q)
 \end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+\AxiomC{}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ⊢  ¬P ∨  ¬Q}
+\AxiomC{}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬P ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬P ⊢ P ∧ Q}\RightLabel{∧-E1}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬P ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬P ⊢ ⊥}
+\AxiomC{}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬Q ⊢  ¬Q}
+\AxiomC{}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬Q ⊢ P ∧ Q}\RightLabel{∧-E2}
+\UnaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬Q ⊢ Q}
+\RightLabel{¬-E}
+\BinaryInfC{ ¬P ∨  ¬Q , P ∧ Q ,  ¬Q ⊢ ⊥}
+\RightLabel{∨-E}
+\TrinaryInfC{ ¬P ∨  ¬Q , P ∧ Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{ ¬P ∨  ¬Q ⊢  ¬(P ∧ Q)}
+  \end{scprooftree}
+\end{Answer}
+
+\begin{Exercise}
+Give a natural deduction proof of P ⇔ Q ⊢ (¬P ⇔ ¬Q)
+\end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢ P ⇒ Q}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢ Q}
+\RightLabel{⇔-E1}
+\BinaryInfC{P ⇒ Q ,  ¬P , Q ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{P ⇒ Q ,  ¬P , Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{P ⇒ Q ,  ¬P ⊢  ¬Q}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢  ¬Q}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢ P ⇒ Q}
+\AxiomC{}
+\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢ P}
+\RightLabel{⇔-E2}
+\BinaryInfC{P ⇒ Q ,  ¬Q , P ⊢ Q}
+\RightLabel{¬-E}
+\BinaryInfC{P ⇒ Q ,  ¬Q , P ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{P ⇒ Q ,  ¬Q ⊢  ¬P}
+\RightLabel{⇔-I}
+\BinaryInfC{P ⇒ Q ⊢  ¬P ⇒  ¬Q}
+  \end{scprooftree}
+\end{Answer}
+
+
+\begin{Exercise}
+Give a natural deduction proof of ⊢ ¬(P ⇔ ¬P)
+\end{Exercise}
+\begin{Answer}
+  \begin{scprooftree}{0.5}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ⊢ P ⇒  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢ P ⇒  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\RightLabel{⇔-E1}
+\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
+\UnaryInfC{P ⇒  ¬P ⊢ P}
+\RightLabel{⇔-E2}
+\BinaryInfC{P ⇒  ¬P ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢ P ⇒  ¬P}
+\AxiomC{}
+\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\RightLabel{⇔-E1}
+\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
+\UnaryInfC{P ⇒  ¬P ⊢ P}
+\RightLabel{¬-E}
+\BinaryInfC{P ⇒  ¬P ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{ ⊢  ¬(P ⇒  ¬P)}
+  \end{scprooftree}
+\end{Answer}
+
+\begin{Exercise}
+Give a natural deduction proof of P ∨ Q ⊢ R ⇒ (P ∨ Q) ∧ R
+\end{Exercise}
+\begin{Answer}
+  \begin{prooftree}
+\AxiomC{}
+\UnaryInfC{P ∨ Q , R ⊢ P ∨ Q}
+\AxiomC{}
+\UnaryInfC{P ∨ Q , R ⊢ R}
+\RightLabel{∧-I}
+\BinaryInfC{P ∨ Q , R ⊢ (P ∨ Q) ∧ R}\RightLabel{⇒-I}
+\UnaryInfC{P ∨ Q ⊢ R ⇒ (P ∨ Q) ∧ R}
+  \end{prooftree}
+\end{Answer}
+\begin{Exercise}
+Give a natural deduction proof of ⊢ (P ∨ (Q ∧ P)) ⇒ P
+\end{Exercise}
+\begin{Answer}
+  \begin{prooftree}
+\AxiomC{}
+\UnaryInfC{P ∨ Q ∧ P ⊢ P ∨ Q ∧ P}
+\AxiomC{}
+\UnaryInfC{P ∨ Q ∧ P , P ⊢ P}
+\AxiomC{}
+\UnaryInfC{P ∨ Q ∧ P , Q ∧ P ⊢ Q ∧ P}\RightLabel{∧-E2}
+\UnaryInfC{P ∨ Q ∧ P , Q ∧ P ⊢ P}
+\RightLabel{∨-E}
+\TrinaryInfC{P ∨ Q ∧ P ⊢ P}\RightLabel{⇒-I}
+\UnaryInfC{ ⊢ P ∨ Q ∧ P ⇒ P}
+  \end{prooftree}
+\end{Answer}
 \newpage
 
 ## Solutions to selected exercises
