@@ -1499,7 +1499,7 @@ Identify each inference rule that has been used to construct the proof above.
 \end{Answer}
 
 \begin{Exercise}
-Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
+Use the \emph{reductio ad absurdum} rule twice to prove that $⊢ P ∨ ¬P$.
 \end{Exercise}
 \begin{Answer}
 \begin{scprooftree}{0.5}
