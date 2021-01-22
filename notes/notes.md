@@ -1447,7 +1447,7 @@ We can formulate the corresponding inference rule readily enough:
 \UnaryInfC{$Γ ⊢ P ⇒ Q$}
 \end{prooftree}
 
-But adding haphazardly adding inference rules is not a good idea---we
+But haphazardly adding inference rules is not a good idea---we
 may accidentally add rules that break our logic in an unexpected
 way. Furthermore, the 'smaller' our collection of inference rules, the
 fewer cases we have to reason about when studying all possible proofs
