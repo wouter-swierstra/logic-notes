@@ -1398,7 +1398,7 @@ Give a derivation showing $⊢ (P ∨ ⊥) ⇒ P$.
 
 #### *Reductio ad absurdum*
 
-To complet our natural deduction rules for classical propositional
+To complete our natural deduction rules for classical propositional
 logic, we need one final rule:
 
 \begin{prooftree}
@@ -1447,7 +1447,7 @@ We can formulate the corresponding inference rule readily enough:
 \UnaryInfC{$Γ ⊢ P ⇒ Q$}
 \end{prooftree}
 
-But adding haphazardly adding inference rules is not a good idea---we
+But haphazardly adding inference rules is not a good idea---we
 may accidentally add rules that break our logic in an unexpected
 way. Furthermore, the 'smaller' our collection of inference rules, the
 fewer cases we have to reason about when studying all possible proofs
@@ -1499,7 +1499,7 @@ Identify each inference rule that has been used to construct the proof above.
 \end{Answer}
 
 \begin{Exercise}
-Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
+Use the \emph{reductio ad absurdum} rule twice to prove that $⊢ P ∨ ¬P$.
 \end{Exercise}
 \begin{Answer}
 \begin{scprooftree}{0.5}
