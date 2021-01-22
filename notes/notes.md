@@ -1398,7 +1398,7 @@ Give a derivation showing $⊢ (P ∨ ⊥) ⇒ P$.
 
 #### *Reductio ad absurdum*
 
-To complet our natural deduction rules for classical propositional
+To complete our natural deduction rules for classical propositional
 logic, we need one final rule:
 
 \begin{prooftree}
