@@ -3281,7 +3281,7 @@ Can you simplify the preconditions you found any further?
 
 \begin{Answer}
 \begin{enumerate}
-\item \{ y ≥ 10 \} y := x; z := y \{z ≥ 10\}
+\item \{ x ≥ 10 \} y := x; z := y \{z ≥ 10\}
 \item \{ y ≥ 5 \} x := y; z := x + 5 \{z ≥ 10\}
 \item \{ y ≥ 5 \} x := y; z := y + 5 \{z ≥ 10\}
 \item \{ y + z ≥ 7 \} x := y + 3; z := z + x \{z ≥ 10\}
