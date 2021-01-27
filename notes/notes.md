@@ -2686,7 +2686,7 @@ Give a state τ and derivation showing that ⟨ $p$ , σ ⟩ → τ.
 \end{Exercise}
 
 \begin{Answer}
-Define σ be a state such that:
+Define σ' be a state such that:
  $σ'(\mathtt{x}) = 2$
  $σ'(\mathtt{y}) = 1$
 
@@ -2698,7 +2698,7 @@ Now we can give the following derivation:
 \begin{prooftree}
 \AxiomC{ }
 \RightLabel{Assign}
-\UnaryInfC{⟨ y := x + 3 , σ ⟩ → τ}
+\UnaryInfC{⟨ y := x + 3 , σ' ⟩ → τ}
 \AxiomC{ }
 \RightLabel{Assign}
 \UnaryInfC{⟨ x:= x + y , σ ⟩ → σ'}
