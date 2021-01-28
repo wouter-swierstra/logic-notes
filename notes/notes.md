@@ -2750,8 +2750,8 @@ Given the following program $p$:
 \texttt{while(i ≤ n) do \{ x := x * i; i := i + 1\} } 
 
 Given an initial state σ that satisfies:
- $σ'(\mathtt{x}) = 1$
- $σ'(\mathtt{i}) = 1$
+ $σ(\mathtt{x}) = 1$
+ $σ(\mathtt{i}) = 1$
 
 Describe the size and shape of possible derivations ⟨ $p$ , σ ⟩ → σ'
 in terms of the initial value of \texttt{n} in σ. What does this program
