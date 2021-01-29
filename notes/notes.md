@@ -2884,7 +2884,7 @@ Instead, we will use a formal specification to answer one question:
 *Is this program doing what it should?*
 
 There are different ways to specify a program's behaviour. In this
-chapter, we consider a *specification* to consist of a *preconditian*
+chapter, we consider a *specification* to consist of a *precondition*
 and a *postcondition*. Intuitively, the precondition captures the
 assumptions the program makes about the initial state; the
 postcondition expresses the properties that are guaranteed to hold
@@ -2893,7 +2893,7 @@ after the program has finished executing.
 ##### Examples
 
 Previously, we saw the following program that assigns to `r` the
-miminum of `x` and `y`.
+mininum of `x` and `y`.
 
 ```c
 if x < y then r := x else r := y
@@ -3493,7 +3493,7 @@ As $p$ starts with a while-loop, we need to apply our while-rule to
 establish this statement. What invariant should we choose? This is not
 at all obvious and requires some creativity. The key insight that
 makes this algorithm work, however, is that during execution the
-greatest common divisor of x and y is is equal to the greatest
+greatest common divisor of x and y is equal to the greatest
 common divisor of N and M. Using the rule of consequence, we therefore
 rephrase the Hoare triple we wish to establish as:
 
@@ -3536,7 +3536,7 @@ leave as exercises to the reader.
 
 \begin{Exercise}
 Show that k is the \emph{greatest} common divisor of x and y if and
-only if it also the greatest common divisor a divisor of x - y and y.
+only if it also the greatest common divisor of x - y and y.
 \end{Exercise}
 \begin{Exercise}
 Give a similar argument to establish that the else-branch of $p$ is correct.
