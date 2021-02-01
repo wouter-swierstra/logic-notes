@@ -2220,20 +2220,20 @@ Give a natural deduction proof of ⊢ ¬(P ⇔ ¬P)
 \BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
 \UnaryInfC{P ⇒  ¬P ⊢ P}
 \RightLabel{⇔-E2}
-\BinaryInfC{P ⇒  ¬P ⊢  ¬P}
+\BinaryInfC{P ⇒ ¬P ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢ P ⇒  ¬P}
+\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢ P ⇒  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢  ¬P}
 \RightLabel{⇔-E1}
-\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ P}
+\BinaryInfC{P ⇒ ¬P ,  ¬P ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
+\BinaryInfC{P ⇒ ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
 \UnaryInfC{P ⇒  ¬P ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒  ¬P ⊢ ⊥}\RightLabel{¬-I}
+\BinaryInfC{P ⇒ ¬P ⊢ ⊥}\RightLabel{¬-I}
 \UnaryInfC{ ⊢  ¬(P ⇒  ¬P)}
   \end{scprooftree}
 \end{Answer}
@@ -3281,7 +3281,7 @@ Can you simplify the preconditions you found any further?
 
 \begin{Answer}
 \begin{enumerate}
-\item \{ y ≥ 10 \} y := x; z := y \{z ≥ 10\}
+\item \{ x ≥ 10 \} y := x; z := y \{z ≥ 10\}
 \item \{ y ≥ 5 \} x := y; z := x + 5 \{z ≥ 10\}
 \item \{ y ≥ 5 \} x := y; z := y + 5 \{z ≥ 10\}
 \item \{ y + z ≥ 7 \} x := y + 3; z := z + x \{z ≥ 10\}
@@ -3345,7 +3345,7 @@ We can always reorganize this proof as follows:
 \RightLabel{Seq}
 \BinaryInfC{\{ $R$ \} \quad $p₂ ; p₃$ \quad \{ $S$ \}}
 \RightLabel{Seq}
-\BinaryInfC{\{ $P$ \} \quad $(p₁ ; p₂) ; p₃$ \quad \{ $S$ \}}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; (p₂ ; p₃)$ \quad \{ $S$ \}}
 \end{prooftree}
 \end{Answer}
 
@@ -3512,7 +3512,7 @@ moment, we focus on the then-branch:
 To prove this, we would like to use the Hoare logic rule for
 assignments, that is, we need to show that if x > y then
 
-  gcd(x,y) = gcd(x - y, x)
+  gcd(x,y) = gcd(x - y, y)
 
 At this point, we have boiled the verification of the program $p$ down
 to establishing the above property of greatest common divisors. We no
@@ -3563,8 +3563,9 @@ Consider the following program:
 
 \begin{verbatim}
 r := 0
-while (r × r < n)
-  { r := r + 1}
+while (r × r < n) do
+  r := r + 1
+  od
 \end{verbatim}
 
 Give a similar argument for why this program computes the integer
