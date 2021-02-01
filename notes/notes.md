@@ -1398,7 +1398,7 @@ Give a derivation showing $⊢ (P ∨ ⊥) ⇒ P$.
 
 #### *Reductio ad absurdum*
 
-To complet our natural deduction rules for classical propositional
+To complete our natural deduction rules for classical propositional
 logic, we need one final rule:
 
 \begin{prooftree}
@@ -1447,7 +1447,7 @@ We can formulate the corresponding inference rule readily enough:
 \UnaryInfC{$Γ ⊢ P ⇒ Q$}
 \end{prooftree}
 
-But adding haphazardly adding inference rules is not a good idea---we
+But haphazardly adding inference rules is not a good idea---we
 may accidentally add rules that break our logic in an unexpected
 way. Furthermore, the 'smaller' our collection of inference rules, the
 fewer cases we have to reason about when studying all possible proofs
@@ -1499,7 +1499,7 @@ Identify each inference rule that has been used to construct the proof above.
 \end{Answer}
 
 \begin{Exercise}
-Use the \emph{reductio ad absurdum} twice rule to prove that $⊢ P ∨ ¬P$.
+Use the \emph{reductio ad absurdum} rule twice to prove that $⊢ P ∨ ¬P$.
 \end{Exercise}
 \begin{Answer}
 \begin{scprooftree}{0.5}
@@ -2686,7 +2686,7 @@ Give a state τ and derivation showing that ⟨ $p$ , σ ⟩ → τ.
 \end{Exercise}
 
 \begin{Answer}
-Define σ be a state such that:
+Define σ' be a state such that:
  $σ'(\mathtt{x}) = 2$
  $σ'(\mathtt{y}) = 1$
 
@@ -2698,7 +2698,7 @@ Now we can give the following derivation:
 \begin{prooftree}
 \AxiomC{ }
 \RightLabel{Assign}
-\UnaryInfC{⟨ y := x + 3 , σ ⟩ → τ}
+\UnaryInfC{⟨ y := x + 3 , σ' ⟩ → τ}
 \AxiomC{ }
 \RightLabel{Assign}
 \UnaryInfC{⟨ x:= x + y , σ ⟩ → σ'}
@@ -2750,8 +2750,8 @@ Given the following program $p$:
 \texttt{while(i ≤ n) do \{ x := x * i; i := i + 1\} } 
 
 Given an initial state σ that satisfies:
- $σ'(\mathtt{x}) = 1$
- $σ'(\mathtt{i}) = 1$
+ $σ(\mathtt{x}) = 1$
+ $σ(\mathtt{i}) = 1$
 
 Describe the size and shape of possible derivations ⟨ $p$ , σ ⟩ → σ'
 in terms of the initial value of \texttt{n} in σ. What does this program
@@ -2884,7 +2884,7 @@ Instead, we will use a formal specification to answer one question:
 *Is this program doing what it should?*
 
 There are different ways to specify a program's behaviour. In this
-chapter, we consider a *specification* to consist of a *preconditian*
+chapter, we consider a *specification* to consist of a *precondition*
 and a *postcondition*. Intuitively, the precondition captures the
 assumptions the program makes about the initial state; the
 postcondition expresses the properties that are guaranteed to hold
@@ -2893,7 +2893,7 @@ after the program has finished executing.
 ##### Examples
 
 Previously, we saw the following program that assigns to `r` the
-miminum of `x` and `y`.
+mininum of `x` and `y`.
 
 ```c
 if x < y then r := x else r := y
@@ -3493,7 +3493,7 @@ As $p$ starts with a while-loop, we need to apply our while-rule to
 establish this statement. What invariant should we choose? This is not
 at all obvious and requires some creativity. The key insight that
 makes this algorithm work, however, is that during execution the
-greatest common divisor of x and y is is equal to the greatest
+greatest common divisor of x and y is equal to the greatest
 common divisor of N and M. Using the rule of consequence, we therefore
 rephrase the Hoare triple we wish to establish as:
 
@@ -3536,7 +3536,7 @@ leave as exercises to the reader.
 
 \begin{Exercise}
 Show that k is the \emph{greatest} common divisor of x and y if and
-only if it also the greatest common divisor a divisor of x - y and y.
+only if it also the greatest common divisor of x - y and y.
 \end{Exercise}
 \begin{Exercise}
 Give a similar argument to establish that the else-branch of $p$ is correct.
