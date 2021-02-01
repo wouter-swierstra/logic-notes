@@ -2798,7 +2798,7 @@ section. What about $p₁ ; p₂$ and $p₂ ; p₁$? Are these the same?
 \begin{Answer} 
 
 The associativity does not matter: $(p₁ ; p₂) ; p₃$ and $p₁ ; (p₂ ;
-p₂)$ will always behave the same. More formally, for all states σ and
+p₃)$ will always behave the same. More formally, for all states σ and
 σ', $⟨ (p₁ ; p₂) ; p₃ , σ ⟩ → σ'$ if and only if $⟨ p₁ ; (p₂ ; p₃) , σ
 ⟩ → σ'$. To see why this holds, we will prove the implication in one
 direction. Consider the possible derivations of $⟨ (p₁ ; p₂) ; p₃ , σ
