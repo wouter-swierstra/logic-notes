@@ -3253,8 +3253,8 @@ Now note that $¬¬b$ is equivalent to $b$, which gives us the required proof.
 To compose larger programs, we need a rule for sequential composition:
 
 \begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{ $R$ \}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{ $Q$ \}}
 \RightLabel{Seq}
 \BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
 \end{prooftree}
@@ -3327,11 +3327,11 @@ p₃  \{ S \}$ if and only if $\{ P \}   p₁ ; (p₂ ; p₃)  \{ S \}$. T
 why this is the case, consider the a possible derivation of $\{ P \}  (p₁ ; p₂) ; p₃  \{ S \}$:
 
 \begin{prooftree}
-\AxiomC{\{ $P$ \} \; $p₁$ \; \{$R$\}}
-\AxiomC{\{ $R$ \} \; $p₂$ \; \{$Q$\}}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{ $R$ \}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{ $Q$ \}}
 \RightLabel{Seq}
 \BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
-\AxiomC{\{ $Q$ \} \; $p₃$ \; \{$S$\}}
+\AxiomC{\{ $Q$ \} \; $p₃$ \; \{ $S$ \}}
 \RightLabel{Seq}
 \BinaryInfC{\{ $P$ \} \quad $(p₁ ; p₂) ; p₃$ \quad \{ $S$ \}}
 \end{prooftree}
@@ -3391,10 +3391,10 @@ the condition $P$ *must hold after every iteration of the loop body*:
 \end{prooftree}
 
 This leaves just one set of question marks: the postcondition of the
-entire loop. After
+entire loop.
 
 \begin{prooftree}
-\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{$P$\}}
+\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{ $P$ \}}
 \RightLabel{While}
 \UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ ${P} ∧ ¬ b$ \}}
 \end{prooftree}
@@ -3663,7 +3663,115 @@ and used by some of the largest software development companies in the
 world.
 
 <!-- TODO references? -->
+
 \newpage 
+
+## Overview of the operational semantics
+
+#### Assignment
+
+\begin{prooftree}
+\RightLabel{Assignment}
+\AxiomC{$〚 e 〛(σ) = n$}
+\UnaryInfC{$\langle x := e , σ \rangle \; → \; σ[x \mapsto n]$}
+\end{prooftree}
+
+#### Conditionals
+
+\begin{prooftree}
+\RightLabel{If-true}
+\AxiomC{$〚 b 〛(σ) = \text{true} $}
+\AxiomC{$⟨ p₁ , σ ⟩ → σ'$}
+\BinaryInfC{⟨ if  $b$  then $p₁$  else  $p₂$  fi  , σ ⟩ → σ'}
+\end{prooftree}
+
+\begin{prooftree}
+\RightLabel{If-false}
+\AxiomC{$〚 b 〛(σ) = \text{false} $}
+\AxiomC{$⟨ p₂ , σ ⟩ → σ'$}
+\BinaryInfC{⟨ if  $b$  then  $p₁$  else  $p₂$  fi  , σ ⟩ → σ'}
+\end{prooftree}
+
+
+#### Sequential composition
+
+\begin{prooftree}
+\RightLabel{Seq}
+\AxiomC{⟨ $p₁$ , σ ⟩ → $σ'$}
+\AxiomC{⟨ $p₂$ , σ' ⟩ → $σ''$}
+\BinaryInfC{⟨ $(p₁ ; p₂)$ , σ ⟩ → $σ''$}
+\end{prooftree}
+
+
+#### Loops
+
+\begin{prooftree}
+\RightLabel{While-false}
+\AxiomC{$〚 b 〛(σ) = false $}
+\UnaryInfC{⟨ while $b$ do $p$ , σ ⟩ → σ}
+\end{prooftree}
+
+\begin{prooftree}
+\RightLabel{While-true}
+\AxiomC{$〚 b 〛(σ) = true $}
+\AxiomC{⟨ $p$ , σ ⟩ → σ'}
+\AxiomC{⟨ while $b$ do $p$  , σ' ⟩ → σ''}
+\TrinaryInfC{⟨ while $b$ do $p$  , σ ⟩ → σ''}
+\end{prooftree}
+
+\newpage 
+
+## Overview of rules for Hoare logic
+
+#### Assignment
+
+\begin{prooftree}
+\AxiomC{}
+\RightLabel{Assign}
+\UnaryInfC{\{ $Q[x \backslash e]$ \}  x := e  \{ $Q$ \}}
+\end{prooftree}
+
+
+#### Conditionals
+
+\begin{prooftree}
+\AxiomC{\{ $P ∧ b$ \} \; $p₁$ \; \{ $Q$ \}}
+\AxiomC{\{ $P ∧ ¬ b$ \} \; $p₂$ \; \{ $Q$ \}}
+\RightLabel{If}
+\BinaryInfC{\{ $P$ \} \quad if $b$ then $p₁$ else $p₂$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+
+#### Sequential composition
+
+\begin{prooftree}
+\AxiomC{\{ $P$ \} \; $p₁$ \; \{ $R$ \}}
+\AxiomC{\{ $R$ \} \; $p₂$ \; \{ $Q$ \}}
+\RightLabel{Seq}
+\BinaryInfC{\{ $P$ \} \quad $p₁ ; p₂$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+
+#### Loops
+
+\begin{prooftree}
+\AxiomC{\{ $P ∧ b$ \} \; $p$ \; \{$P$\}}
+\RightLabel{While}
+\UnaryInfC{\{ $P$ \} \quad while $b$ do $p$ \quad \{ ${P} ∧ ¬ b$ \}}
+\end{prooftree}
+
+
+#### Consequence
+
+\begin{prooftree}
+\AxiomC{$P ⇒ P'$}
+\AxiomC{\{ $P'$ \} \; $p$ \; \{ $Q'$\}}
+\AxiomC{$Q' ⇒ Q$}
+\RightLabel{Consq}
+\TrinaryInfC{\{ $P$ \} \quad $p$ \quad \{ $Q$ \}}
+\end{prooftree}
+
+\newpage
 
 ## Solutions to selected exercises
 
