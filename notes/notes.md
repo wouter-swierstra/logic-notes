@@ -2366,7 +2366,9 @@ Suppose we want to evaluate `x + 3`, given the current memory $σ : V →
 It may seem like this semantics `does nothing'. How should we read the
 following line from the definition above?
 
+\begin{align*}
 〚 e₁ + e₂ 〛 (σ) \; = \; 〚 e₁ 〛(σ) + 〚 e₂ 〛(σ) 
+\end{align*}
 
 It is important to distinguish the two occurrences of the `+` symbol
 in this formula. On the left hand side, we indicate that we are
@@ -2375,8 +2377,8 @@ $e₁ + e₂$. Here the `+` symbol is part of the *syntax* of our
 expression language. We could equally well have chosen to use a
 different operator to represent addition, such as $\oplus$. The second
 plus symbol, used on the right-hand side of the equation, is the
-regular addition between integers. The integers being added here are $
-〚 e₁ 〛(σ)$ and $〚 e₂ 〛(σ)$ corresponding to the two
+regular addition between integers. The integers being added here are 
+$〚 e₁ 〛(σ)$ and $〚 e₂ 〛(σ)$ corresponding to the two
 sub-expressions of the `+` operator of our expression
 language. Something similar appeared in our semantics for
 propositional logic in the previous chapter, where we mapped the
@@ -2437,7 +2439,7 @@ terminate.
 
 #### Example: program execution
 
-Suppose we start have the following program:
+Suppose we have the following program:
 
 ~~~~ {#mycode .c .numberLines startFrom="1"}
 x := 3;
@@ -2536,7 +2538,7 @@ This formalizes the example we had a few slides ago, where we 'stepped
 through' the execution of a program studying how the state changed at
 every step.
 
-We will write use the following notation:
+We will use the following notation:
 
   ⟨ p , σ ⟩ → σ'
 
