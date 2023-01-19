@@ -1549,10 +1549,10 @@ showing that $⊢ P$ holds, this would contradict soundness.
 \end{Answer}
 
 \begin{Exercise}
-When $Γ ⊢ P$ holds, is this proof unique? If so, choose a
-propositional logic formula $P$ and context Γ such that there are
-different derivations showing $Γ ⊢ P$. If not, explain why all
-derivations are equal.
+When $Γ ⊢ P$ holds, is this proof unique? If so, explain why all
+derivations are equal. If not, choose a propositional logic formula
+$P$ and context Γ such that there are different derivations showing
+$Γ ⊢ P$.
 \end{Exercise}
 
 \begin{Answer} 
