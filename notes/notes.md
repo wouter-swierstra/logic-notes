@@ -2013,8 +2013,7 @@ Give a natural deduction proof of ⊢ ¬(P ∧ Q) ⇒ (P ⇒ ¬Q)
 \RightLabel{∧-I}
 \BinaryInfC{ ¬(P ∧ Q) , P , Q ⊢ P ∧ Q}
 \RightLabel{¬-E}
-\BinaryInfC{ ¬(P ∧ Q) , P , Q ⊢ ⊥}\RightLabel{⊥-E}
-\UnaryInfC{ ¬(P ∧ Q) , P , Q ⊢ ⊥}\RightLabel{¬-I}
+\BinaryInfC{ ¬(P ∧ Q) , P , Q ⊢ ⊥}\RightLabel{¬-I}
 \UnaryInfC{ ¬(P ∧ Q) , P ⊢  ¬Q}\RightLabel{⇒-I}
 \UnaryInfC{ ¬(P ∧ Q) ⊢ P ⇒  ¬Q}\RightLabel{⇒-I}
 \UnaryInfC{ ⊢  ¬(P ∧ Q) ⇒ P ⇒  ¬Q}
