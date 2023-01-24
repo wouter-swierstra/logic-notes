@@ -2173,29 +2173,29 @@ Give a natural deduction proof of P ⇔ Q ⊢ (¬P ⇔ ¬Q)
 \begin{Answer}
   \begin{scprooftree}{0.5}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢  ¬P}
+\UnaryInfC{P ⇔ Q ,  ¬P , Q ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢ P ⇒ Q}
+\UnaryInfC{P ⇔ Q ,  ¬P , Q ⊢ P ⇔ Q}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬P , Q ⊢ Q}
+\UnaryInfC{P ⇔ Q ,  ¬P , Q ⊢ Q}
 \RightLabel{⇔-E1}
-\BinaryInfC{P ⇒ Q ,  ¬P , Q ⊢ P}
+\BinaryInfC{P ⇔ Q ,  ¬P , Q ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒ Q ,  ¬P , Q ⊢ ⊥}\RightLabel{¬-I}
-\UnaryInfC{P ⇒ Q ,  ¬P ⊢  ¬Q}
+\BinaryInfC{P ⇔ Q ,  ¬P , Q ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{P ⇔ Q ,  ¬P ⊢  ¬Q}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢  ¬Q}
+\UnaryInfC{P ⇔ Q ,  ¬Q , P ⊢  ¬Q}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢ P ⇒ Q}
+\UnaryInfC{P ⇔ Q ,  ¬Q , P ⊢ P ⇔ Q}
 \AxiomC{}
-\UnaryInfC{P ⇒ Q ,  ¬Q , P ⊢ P}
+\UnaryInfC{P ⇔ Q ,  ¬Q , P ⊢ P}
 \RightLabel{⇔-E2}
-\BinaryInfC{P ⇒ Q ,  ¬Q , P ⊢ Q}
+\BinaryInfC{P ⇔ Q ,  ¬Q , P ⊢ Q}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒ Q ,  ¬Q , P ⊢ ⊥}\RightLabel{¬-I}
-\UnaryInfC{P ⇒ Q ,  ¬Q ⊢  ¬P}
+\BinaryInfC{P ⇔ Q ,  ¬Q , P ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{P ⇔ Q ,  ¬Q ⊢  ¬P}
 \RightLabel{⇔-I}
-\BinaryInfC{P ⇒ Q ⊢  ¬P ⇒  ¬Q}
+\BinaryInfC{P ⇔ Q ⊢  ¬P ⇔  ¬Q}
   \end{scprooftree}
 \end{Answer}
 
@@ -2206,34 +2206,34 @@ Give a natural deduction proof of ⊢ ¬(P ⇔ ¬P)
 \begin{Answer}
   \begin{scprooftree}{0.5}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ⊢ P ⇒  ¬P}
+\UnaryInfC{P ⇔  ¬P ⊢ P ⇔  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇔  ¬P ,  ¬P ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢ P ⇒  ¬P}
+\UnaryInfC{P ⇔  ¬P ,  ¬P ⊢ P ⇔  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒  ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇔  ¬P ,  ¬P ⊢  ¬P}
 \RightLabel{⇔-E1}
-\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ P}
+\BinaryInfC{P ⇔  ¬P ,  ¬P ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
-\UnaryInfC{P ⇒  ¬P ⊢ P}
+\BinaryInfC{P ⇔  ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
+\UnaryInfC{P ⇔  ¬P ⊢ P}
 \RightLabel{⇔-E2}
-\BinaryInfC{P ⇒ ¬P ⊢  ¬P}
+\BinaryInfC{P ⇔ ¬P ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇔ ¬P ,  ¬P ⊢  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢ P ⇒  ¬P}
+\UnaryInfC{P ⇔ ¬P ,  ¬P ⊢ P ⇔  ¬P}
 \AxiomC{}
-\UnaryInfC{P ⇒ ¬P ,  ¬P ⊢  ¬P}
+\UnaryInfC{P ⇔ ¬P ,  ¬P ⊢  ¬P}
 \RightLabel{⇔-E1}
-\BinaryInfC{P ⇒ ¬P ,  ¬P ⊢ P}
+\BinaryInfC{P ⇔ ¬P ,  ¬P ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒ ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
-\UnaryInfC{P ⇒  ¬P ⊢ P}
+\BinaryInfC{P ⇔ ¬P ,  ¬P ⊢ ⊥}\RightLabel{RAA}
+\UnaryInfC{P ⇔  ¬P ⊢ P}
 \RightLabel{¬-E}
-\BinaryInfC{P ⇒ ¬P ⊢ ⊥}\RightLabel{¬-I}
-\UnaryInfC{ ⊢  ¬(P ⇒  ¬P)}
+\BinaryInfC{P ⇔ ¬P ⊢ ⊥}\RightLabel{¬-I}
+\UnaryInfC{ ⊢  ¬(P ⇔  ¬P)}
   \end{scprooftree}
 \end{Answer}
 
