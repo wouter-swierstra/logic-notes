@@ -2196,7 +2196,7 @@ Give a natural deduction proof of P ⇔ Q ⊢ (¬P ⇔ ¬Q)
 \BinaryInfC{P ⇒ Q ,  ¬Q , P ⊢ ⊥}\RightLabel{¬-I}
 \UnaryInfC{P ⇒ Q ,  ¬Q ⊢  ¬P}
 \RightLabel{⇔-I}
-\BinaryInfC{P ⇒ Q ⊢  ¬P ⇒  ¬Q}
+\BinaryInfC{P ⇒ Q ⊢  ¬P ⇔  ¬Q}
   \end{scprooftree}
 \end{Answer}
 
@@ -2234,7 +2234,7 @@ Give a natural deduction proof of ⊢ ¬(P ⇔ ¬P)
 \UnaryInfC{P ⇒  ¬P ⊢ P}
 \RightLabel{¬-E}
 \BinaryInfC{P ⇒ ¬P ⊢ ⊥}\RightLabel{¬-I}
-\UnaryInfC{ ⊢  ¬(P ⇒  ¬P)}
+\UnaryInfC{ ⊢  ¬(P ⇔  ¬P)}
   \end{scprooftree}
 \end{Answer}
 
@@ -2700,10 +2700,10 @@ Now we can give the following derivation:
 \begin{prooftree}
 \AxiomC{ }
 \RightLabel{Assign}
-\UnaryInfC{⟨ y := x + 3 , σ' ⟩ → τ}
+\UnaryInfC{⟨ x:= x + y , σ ⟩ → σ'}
 \AxiomC{ }
 \RightLabel{Assign}
-\UnaryInfC{⟨ x:= x + y , σ ⟩ → σ'}
+\UnaryInfC{⟨ y := x + 3 , σ' ⟩ → τ}
 \RightLabel{Seq}
 \BinaryInfC{⟨ $p$ , σ ⟩ → τ}
 \end{prooftree}
