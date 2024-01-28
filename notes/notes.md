@@ -233,7 +233,7 @@ palindrome:
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{$a ∈ Σ$ }
+\AxiomC{$a ∈ Σ$ } 
 \RightLabel{Single}
 \UnaryInfC{isPalindrome($a$)}
 \end{prooftree}
@@ -265,30 +265,32 @@ isPalindrome(101).
 \begin{prooftree}
 \AxiomC{ }
 \RightLabel{Empty}
-\UnaryInfC{isPalindrome($ε$)}
+\AxiomC{$0 ∈ \{0,1\}$}
+\BinaryInfC{isPalindrome($ε$)}
 \RightLabel{Step}
 \UnaryInfC{isPalindrome($00$)}
 \end{prooftree}
 
 \begin{prooftree}
-\AxiomC{ }
+\AxiomC{$0 ∈ \{0,1\}$ }
 \RightLabel{Single}
 \UnaryInfC{isPalindrome($0$)}
 \RightLabel{Step}
-\UnaryInfC{isPalindrome($101$)}
+\AxiomC{$1 ∈ \{0,1\}$}
+\BinaryInfC{isPalindrome($101$)}
 \end{prooftree}
 
 \end{Answer}
 
-\begin{Exercise} 
-There are two axioms that can be used to prove isPalindrome($w$).
-Given a derivation of isPalindrome($w$), can you predict with which axiom
-was used to start the derivation?
+\begin{Exercise} Given a word $w \in Σ^{⋆}$, there are two rules that
+can be used to start the derivation isPalindrome($w$). Suppose you
+know that $w$ is a palindrome, can you predict which rule you need to
+use to start the derivation?  
 \end{Exercise}
 
 \begin{Answer} 
 If the length of the word $w$ is even, we can repeatedly remove two
-chararters until we have none left over. In the final step, we then
+characters until we have none left over. In the final step, we then
 apply the Empty rule. If the length of $w$ is odd, however, the
 derivation must end using the Single rule.
 \end{Answer}
@@ -354,10 +356,14 @@ word formed by concatenating $w$ and $w'$. Using these rules, we can
 prove that $[[][]]$ is balanced:
 
 \begin{prooftree}
-\AxiomC{isBalanced(ε)}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced($ ε $)}
 \RightLabel{Bracket}
 \UnaryInfC{isBalanced($[]$)}
-\AxiomC{isBalanced(ε)}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced(ε)}
 \RightLabel{Bracket}
 \UnaryInfC{isBalanced($[]$)}
 \RightLabel{Append}
@@ -382,7 +388,9 @@ why no derivation can exist.
 \item The word $[]$ is balanced, as shown by the following derivation:
 
 \begin{prooftree}
-\AxiomC{isBalanced(ε)}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced(ε)}
 \RightLabel{Bracket}
 \UnaryInfC{isBalanced($[]$)}
 \end{prooftree}
@@ -394,10 +402,14 @@ with a closing bracket, no derivation can exist.
 
 \item The word $[][]$ is balanced, as shown by the following derivation:
 \begin{prooftree}
-\AxiomC{isBalanced(ε)}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced(ε)}
 \RightLabel{Bracket}
 \UnaryInfC{isBalanced($[]$)}
-\AxiomC{isBalanced(ε)}
+\AxiomC{ }
+\RightLabel{Empty}
+\UnaryInfC{isBalanced(ε)}
 \RightLabel{Bracket}
 \UnaryInfC{isBalanced($[]$)}
 \BinaryInfC{isBalanced($[][]$)}
@@ -663,8 +675,9 @@ achieve just that.
 We can define the set of propositional logical formulas over a set of
 atomic propositional variables \PV\ using the following BNF equation:
 
- $p,q$  ::=  true  |  false  |  $PV$  |  $¬p$  |  $p ∧ q$  |  $p ∨ q$  |  $p ⇒ q$  |  $p ⇔ q$ 
+ $p,q$  ::=  true  |  false  |  $P$  |  $¬p$  |  $p ∧ q$  |  $p ∨ q$  |  $p ⇒ q$  |  $p ⇔ q$ 
 
+Here the atomic propositional variable $P$ is drawn from the set of variables \PV.
 We will sometimes refer to the set of all propositional logic formulas
 as \PLF.
 
@@ -2790,7 +2803,7 @@ exist.
 \begin{Exercise} 
 The semi-colon operator is used to compose two programs, running one
 after the other. Given three programs, we can compose them in two
-possible ways: $(p₁ ; p₂) ; p₃$ or $p₁ ; (p₂ ; p₂)$. Does the order of
+possible ways: $(p₁ ; p₂) ; p₃$ or $p₁ ; (p₂ ; p₃)$. Does the order of
 composition matter? If so, give a program that illustrates this; if
 not, argue why using the operational semantics presented in this
 section. What about $p₁ ; p₂$ and $p₂ ; p₁$? Are these the same?
